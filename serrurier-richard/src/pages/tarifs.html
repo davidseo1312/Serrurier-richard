@@ -1,0 +1,142 @@
+<!--meta
+title: Tarifs serrurier : prix affichés et devis gratuit
+description: Tarifs de dépannage serrurerie affichés : taux horaire, frais de déplacement, forfaits et majorations de nuit. Devis écrit gratuit avant travaux.
+schema: service
+breadcrumb: Tarifs
+priority: 0.9
+-->
+
+<div class="wrap fil">
+  <nav aria-label="Fil d'Ariane">
+    <ol>
+      <li><a href="/">Accueil</a></li>
+      <li>Tarifs</li>
+    </ol>
+  </nav>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="section-titre">
+      <h1>Tarifs de dépannage serrurerie</h1>
+      <p>
+        L'arrêté du 24 janvier 2017 impose aux professionnels du dépannage d'afficher leurs prix
+        avant toute sollicitation du client. Voici les nôtres, en euros. {{MENTION_TVA}}.
+        Ils sont annoncés au téléphone puis confirmés par un devis écrit sur place.
+      </p>
+    </div>
+
+    <div class="tableau-wrap">
+      <table>
+        <caption>Prestations forfaitaires — tarifs en journée, du lundi au samedi de 8h à 19h</caption>
+        <thead>
+          <tr>
+            <th scope="col">Prestation</th>
+            <th scope="col">Ce que comprend le forfait</th>
+            <th scope="col">Prix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ouverture de porte claquée</td>
+            <td>Déplacement, diagnostic et ouverture par radiographie, sans dégât ni remplacement</td>
+            <td class="prix">{{FORFAIT_OUVERTURE_SIMPLE}} €</td>
+          </tr>
+          <tr>
+            <td>Ouverture de porte fermée à clé</td>
+            <td>Déplacement, diagnostic et ouverture d'une serrure verrouillée standard</td>
+            <td class="prix">179 €</td>
+          </tr>
+          <tr>
+            <td>Ouverture de porte blindée ou multipoints</td>
+            <td>Déplacement, diagnostic et ouverture d'un mécanisme haute sécurité</td>
+            <td class="prix">{{FORFAIT_OUVERTURE_BLINDEE}} €</td>
+          </tr>
+          <tr>
+            <td>Changement de cylindre standard</td>
+            <td>Déplacement, main-d'œuvre et cylindre européen d'entrée de gamme, 3 clés fournies</td>
+            <td class="prix">{{FORFAIT_CHANGEMENT_CYLINDRE}} €</td>
+          </tr>
+          <tr>
+            <td>Extraction de clé cassée</td>
+            <td>Déplacement et extraction sans démontage lorsque le mécanisme le permet</td>
+            <td class="prix">99 €</td>
+          </tr>
+          <tr>
+            <td>Mise en sécurité après effraction</td>
+            <td>Déplacement, sécurisation provisoire de l'ouvrant et rapport pour l'assurance</td>
+            <td class="prix">Sur devis</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tableau-wrap" style="margin-top:2rem">
+      <table>
+        <caption>Tarifs unitaires applicables hors forfait</caption>
+        <thead>
+          <tr>
+            <th scope="col">Poste</th>
+            <th scope="col">Montant</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Taux horaire de main-d'œuvre</td><td class="prix">{{TAUX_HORAIRE}} € / heure</td></tr>
+          <tr><td>Frais de déplacement (inclus dans les forfaits ci-dessus)</td><td class="prix">{{FRAIS_DEPLACEMENT}} €</td></tr>
+          <tr><td>Majoration nuit (19h–8h), dimanches et jours fériés</td><td class="prix">+ {{MAJORATION_NUIT}} %</td></tr>
+          <tr><td>Déplacement annulé après départ du technicien</td><td class="prix">{{FRAIS_DEPLACEMENT}} €</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="encadre">
+      <h2>Ce qui peut faire varier le prix</h2>
+      <p>
+        Les forfaits couvrent les situations courantes. Un prix supérieur ne peut vous être appliqué
+        que si le devis signé le prévoit explicitement. Les principaux facteurs de variation sont :
+      </p>
+      <ul>
+        <li><strong>Le type de serrure</strong> : un cylindre certifié A2P coûte nettement plus cher qu'un modèle standard, et sa dépose demande plus de temps.</li>
+        <li><strong>L'état du mécanisme</strong> : une serrure déjà forcée ou grippée peut nécessiter un perçage, donc un remplacement.</li>
+        <li><strong>L'horaire</strong> : la majoration de nuit et de jours fériés s'applique sur la totalité de la prestation.</li>
+        <li><strong>L'éloignement</strong> : au-delà de 30 km de {{ADRESSE_VILLE}}, un supplément kilométrique peut s'appliquer. Il vous est annoncé au téléphone, jamais découvert sur la facture.</li>
+      </ul>
+    </div>
+
+    <h2>Le devis est gratuit, écrit et remis avant les travaux</h2>
+    <p>
+      C'est une obligation légale et une garantie pour vous. Le technicien établit sur place un devis
+      détaillé mentionnant la nature de l'intervention, le coût de la main-d'œuvre, le prix des pièces
+      et les majorations applicables. Rien ne démarre avant votre signature. Si le diagnostic révèle
+      que l'intervention sera plus lourde qu'annoncée au téléphone, un nouveau devis vous est présenté :
+      vous restez libre de refuser et ne payez alors que les frais de déplacement.
+    </p>
+
+    <h2>Modes de paiement acceptés</h2>
+    <p>
+      Carte bancaire, espèces et virement. Une facture détaillée vous est systématiquement remise,
+      quel que soit le mode de règlement et quel que soit le montant. Un professionnel qui exige des
+      espèces sans facture est en infraction : n'hésitez pas à refuser.
+    </p>
+
+    <div class="encadre alerte">
+      <h2>Attention aux prix d'appel</h2>
+      <p>
+        Méfiez-vous des annonces affichant « ouverture de porte à partir de 49 € ». Ces montants ne
+        couvrent en pratique que le déplacement, et la facture finale est souvent multipliée par cinq
+        ou dix une fois le technicien sur place. Un tarif honnête est un tarif complet, annoncé avant
+        le déplacement et tenu à l'arrivée. C'est l'engagement que nous prenons.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <div class="wrap">
+    <h2>Un doute sur le prix de votre intervention ?</h2>
+    <p>Décrivez-nous votre situation par téléphone : nous vous annonçons une fourchette avant tout déplacement, sans engagement.</p>
+    <p style="margin-top:1.5rem">
+      <a class="btn btn-call" href="tel:{{TELEPHONE_E164}}">{{TELEPHONE}}</a>
+    </p>
+  </div>
+</section>

@@ -1,0 +1,87 @@
+<!--meta
+title: Contact — serrurier d'urgence 24h/24
+description: Contactez {{NOM_COMMERCIAL}} au {{TELEPHONE}}, 24h/24 et 7j/7. Intervention dans les six départements du Grand Ouest. Devis gratuit.
+priority: 0.7
+-->
+
+<div class="wrap fil">
+  <nav aria-label="Fil d'Ariane">
+    <ol>
+      <li><a href="/">Accueil</a></li>
+      <li>Contact</li>
+    </ol>
+  </nav>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="section-titre">
+      <h1>Nous contacter</h1>
+      <p>
+        Pour une urgence, le téléphone reste le moyen le plus rapide et le seul que nous garantissons
+        24h/24. Un technicien vous répond directement : il n'y a pas de plateforme d'appel entre vous
+        et nous.
+      </p>
+    </div>
+
+    <div class="grille grille-2">
+      <div class="carte">
+        <h2>Dépannage d'urgence</h2>
+        <p>Disponible 24 heures sur 24, 7 jours sur 7, jours fériés compris.</p>
+        <p style="margin-top:1.2rem">
+          <a class="btn btn-call" href="tel:{{TELEPHONE_E164}}">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.6 1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
+            {{TELEPHONE}}
+          </a>
+        </p>
+      </div>
+
+      <div class="carte">
+        <h2>Devis, questions, professionnels</h2>
+        <p>
+          Pour une demande non urgente — devis de renforcement, convention avec un syndic, contrat
+          de maintenance de rideau métallique — écrivez-nous. Nous répondons sous 24 à 48 heures
+          ouvrées.
+        </p>
+        <p><a class="lien-fleche" href="mailto:{{EMAIL}}">{{EMAIL}}</a></p>
+      </div>
+    </div>
+
+    <h2>Ce qu'il faut nous dire au téléphone</h2>
+    <p>
+      Plus votre description est précise, plus notre estimation de prix et de délai sera juste, et
+      plus le technicien partira avec le bon matériel. Préparez si possible ces cinq éléments :
+    </p>
+    <ol>
+      <li><strong>Votre commune exacte</strong>, et en zone rurale un point de repère ou le nom du lieu-dit.</li>
+      <li><strong>La nature du problème</strong> : porte claquée sans tour de clé, porte fermée à clé, clé cassée, serrure forcée.</li>
+      <li><strong>Le type de porte</strong> : porte standard, porte blindée, nombre de points de fermeture si vous le savez.</li>
+      <li><strong>La marque de la serrure</strong> si elle est visible — souvent gravée sur le cylindre ou la tranche de la porte.</li>
+      <li><strong>Toute urgence particulière</strong> : enfant ou animal enfermé, personne vulnérable, logement laissé ouvert.</li>
+    </ol>
+
+    <div class="encadre">
+      <h2>Adresse et zone d'intervention</h2>
+      <p>
+        {{RAISON_SOCIALE}}<br>
+        {{SIEGE_RUE}}<br>
+        {{SIEGE_CP}} {{SIEGE_VILLE}}
+      </p>
+      <p>
+        Notre activité est le dépannage sur site : nous nous déplaçons chez vous et ne recevons pas
+        de clientèle à cette adresse. Consultez nos
+        <a href="/zones-d-intervention">zones d'intervention</a> pour les délais par secteur.
+      </p>
+    </div>
+
+    <div class="encadre alerte">
+      <h2>En cas de danger immédiat</h2>
+      <p>
+        Si une personne est en danger — malaise derrière une porte fermée, enfant en bas âge seul,
+        départ de feu — n'attendez pas un serrurier. Appelez le <strong>18</strong> (pompiers) ou le
+        <strong>112</strong> (numéro d'urgence européen). Les secours sont habilités à forcer un accès
+        et arriveront plus vite que nous.
+      </p>
+    </div>
+  </div>
+</section>

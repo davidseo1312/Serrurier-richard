@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 540" width="720" height="540" role="img" aria-label="Illustration d'une porte d'entrée équipée d'une serrure de sécurité">
+  <defs>
+    <linearGradient id="mur" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#123c68"/>
+      <stop offset="1" stop-color="#071d33"/>
+    </linearGradient>
+    <linearGradient id="porte" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d4f7f"/>
+      <stop offset="1" stop-color="#0e3355"/>
+    </linearGradient>
+    <linearGradient id="laiton" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffc766"/>
+      <stop offset="0.5" stop-color="#f5a524"/>
+      <stop offset="1" stop-color="#c97f0c"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="720" height="540" fill="url(#mur)"/>
+
+  <!-- Halo de lumière -->
+  <ellipse cx="360" cy="300" rx="290" ry="250" fill="#2a6ba8" opacity="0.18"/>
+
+  <!-- Encadrement -->
+  <rect x="196" y="66" width="328" height="440" rx="6" fill="#0a2743"/>
+  <rect x="210" y="80" width="300" height="426" rx="4" fill="url(#porte)"/>
+
+  <!-- Panneaux moulurés -->
+  <g fill="none" stroke="#2f6ea8" stroke-width="3" opacity="0.55">
+    <rect x="238" y="108" width="244" height="150" rx="3"/>
+    <rect x="238" y="286" width="244" height="192" rx="3"/>
+  </g>
+  <g fill="#2a6398" opacity="0.35">
+    <rect x="252" y="122" width="216" height="122" rx="2"/>
+    <rect x="252" y="300" width="216" height="164" rx="2"/>
+  </g>
+
+  <!-- Plaque de serrure -->
+  <rect x="432" y="286" width="46" height="128" rx="10" fill="#0a2743"/>
+  <rect x="436" y="290" width="38" height="120" rx="8" fill="url(#laiton)" opacity="0.9"/>
+
+  <!-- Cylindre -->
+  <circle cx="455" cy="322" r="12" fill="#0a2743"/>
+  <circle cx="455" cy="322" r="7" fill="#f5a524"/>
+  <rect x="452" y="322" width="6" height="14" rx="2" fill="#0a2743"/>
+
+  <!-- Poignée -->
+  <rect x="398" y="366" width="70" height="13" rx="6.5" fill="url(#laiton)"/>
+  <circle cx="455" cy="372" r="10" fill="url(#laiton)"/>
+
+  <!-- Points de fermeture multipoints -->
+  <g fill="#f5a524" opacity="0.85">
+    <rect x="504" y="150" width="14" height="34" rx="4"/>
+    <rect x="504" y="336" width="14" height="34" rx="4"/>
+    <rect x="504" y="420" width="14" height="34" rx="4"/>
+  </g>
+  <g stroke="#f5a524" stroke-width="2" opacity="0.35" stroke-dasharray="5 5">
+    <line x1="511" y1="184" x2="511" y2="336"/>
+    <line x1="511" y1="370" x2="511" y2="420"/>
+  </g>
+
+  <!-- Seuil -->
+  <rect x="180" y="506" width="360" height="14" rx="3" fill="#061826"/>
+
+  <!-- Trousseau de clés -->
+  <g transform="translate(94 300) rotate(-14)">
+    <circle cx="26" cy="26" r="21" fill="none" stroke="url(#laiton)" stroke-width="9"/>
+    <rect x="21" y="45" width="10" height="86" rx="3" fill="url(#laiton)"/>
+    <rect x="31" y="98" width="20" height="9" rx="2.5" fill="url(#laiton)"/>
+    <rect x="31" y="116" width="14" height="9" rx="2.5" fill="url(#laiton)"/>
+  </g>
+
+  <!-- Badge 24h -->
+  <g transform="translate(556 96)">
+    <circle cx="0" cy="0" r="52" fill="#f5a524"/>
+    <text x="0" y="-4" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+          font-size="27" font-weight="800" fill="#1a1200" text-anchor="middle">24h</text>
+    <text x="0" y="22" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+          font-size="18" font-weight="700" fill="#1a1200" text-anchor="middle">7j/7</text>
+  </g>
+</svg>
