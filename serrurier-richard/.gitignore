@@ -1,0 +1,39 @@
+# --- Secrets ----------------------------------------------------------------
+# Identifiants FTP Hostinger et paramètres d'envoi. Ne doit JAMAIS être
+# versionné : seul .env.exemple, qui ne contient aucune valeur réelle, l'est.
+.env
+.env.local
+*.pem
+*.key
+
+# --- Dépôts du formulaire de devis ------------------------------------------
+# Générés sur le serveur de production, jamais dans le dépôt.
+public/stockage/
+public/logs/
+static/stockage/
+static/logs/
+
+# --- Système ----------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+*.swp
+.idea/
+.vscode/
+
+# --- Outils -----------------------------------------------------------------
+node_modules/
+__pycache__/
+.venv/
+
+# --- Journaux de contrôle ---------------------------------------------------
+/tmp-*
+*.log
+
+# NOTE — le dossier public/ EST versionné volontairement.
+# C'est le dossier prêt à déposer sur Hostinger : le versionner permet de le
+# récupérer directement depuis GitHub sans avoir à relancer le build, et rend
+# possible le déploiement automatique par Git de Hostinger.
+# Il est intégralement régénéré par « bash scripts/build.sh » : ne le modifiez
+# jamais à la main, vos changements seraient écrasés.

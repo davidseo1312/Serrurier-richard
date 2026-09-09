@@ -1,0 +1,117 @@
+<form class="formulaire" method="post" action="/envoi-devis.php" enctype="multipart/form-data" data-devis>
+
+  <!-- Piège à robots : déplacé hors de l'écran, jamais affiché ni annoncé.
+       Un automate remplit tous les champs qu'il trouve ; un visiteur, non. -->
+  <div class="pot-de-miel" aria-hidden="true">
+    <label for="champ-site">Ne remplissez pas ce champ</label>
+    <input type="text" id="champ-site" name="_site" tabindex="-1" autocomplete="off">
+  </div>
+  <input type="hidden" name="_horodatage" value="0">
+
+  <div class="champs">
+    <p class="champ">
+      <label for="devis-nom">Nom <span class="requis" aria-hidden="true">*</span></label>
+      <input type="text" id="devis-nom" name="nom" required minlength="2" maxlength="80"
+             autocomplete="name" placeholder="Prénom et nom">
+    </p>
+
+    <p class="champ">
+      <label for="devis-telephone">Téléphone <span class="requis" aria-hidden="true">*</span></label>
+      <input type="tel" id="devis-telephone" name="telephone" required
+             inputmode="tel" autocomplete="tel" maxlength="20"
+             pattern="^(?:\+33|0033|0)\s*[1-9](?:[\s.\-]*[0-9]{2}){4}$"
+             placeholder="06 12 34 56 78">
+      <span class="aide">C'est par là que nous vous rappellerons.</span>
+    </p>
+
+    <p class="champ">
+      <label for="devis-email">E-mail</label>
+      <input type="email" id="devis-email" name="email" maxlength="120"
+             autocomplete="email" placeholder="vous@exemple.fr">
+      <span class="aide">Facultatif — utile pour vous transmettre un devis écrit.</span>
+    </p>
+
+    <p class="champ">
+      <label for="devis-ville">Ville d'intervention <span class="requis" aria-hidden="true">*</span></label>
+      <input type="text" id="devis-ville" name="ville" required minlength="2" maxlength="80"
+             autocomplete="address-level2" placeholder="Rennes, Vannes, Nantes…">
+    </p>
+
+    <p class="champ">
+      <label for="devis-cp">Code postal</label>
+      <input type="text" id="devis-cp" name="code_postal" maxlength="5"
+             inputmode="numeric" pattern="[0-9]{5}" autocomplete="postal-code" placeholder="35000">
+    </p>
+
+    <p class="champ">
+      <label for="devis-type">Type d'intervention <span class="requis" aria-hidden="true">*</span></label>
+      <select id="devis-type" name="type" required>
+        <option value="">— Choisissez —</option>
+        <option value="ouverture-porte">Ouverture de porte</option>
+        <option value="porte-bloquee">Porte bloquée</option>
+        <option value="cle-perdue">Clé perdue</option>
+        <option value="cle-cassee">Clé cassée</option>
+        <option value="changement-serrure">Changement ou remplacement de serrure</option>
+        <option value="installation-serrure">Installation de serrure</option>
+        <option value="serrure-multipoints">Serrure multipoints (3 ou 5 points)</option>
+        <option value="blindage">Blindage de porte</option>
+        <option value="effraction">Sécurisation après effraction</option>
+        <option value="rideau-metallique">Rideau métallique</option>
+        <option value="coffre-fort">Coffre-fort</option>
+        <option value="autre">Autre demande</option>
+      </select>
+    </p>
+  </div>
+
+  <fieldset class="champ champ-large" style="border:0;padding:0;margin:1.4rem 0 0">
+    <legend style="font-weight:600;font-size:.94rem;padding:0;margin-bottom:.5rem">
+      Degré d'urgence <span class="requis" aria-hidden="true">*</span>
+    </legend>
+    <span class="champ-radio">
+      <label><input type="radio" name="urgence" value="immediate" required> Urgent, tout de suite</label>
+      <label><input type="radio" name="urgence" value="jour"> Dans la journée</label>
+      <label><input type="radio" name="urgence" value="semaine"> Dans la semaine</label>
+      <label><input type="radio" name="urgence" value="devis" checked> Devis, pas urgent</label>
+    </span>
+  </fieldset>
+
+  <p class="champ champ-large" style="margin-top:1.4rem">
+    <label for="devis-description">Décrivez votre situation <span class="requis" aria-hidden="true">*</span></label>
+    <textarea id="devis-description" name="description" required minlength="10" maxlength="4000"
+              placeholder="Type de porte, marque de la serrure si vous la voyez, ce qui se passe exactement, étage, accès…"></textarea>
+    <span class="aide">Plus la description est précise, plus notre réponse le sera. Dix caractères minimum.</span>
+  </p>
+
+  <p class="champ champ-large">
+    <label for="devis-photo">Photo de la porte ou de la serrure</label>
+    <input type="file" id="devis-photo" name="photo" accept="image/jpeg,image/png,image/webp,image/gif">
+    <span class="aide">
+      Facultatif, mais très utile : une photo évite souvent un déplacement inutile.
+      Formats JPG, PNG, WEBP ou GIF, {{DEVIS_PHOTO_MAX_MO}} Mo maximum.
+      Les photos iPhone au format HEIC ne sont pas acceptées — réglez votre appareil sur « Le plus compatible ».
+    </span>
+  </p>
+
+  <p class="champ champ-case champ-large">
+    <input type="checkbox" id="devis-consentement" name="consentement" value="1" required>
+    <label for="devis-consentement">
+      J'accepte que ces informations soient utilisées pour traiter ma demande et me recontacter.
+      Elles ne sont ni revendues ni transmises à des tiers, et sont conservées trois ans.
+      <a href="/politique-confidentialite">Politique de confidentialité</a>.
+      <span class="requis" aria-hidden="true">*</span>
+    </label>
+  </p>
+
+  <div class="formulaire-actions">
+    <button type="submit" class="btn btn-devis btn-large" data-track="clic_devis" data-track-zone="formulaire">
+      Envoyer ma demande de devis
+    </button>
+    <span class="aide">Réponse sous {{DELAI_REPONSE}}.</span>
+  </div>
+
+  <p class="formulaire-note">
+    <strong>Vous êtes bloqué dehors maintenant ?</strong> N'utilisez pas ce formulaire :
+    appelez le <a href="tel:{{TELEPHONE_E164}}" data-track="appel" data-track-zone="formulaire">{{TELEPHONE}}</a>.
+    Le formulaire est relevé aux heures de bureau, {{HORAIRES_BUREAU}}.
+  </p>
+</form>

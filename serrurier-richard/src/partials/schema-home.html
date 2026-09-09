@@ -1,51 +1,67 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Locksmith",
-  "@id": "{{BASE_URL}}/#entreprise",
-  "name": "{{NOM_COMMERCIAL}}",
-  "legalName": "{{RAISON_SOCIALE}}",
-  "description": "{{BASELINE}}",
-  "url": "{{BASE_URL}}",
-  "telephone": "{{TELEPHONE_E164}}",
-  "email": "{{EMAIL}}",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "{{ADRESSE_RUE}}",
-    "postalCode": "{{ADRESSE_CP}}",
-    "addressLocality": "{{ADRESSE_VILLE}}",
-    "addressCountry": "FR"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": "{{LATITUDE}}",
-    "longitude": "{{LONGITUDE}}"
-  },
-  "areaServed": [
-    { "@type": "AdministrativeArea", "name": "Ille-et-Vilaine" },
-    { "@type": "AdministrativeArea", "name": "Morbihan" },
-    { "@type": "AdministrativeArea", "name": "Finistère" },
-    { "@type": "AdministrativeArea", "name": "Côtes-d'Armor" },
-    { "@type": "AdministrativeArea", "name": "Loire-Atlantique" },
-    { "@type": "AdministrativeArea", "name": "Maine-et-Loire" }
-  ],
-  "openingHoursSpecification": {
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-    "opens": "00:00",
-    "closes": "23:59"
-  },
-  "priceRange": "€€",
-  "currenciesAccepted": "EUR",
-  "paymentAccepted": "Carte bancaire, espèces, virement",
-  "hasOfferCatalog": {
-    "@type": "OfferCatalog",
-    "name": "Prestations de serrurerie",
-    "itemListElement": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ouverture de porte claquée" }, "price": "{{FORFAIT_OUVERTURE_SIMPLE}}", "priceCurrency": "EUR" },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Changement de cylindre" }, "price": "{{FORFAIT_CHANGEMENT_CYLINDRE}}", "priceCurrency": "EUR" },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ouverture de porte blindée" }, "price": "{{FORFAIT_OUVERTURE_BLINDEE}}", "priceCurrency": "EUR" }
-    ]
-  }
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "{{BASE_URL}}/#site",
+      "url": "{{BASE_URL}}/",
+      "name": "{{NOM_COMMERCIAL}}",
+      "description": "{{BASELINE}}",
+      "inLanguage": "fr-FR",
+      "publisher": { "@id": "{{BASE_URL}}/#entreprise" }
+    },
+    {
+      "@type": "Locksmith",
+      "@id": "{{BASE_URL}}/#entreprise",
+      "name": "{{NOM_COMMERCIAL}}",
+      "legalName": "{{RAISON_SOCIALE}}",
+      "description": "{{BASELINE}}",
+      "url": "{{BASE_URL}}",
+      "telephone": "{{TELEPHONE_E164}}",
+      "email": "{{EMAIL}}",
+      "image": "{{BASE_URL}}/assets/img/og-default.jpg",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ADRESSE_RUE}}",
+        "postalCode": "{{ADRESSE_CP}}",
+        "addressLocality": "{{ADRESSE_VILLE}}",
+        "addressRegion": "Bretagne",
+        "addressCountry": "FR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "{{LATITUDE}}",
+        "longitude": "{{LONGITUDE}}"
+      },
+      "areaServed": [
+        { "@type": "AdministrativeArea", "name": "Ille-et-Vilaine" },
+        { "@type": "AdministrativeArea", "name": "Morbihan" },
+        { "@type": "AdministrativeArea", "name": "Finistère" },
+        { "@type": "AdministrativeArea", "name": "Côtes-d'Armor" },
+        { "@type": "AdministrativeArea", "name": "Loire-Atlantique" },
+        { "@type": "AdministrativeArea", "name": "Maine-et-Loire" }
+      ],
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "00:00",
+        "closes": "23:59"
+      },
+      "priceRange": "€€",
+      "currenciesAccepted": "EUR",
+      "paymentAccepted": "Carte bancaire, espèces, virement",
+      "knowsLanguage": "fr-FR",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Prestations de serrurerie",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ouverture de porte claquée", "url": "{{BASE_URL}}/ouverture-porte" }, "price": "{{FORFAIT_OUVERTURE_SIMPLE}}", "priceCurrency": "EUR" },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Changement de cylindre", "url": "{{BASE_URL}}/changement-serrure" }, "price": "{{FORFAIT_CHANGEMENT_CYLINDRE}}", "priceCurrency": "EUR" },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ouverture de porte blindée", "url": "{{BASE_URL}}/porte-blindee" }, "price": "{{FORFAIT_OUVERTURE_BLINDEE}}", "priceCurrency": "EUR" }
+        ]
+      }
+    }
+  ]
 }
 </script>

@@ -36,6 +36,7 @@ AIDE
 fi
 
 set -a; source .env; set +a
+source src/config.sh
 
 for v in FTP_HOST FTP_USER FTP_PASS; do
   [ -n "${!v:-}" ] || { echo "Variable $v absente de .env"; exit 1; }
@@ -48,7 +49,7 @@ FTP_DIR="${FTP_DIR:-/public_html}"
 echo "Contrôle SEO avant déploiement..."
 if ! bash scripts/check-seo.sh > /tmp/check-seo.log 2>&1; then
   echo
-  echo "Le contrôle SEO signale des erreurs bloquantes :"
+  echo "Le contrôle signale des défauts techniques :"
   grep -E '^\s+x' /tmp/check-seo.log | sed 's/\x1b\[[0-9;]*m//g'
   echo
   read -r -p "Déployer quand même ? (o/N) " reponse
@@ -56,37 +57,74 @@ if ! bash scripts/check-seo.sh > /tmp/check-seo.log 2>&1; then
 fi
 
 # --- Envoi ------------------------------------------------------------------
-NB=0
 TOTAL=$(find public -type f | wc -l)
+PARALLELE="${FTP_PARALLELE:-4}"
+case "$PARALLELE" in ''|*[!0-9]*) PARALLELE=4 ;; esac
+if [ "$PARALLELE" -lt 1 ]; then PARALLELE=1; fi
+if [ "$PARALLELE" -gt 8 ]; then PARALLELE=8; fi
+
 echo
 echo "Déploiement de $TOTAL fichiers vers ftp://$FTP_HOST$FTP_DIR/"
-[ "$DRY" -eq 1 ] && echo "(simulation — aucun fichier ne sera envoyé)"
+if [ "$DRY" -eq 1 ]; then echo "(simulation — aucun fichier ne sera envoyé)"; fi
+echo "($PARALLELE envois simultanés)"
 echo
 
-while IFS= read -r fichier; do
-  rel="${fichier#public/}"
-  cible="ftp://${FTP_HOST}${FTP_DIR}/${rel}"
-  NB=$((NB + 1))
-  printf '  [%2d/%2d] %s\n' "$NB" "$TOTAL" "$rel"
-  if [ "$DRY" -eq 0 ]; then
-    curl --silent --show-error --fail \
-         --ftp-create-dirs \
-         --user "${FTP_USER}:${FTP_PASS}" \
-         --upload-file "$fichier" \
-         "$cible" \
-      || { echo "  ERREUR sur $rel"; exit 1; }
+ECHECS="$(mktemp)"
+trap 'rm -f "$ECHECS"' EXIT
+
+envoyer() {
+  rel="${1#public/}"
+  if [ "$DRY" -eq 1 ]; then
+    printf '  · %s\n' "$rel"
+    return 0
   fi
-done < <(find public -type f | sort)
+  # --ftp-create-dirs crée l'arborescence manquante côté serveur.
+  if curl --silent --show-error --fail --connect-timeout 20 --max-time 180 \
+          --ftp-create-dirs \
+          --user "${FTP_USER}:${FTP_PASS}" \
+          --upload-file "$1" \
+          "ftp://${FTP_HOST}${FTP_DIR}/${rel}"; then
+    printf '  v %s\n' "$rel"
+  else
+    printf '  x %s\n' "$rel"
+    echo "$rel" >> "$ECHECS"
+  fi
+}
+export -f envoyer
+export FTP_HOST FTP_USER FTP_PASS FTP_DIR DRY ECHECS
+
+# Les fichiers cachés (.htaccess) sont inclus : c'est lui qui produit les URLs
+# sans extension et les redirections. L'oublier casse tout le site.
+find public -type f | sort | xargs -P "$PARALLELE" -I{} bash -c 'envoyer "$@"' _ {}
+
+NB_ECHECS=$(grep -c . "$ECHECS" 2>/dev/null || echo 0)
 
 echo
 if [ "$DRY" -eq 1 ]; then
   echo "Simulation terminée : $TOTAL fichiers seraient envoyés."
-else
-  echo "Déploiement terminé : $TOTAL fichiers envoyés."
-  echo
-  echo "À vérifier maintenant :"
-  echo "  1. Le site répond en HTTPS et redirige bien depuis http://"
-  echo "  2. Les URLs sans extension fonctionnent (ex: /tarifs)"
-  echo "  3. Une URL inexistante affiche bien la page 404"
-  echo "  4. Le sitemap est accessible : /sitemap.xml"
+  exit 0
 fi
+
+if [ "${NB_ECHECS:-0}" -gt 0 ]; then
+  echo "$NB_ECHECS fichier(s) en échec :"
+  sed 's/^/    /' "$ECHECS"
+  echo
+  echo "Relancez la commande : seuls les fichiers manquants seront réécrits."
+  exit 1
+fi
+
+echo "Déploiement terminé : $TOTAL fichiers envoyés."
+echo
+echo "À vérifier maintenant, dans cet ordre :"
+echo "  1. https://${DOMAINE}/ répond, et http:// redirige bien vers https://"
+echo "  2. Les URLs sans extension fonctionnent : https://${DOMAINE}/tarifs"
+echo "     (si elles renvoient 404, le .htaccess n'est pas monté ou mod_rewrite"
+echo "      est désactivé : voir la section Hostinger du README)"
+echo "  3. Une URL inexistante affiche la page 404 personnalisée"
+echo "  4. Les anciennes adresses redirigent : /services/ouverture-de-porte"
+echo "  5. https://${DOMAINE}/sitemap.xml et /robots.txt sont accessibles"
+echo "  6. Le formulaire : https://${DOMAINE}/devis-serrurerie"
+echo "     Envoyez une demande de test et vérifiez la réception sur"
+echo "     ${EMAIL_DEVIS}. Si rien n'arrive, la boîte d'envoi"
+echo "     ${EMAIL_EXPEDITEUR} n'existe probablement pas encore :"
+echo "     créez-la dans hPanel > Emails."

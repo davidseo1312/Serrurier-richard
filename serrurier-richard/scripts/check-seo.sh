@@ -23,6 +23,10 @@ trap 'rm -f "$COMPTEURS"' EXIT
 ROUGE=$'\033[31m'; JAUNE=$'\033[33m'; VERT=$'\033[32m'; GRAS=$'\033[1m'; FIN=$'\033[0m'
 
 erreur() { echo "  ${ROUGE}x${FIN} $1"; echo E >> "$COMPTEURS"; }
+# Distinct d'une erreur : le code est correct, il manque une information que
+# seul l'exploitant peut fournir (assurance, médiateur, adresse). Compté à
+# part pour ne pas masquer un vrai défaut technique dans le bilan.
+adonner() { echo "  ${JAUNE}#${FIN} $1"; echo D >> "$COMPTEURS"; }
 avert()  { echo "  ${JAUNE}!${FIN} $1"; echo A >> "$COMPTEURS"; }
 ok()     { echo "  ${VERT}v${FIN} $1"; }
 titre()  { echo; echo "${GRAS}$1${FIN}"; }
@@ -133,11 +137,16 @@ else
 fi
 
 # --- 8. Donnees d'entreprise -----------------------------------------------
-titre "8. Donnees d'entreprise (bloquant avant mise en ligne)"
-PLACEHOLDERS=$(grep -rlE '\[(RAISON SOCIALE|SIRET|ADRESSE|FORME|CAPITAL|RCS|N. TVA|ASSUREUR|N. DE POLICE|NOM DU M|URL DU M|.TABLISSEMENT)[^]]*\]' public/ 2>/dev/null | sed 's|^public/||' || true)
+titre "8. Donnees d'entreprise a fournir (bloquant avant mise en ligne)"
+MOTIF='\[(RAISON SOCIALE|SIRET|ADRESSE|FORME|CAPITAL|RCS|N. TVA|ASSUREUR|N. DE POLICE|NOM DU M|URL DU M|.TABLISSEMENT)[^]]*\]'
+PLACEHOLDERS=$(grep -rlE "$MOTIF" public/ 2>/dev/null | sed 's|^public/||' | sort || true)
 if [ -n "$PLACEHOLDERS" ]; then
-  erreur "Champs a completer dans src/config.sh - pages concernees :"
-  echo "$PLACEHOLDERS" | sed 's/^/        /'
+  NB_PAGES_PH=$(echo "$PLACEHOLDERS" | grep -c .)
+  adonner "Champs a renseigner dans src/config.sh, presents sur $NB_PAGES_PH page(s) :"
+  grep -rhoE "$MOTIF" public/ 2>/dev/null | sort -u | sed 's/^/        /'
+  echo "        -> ces valeurs sont des obligations legales : elles ne peuvent"
+  echo "           pas etre inventees. Voir la section « Avant la mise en ligne »"
+  echo "           du README."
 else
   ok "Donnees d'entreprise renseignees"
 fi
@@ -148,37 +157,89 @@ grep -qE '02 99 00 00 00' src/config.sh \
 # --- 9. Fichiers requis ----------------------------------------------------
 titre "9. Fichiers requis"
 for f in public/robots.txt public/sitemap.xml public/.htaccess public/404.html \
-         public/assets/css/style.css public/assets/js/site.js public/assets/img/favicon.svg; do
+         public/manifest.webmanifest public/envoi-devis.php \
+         public/assets/css/style.css public/assets/js/site.js \
+         public/assets/img/favicon.svg public/assets/img/favicon.ico \
+         public/assets/img/apple-touch-icon.png public/assets/img/og-default.jpg \
+         public/assets/img/icone-192.png public/assets/img/icone-512.png \
+         public/assets/img/icone-512-maskable.png; do
   [ -f "$f" ] && ok "${f#public/}" || erreur "${f#public/} manquant"
 done
-# Photos référencées par les pages : voir static/assets/img/README.md
-while IFS= read -r img; do
-  [ -z "$img" ] && continue
-  if [ -f "public$img" ]; then
-    ok "${img#/}"
-  else
-    erreur "${img#/} manquant - voir static/assets/img/README.md"
+
+# --- 10. Ressources referencees par les pages ------------------------------
+titre "10. Ressources referencees (images, feuilles, scripts)"
+PB=0
+REFS=$( { grep -rhoE 'src="/[^"]+"'  public --include='*.html'
+          grep -rhoE 'href="/assets/[^"]+"' public --include='*.html'
+          grep -rhoE 'href="/manifest[^"]*"' public --include='*.html'
+        } | sed 's/^[a-z]*="//;s/"$//' | sort -u )
+while IFS= read -r ref; do
+  [ -z "$ref" ] && continue
+  if [ ! -f "public$ref" ]; then
+    erreur "ressource absente : $ref"
+    PB=1
   fi
-done <<< "$(grep -rho '/assets/img/[a-z-]*\.jpg' src/pages/ | sort -u)"
+done <<< "$REFS"
+[ "$PB" -eq 0 ] && ok "Toutes les ressources referencees existent ($(echo "$REFS" | grep -c .) fichiers)"
 
-[ -f public/assets/img/og-default.jpg ] \
-  && ok "assets/img/og-default.jpg" \
-  || erreur "assets/img/og-default.jpg manquant - partage social 1200x630 (voir static/assets/img/README.md)"
+# Illustrations encore vectorielles : le site est complet et deployable en
+# l'etat, mais des photos reelles convertissent nettement mieux sur ce metier.
+NB_SVG=$(grep -rhoE 'src="/assets/img/[a-z0-9-]+\.svg"' public --include='*.html' | sort -u | grep -c . || true)
+[ "${NB_SVG:-0}" -gt 0 ] && avert "$NB_SVG illustration(s) encore vectorielle(s) - voir static/assets/img/README.md pour deposer de vraies photos"
 
-# --- 10. Indexation --------------------------------------------------------
-titre "10. Parametres d'indexation"
+# --- 11. Redirections des anciennes URL ------------------------------------
+titre "11. Redirections 301"
+PB=0
+for ancienne in \
+  "services/ouverture-de-porte" "services/changement-de-serrure" \
+  "services/porte-blindee" "services/apres-effraction" \
+  "services/rideau-metallique" "services/coffre-fort" \
+  "politique-de-confidentialite"; do
+  # L'ancienne URL ne doit plus exister en dur ET doit etre redirigee.
+  if [ -f "public/${ancienne}.html" ]; then
+    erreur "$ancienne existe encore en page : conflit avec la redirection"
+    PB=1
+  elif ! grep -qF "^${ancienne}/?\$" public/.htaccess; then
+    erreur "aucune redirection 301 pour /$ancienne dans .htaccess"
+    PB=1
+  fi
+done
+[ "$PB" -eq 0 ] && ok "Anciennes URL toutes redirigees en 301"
+
+# --- 12. Questions FAQ dupliquees ------------------------------------------
+# Deux pages portant la meme question se concurrencent dans les resultats
+# enrichis de Google : aucune des deux ne ressort.
+titre "12. Donnees structurees FAQ"
+DOUBLES=$(grep -rhoE '"name": "[^"]+\?"' public --include='*.html' | sort | uniq -d || true)
+if [ -n "$DOUBLES" ]; then
+  while IFS= read -r q; do avert "question FAQ presente sur plusieurs pages : ${q:10:70}"; done <<< "$DOUBLES"
+else
+  NB_FAQ=$(grep -rl '"@type": "FAQPage"' public --include='*.html' | grep -c . || true)
+  ok "FAQPage sur ${NB_FAQ:-0} page(s), aucune question dupliquee"
+fi
+
+# --- 13. Indexation --------------------------------------------------------
+titre "13. Parametres d'indexation"
 if [ "$ROBOTS_POLICY" = "index" ]; then
   ok "Site en index"
+  grep -q "Sitemap: ${BASE_URL}/sitemap.xml" public/robots.txt \
+    && ok "robots.txt declare le sitemap" \
+    || erreur "robots.txt ne declare pas le sitemap"
 else
-  avert "Site en '$ROBOTS_POLICY' : il ne sera PAS reference. Passez ROBOTS_POLICY=index dans src/config.sh."
+  adonner "Site en '$ROBOTS_POLICY' : il ne sera PAS reference tant que"
+  echo "        ROBOTS_POLICY n'est pas passe a \"index\" dans src/config.sh."
+  echo "        Voir « Coherence geographique » dans le README avant de le faire."
 fi
-grep -q "Sitemap: ${BASE_URL}/sitemap.xml" public/robots.txt \
-  && ok "robots.txt declare le sitemap" \
-  || avert "robots.txt ne declare pas le sitemap"
 ok "sitemap.xml : $(grep -c '<loc>' public/sitemap.xml) URLs"
+# Pages mises en noindex individuellement (404, remerciement). Le compte n'a
+# de sens que si le site est globalement indexable.
+if [ "$ROBOTS_POLICY" = "index" ]; then
+  NB_NOINDEX=$(grep -rl 'name="robots" content="noindex' public --include='*.html' | grep -c . || true)
+  ok "${NB_NOINDEX:-0} page(s) volontairement en noindex (404, remerciement)"
+fi
 
-# --- 11. Poids -------------------------------------------------------------
-titre "11. Poids des fichiers"
+# --- 14. Poids -------------------------------------------------------------
+titre "14. Poids des fichiers"
 PB=0
 while IFS= read -r l; do
   [ -n "$l" ] && { avert "${l#public/} depasse 100 Ko"; PB=1; }
@@ -187,17 +248,31 @@ while IFS= read -r g; do
   [ -n "$g" ] && { avert "${g#public/} depasse 250 Ko"; PB=1; }
 done <<< "$(find public/assets -type f -size +250k 2>/dev/null)"
 [ "$PB" -eq 0 ] && ok "Aucun fichier trop lourd"
+ok "CSS $(du -k public/assets/css/style.css | cut -f1) Ko, JS $(du -k public/assets/js/site.js | cut -f1) Ko, total site $(du -sk public | cut -f1) Ko"
 
 # --- Bilan -----------------------------------------------------------------
 NB_ERR=$(grep -c '^E$' "$COMPTEURS" 2>/dev/null || true)
 NB_AVERT=$(grep -c '^A$' "$COMPTEURS" 2>/dev/null || true)
-NB_ERR=${NB_ERR:-0}; NB_AVERT=${NB_AVERT:-0}
+NB_DONN=$(grep -c '^D$' "$COMPTEURS" 2>/dev/null || true)
+NB_ERR=${NB_ERR:-0}; NB_AVERT=${NB_AVERT:-0}; NB_DONN=${NB_DONN:-0}
 
 echo
 echo "${GRAS}Bilan${FIN}"
 echo "  $NB_PAGES pages analysees"
-echo "  ${ROUGE}$NB_ERR erreur(s) bloquante(s)${FIN}"
+echo "  ${ROUGE}$NB_ERR defaut(s) technique(s)${FIN}     - a corriger dans le code"
+echo "  ${JAUNE}$NB_DONN information(s) a fournir${FIN} - a renseigner dans src/config.sh"
 echo "  ${JAUNE}$NB_AVERT avertissement(s)${FIN}"
 echo
 
+if [ "$NB_ERR" -eq 0 ] && [ "$NB_DONN" -eq 0 ]; then
+  echo "  ${VERT}Le site est pret a etre mis en ligne.${FIN}"
+elif [ "$NB_ERR" -eq 0 ]; then
+  echo "  ${VERT}Aucun defaut technique.${FIN} Le site se construit et se deploie."
+  echo "  Completez les informations ci-dessus avant la mise en ligne : ce sont"
+  echo "  des mentions legalement obligatoires, elles ne peuvent pas etre devinees."
+fi
+echo
+
+# Le code de sortie ne signale que les defauts techniques : les informations
+# manquantes relevent de l'exploitant, pas d'un echec de construction.
 [ "$NB_ERR" -eq 0 ]

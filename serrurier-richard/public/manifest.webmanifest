@@ -1,0 +1,29 @@
+{
+  "name": "Serrurier Richard — Dépannage serrurerie 24h/24 dans le Grand Ouest",
+  "short_name": "Serrurier Richard",
+  "description": "Dépannage et installation en serrurerie. Ouverture de porte, changement de serrure, sécurisation après effraction en Bretagne et Pays de la Loire.",
+  "lang": "fr-FR",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#0b2a4a",
+  "icons": [
+    { "src": "/assets/img/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/assets/img/icone-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/img/icone-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/assets/img/icone-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Appeler un serrurier",
+      "short_name": "Appeler",
+      "url": "/serrurier-urgence"
+    },
+    {
+      "name": "Demander un devis",
+      "short_name": "Devis",
+      "url": "/devis-serrurerie"
+    }
+  ]
+}

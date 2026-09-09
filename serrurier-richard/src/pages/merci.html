@@ -1,0 +1,46 @@
+<!--meta
+title: Demande envoyée — nous vous répondons rapidement
+description: Votre demande de devis a bien été transmise. Nous revenons vers vous sous {{DELAI_REPONSE}}. Pour une urgence, appelez directement le {{TELEPHONE}}.
+breadcrumb: Demande envoyée
+robots: noindex
+conversion: devis_envoye
+sitemap: non
+priority: 0.1
+-->
+
+<section>
+  <div class="wrap" style="max-width:44em">
+    <div class="message-etat ok">
+      <h1 style="margin-bottom:.4rem">Votre demande nous est bien parvenue</h1>
+      <p>
+        Elle a été transmise à notre boîte de réception. Nous revenons vers vous sous
+        <strong>{{DELAI_REPONSE}}</strong>, par téléphone en priorité.
+      </p>
+    </div>
+
+    <h2>Ce qui se passe maintenant</h2>
+    <ol>
+      <li>Nous lisons votre description et, le cas échéant, la photo jointe.</li>
+      <li>Nous vous rappelons au numéro indiqué pour préciser ce qui manque.</li>
+      <li>Si un relevé sur place est nécessaire, nous convenons d'un créneau avec vous.</li>
+      <li>Vous recevez un devis écrit et détaillé, gratuit et sans engagement.</li>
+    </ol>
+
+    <div class="encadre alerte">
+      <h2>Votre situation devient urgente ?</h2>
+      <p>
+        N'attendez pas notre rappel. Le téléphone est traité en priorité absolue, {{HORAIRES_URGENCE}} :
+        <a href="tel:{{TELEPHONE_E164}}" data-track="appel" data-track-zone="page-merci"><strong>{{TELEPHONE}}</strong></a>.
+      </p>
+    </div>
+
+    <h2>En attendant</h2>
+    <ul class="liens-connexes">
+      <li><a href="/tarifs">Consulter nos tarifs</a></li>
+      <li><a href="/faq">Questions fréquentes</a></li>
+      <li><a href="/blog/eviter-arnaques-serrurier">Éviter les arnaques en serrurerie</a></li>
+      <li><a href="/zones-d-intervention">Zones d'intervention</a></li>
+      <li><a href="/">Retour à l'accueil</a></li>
+    </ul>
+  </div>
+</section>

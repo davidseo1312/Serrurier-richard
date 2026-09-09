@@ -1,68 +1,99 @@
-# Photos du site — où déposer quoi
+# Images du site
 
-Les pages référencent désormais des fichiers `.jpg` qui **ne sont pas encore
-présents**. Le contrôle SEO les signale comme manquants tant qu'ils n'ont pas
-été déposés dans ce dossier (`static/assets/img/`).
+Ce fichier n'est pas publié : `scripts/build.sh` retire les `.md` de `public/`.
 
-Les photos transmises dans la conversation ne peuvent pas être écrites
-automatiquement sur le disque : il faut les enregistrer ici à la main, en
-respectant exactement les noms ci-dessous.
+## Ce qui est en place
 
-## Correspondance à respecter
+| Fichier | Rôle | Type |
+|---|---|---|
+| `hero-serrurier.svg` | Illustration du héros de l'accueil | vectoriel |
+| `ouverture-porte.svg` | Illustration de la page ouverture de porte | vectoriel |
+| `changement-serrure.svg` | Illustration de la page changement de serrure | vectoriel |
+| `porte-blindee.svg` | Illustration de la page porte blindée | vectoriel |
+| `apres-effraction.svg` | Illustration de la page après effraction | vectoriel |
+| `rideau-metallique.svg` | Illustration de la page rideau métallique | vectoriel |
+| `coffre-fort.svg` | Illustration disponible, non encore posée dans une page | vectoriel |
+| `favicon.svg` | Icône d'onglet | vectoriel |
+| `favicon.ico` | Repli pour les navigateurs qui ignorent le SVG | 16/32/48 px |
+| `apple-touch-icon.png` | Icône d'écran d'accueil iOS | 180 × 180 |
+| `icone-192.png`, `icone-512.png` | Icônes du manifeste | PNG |
+| `icone-512-maskable.png` | Icône Android « maskable », 20 % de marge | PNG |
+| `og-default.jpg` | Vignette de partage sur les réseaux sociaux | 1200 × 630 |
 
-Les photos sont numérotées dans l'ordre où elles ont été transmises.
+Les illustrations sont **vectorielles** : elles pèsent 2 à 3 Ko chacune,
+s'affichent parfaitement sur tous les écrans, ne demandent aucune version
+« retina » et se chargent instantanément. Le site est complet et déployable
+tel quel.
 
-| Fichier à créer          | Photo à utiliser | Description de la photo                                          | Dimensions cibles |
-|--------------------------|------------------|------------------------------------------------------------------|-------------------|
-| `hero-serrurier.jpg`     | photo 1          | Veste bleu marine, crochetage d'un cylindre sur porte blindée     | 1440 × 1080       |
-| `ouverture-porte.jpg`    | photo 6          | Gros plan, lampe torche, inspection du cylindre                   | 1120 × 620        |
-| `changement-serrure.jpg` | photo 2          | Tournevis sur la crémone en tranche de porte                      | 1120 × 620        |
-| `porte-blindee.jpg`      | photo 3          | Porte alu grise, crochetage, caisse à outils ouverte              | 1120 × 620        |
-| `apres-effraction.jpg`   | photo 4          | Lampe torche, ceinture porte-outils, ambiance de soirée           | 1120 × 620        |
-| `rideau-metallique.jpg`  | photo 8          | Intervention en bas d'une porte sectionnelle grise                | 1120 × 620        |
-| `og-default.jpg`         | photo 5          | Recadrer en **1200 × 630** — image de partage sur les réseaux     | 1200 × 630        |
-
-`og-default.jpg` est obligatoire : c'est la vignette affichée quand un lien du
-site est partagé. Un format vectoriel n'y est pas accepté.
-
-## Photos non utilisées pour l'instant
-
-- **Photo 7** — portail métallique
-- **Photo 9** — seconde photo de porte de garage
-
-Elles ne correspondent à aucune page existante. Le site couvre l'ouverture de
-porte, le changement de serrure, la porte blindée, l'après-effraction, le
-rideau métallique et le coffre-fort. Si le portail et la porte de garage font
-partie des prestations réellement proposées, il faut créer les pages
-correspondantes — sinon ces photos induiraient en erreur.
-
-## Préparation des fichiers
-
-Aucun outil de traitement d'image n'est installé sur ce poste. Utilisez
-<https://squoosh.app> (dans le navigateur, rien à installer) pour recadrer,
-redimensionner et compresser :
-
-1. Ouvrir la photo dans Squoosh
-2. Redimensionner aux dimensions du tableau ci-dessus
-3. Exporter en **MozJPEG qualité 78**
-4. Viser **moins de 200 Ko** par fichier
-5. Enregistrer dans ce dossier sous le nom exact indiqué
-
-Puis relancer :
+Les fichiers matriciels (vignette sociale et icônes) sont régénérables :
 
 ```bash
-bash scripts/build.sh && bash scripts/check-seo.sh
+python3 scripts/generer-images.py     # nécessite Pillow
 ```
+
+À relancer après un changement de nom commercial, de baseline ou de couleurs.
+Le numéro de téléphone n'y est volontairement pas incrusté : les réseaux
+sociaux mettent ces images en cache des mois, et un numéro périmé y ferait plus
+de dégâts que son absence.
+
+---
+
+## Passer à de vraies photos
+
+Sur ce métier, **des photos réelles convertissent nettement mieux** que
+n'importe quelle illustration : véhicule floqué, technicien identifiable,
+chantier terminé. Elles alimentent aussi la fiche Google Business Profile, ce
+qu'un visuel vectoriel ne peut pas faire.
+
+### Remplacer une illustration
+
+1. Préparer le fichier aux dimensions ci-dessous.
+2. Le déposer dans ce dossier.
+3. Dans la page concernée (`src/pages/…`), remplacer l'extension `.svg` par
+   celle de la photo — il y a **une seule occurrence par page**.
+4. `bash scripts/build.sh && bash scripts/check-seo.sh`
+
+| Page | Fichier à remplacer | Dimensions cibles |
+|---|---|---|
+| Accueil (`index.html`) | `hero-serrurier` | 1440 × 1080 |
+| `ouverture-porte.html` | `ouverture-porte` | 1120 × 620 |
+| `changement-serrure.html` | `changement-serrure` | 1120 × 620 |
+| `porte-blindee.html` | `porte-blindee` | 1120 × 620 |
+| `effraction.html` | `apres-effraction` | 1120 × 620 |
+| `rideau-metallique.html` | `rideau-metallique` | 1120 × 620 |
+
+Pensez à mettre à jour l'attribut `alt` : il doit décrire ce que montre
+réellement la nouvelle photo, pas l'ancienne illustration.
+
+### Préparer les fichiers
+
+<https://squoosh.app> fonctionne dans le navigateur, sans rien installer :
+
+1. Ouvrir la photo, la recadrer aux dimensions du tableau.
+2. Exporter en **MozJPEG qualité 78**, ou en **WebP qualité 80** — plus léger,
+   accepté par tous les navigateurs actuels.
+3. Viser **moins de 200 Ko** par fichier. `scripts/check-seo.sh` signale tout
+   fichier au-delà de 250 Ko.
+
+Le `.htaccess` sert déjà le WebP et l'AVIF avec le bon type MIME : vous pouvez
+utiliser ces formats directement.
+
+### Vignette sociale
+
+Si vous remplacez `og-default.jpg` par une photo, gardez impérativement le
+format **1200 × 630** et le format JPEG ou PNG : les réseaux sociaux
+n'acceptent pas le SVG. Le nom de fichier doit rester identique, sans quoi il
+faut modifier `src/partials/head.html`.
+
+---
 
 ## Droits d'utilisation
 
-Les mentions légales déclarent que ces photographies sont la propriété de
-l'éditeur ou utilisées avec l'autorisation de leurs auteurs. Assurez-vous que
-c'est exact avant publication : si les images proviennent d'une banque
-d'images, la licence doit autoriser l'usage commercial, et la formulation des
-mentions légales doit être adaptée en conséquence.
+Les mentions légales déclarent que les photographies sont la propriété de
+l'éditeur ou utilisées avec l'autorisation de leurs auteurs. Vérifiez que c'est
+exact avant publication : si les images viennent d'une banque d'images, la
+licence doit autoriser l'usage commercial, et la formulation des mentions
+légales doit être adaptée en conséquence.
 
-Si ces photos ne représentent pas l'entreprise elle-même, sachez que des
-clichés réels — véhicule floqué, technicien identifiable, chantier terminé —
-convertissent nettement mieux sur ce métier et alimentent la fiche Google
-Business Profile, que des visuels génériques ne peuvent pas nourrir.
+Une photo de personne identifiable exige son accord écrit pour une utilisation
+commerciale, y compris s'il s'agit d'un salarié de l'entreprise.

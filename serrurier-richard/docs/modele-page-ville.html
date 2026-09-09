@@ -1,0 +1,178 @@
+<!--meta
+title: Serrurier NOM_VILLE — dépannage et ouverture de porte
+description: Serrurier à NOM_VILLE : ouverture de porte, changement de serrure, dépannage d'urgence. Intervention en DÉLAI sur NOM_VILLE et ses environs.
+schema: zone
+breadcrumb: Serrurier à NOM_VILLE
+parent_nom: Zones d'intervention
+parent_url: /zones-d-intervention
+priority: 0.85
+-->
+
+<!--
+  ===========================================================================
+  MODÈLE DE PAGE LOCALE — mode d'emploi
+  ===========================================================================
+
+  Ce fichier n'est PAS construit : il vit dans docs/ et non dans src/pages/.
+
+  Pour créer une page ville :
+
+    cp docs/modele-page-ville.html src/pages/serrurier-VOTRE-VILLE.html
+
+  puis remplacez NOM_VILLE, complétez chaque section, SUPPRIMEZ ce commentaire
+  et lancez :
+
+    bash scripts/build.sh && bash scripts/check-seo.sh
+
+  L'URL découle du nom de fichier : serrurier-quimper.html -> /serrurier-quimper
+
+  ---------------------------------------------------------------------------
+  LA RÈGLE À NE PAS ENFREINDRE
+  ---------------------------------------------------------------------------
+
+  Une page locale qui reprend le texte d'une autre en changeant seulement le
+  nom de la ville est du contenu dupliqué. Google ne la classera pas, et
+  produire vingt pages de ce type dégrade le référencement de TOUT le site,
+  y compris celui des pages qui fonctionnaient. C'est le mode d'échec le plus
+  répandu du référencement local en serrurerie.
+
+  Trois pages vraiment locales valent mieux que trente pages génériques.
+
+  N'ouvrez une page ville que si vous pouvez écrire, sans les inventer, au
+  moins quatre des éléments suivants :
+
+    - les délais réels par quartier ou par commune limitrophe
+    - les particularités du bâti : époque de construction, matériaux,
+      hauteur des portes, type de fermetures rencontrées
+    - une contrainte d'accès concrète : zone piétonne, stationnement,
+      circulation, saisonnalité
+    - le profil des demandes qui dominent : étudiants, résidences
+      secondaires, commerces, copropriétés, pavillonnaire
+    - une particularité climatique ou géographique qui affecte les serrures
+      (air marin, humidité, gel)
+    - des questions locales réellement posées par les clients du secteur
+
+  Voir src/pages/serrurier-rennes.html, serrurier-vannes.html et
+  serrurier-nantes.html : chacune traite d'un contexte différent, aucune
+  n'est la copie d'une autre.
+
+  ---------------------------------------------------------------------------
+  À NE JAMAIS ÉCRIRE
+  ---------------------------------------------------------------------------
+
+  - « notre agence de NOM_VILLE », « notre dépôt à NOM_VILLE » : n'annoncez
+    une implantation que si un établissement y existe réellement et est
+    déclaré. Une fausse adresse locale est le premier motif de suspension
+    d'une fiche Google Business Profile, et une pratique commerciale
+    trompeuse au sens du code de la consommation.
+  - un délai que vous ne tenez pas
+  - des avis clients que vous n'avez pas reçus
+  - un nombre d'interventions ou d'années d'expérience non vérifiable
+
+  Écrivez « nous intervenons à NOM_VILLE », qui est exact, plutôt que
+  « votre serrurier à NOM_VILLE », qui laisse entendre une implantation.
+  ===========================================================================
+-->
+
+<div class="wrap fil">
+  <nav aria-label="Fil d'Ariane">
+    <ol>
+      <li><a href="/">Accueil</a></li>
+      <li><a href="/zones-d-intervention">Zones d'intervention</a></li>
+      <li>NOM_VILLE</li>
+    </ol>
+  </nav>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="section-titre">
+      <h1>Serrurier à NOM_VILLE : PROMESSE EN QUELQUES MOTS</h1>
+      <p>
+        Deux à quatre phrases situant le secteur et ce qui le distingue.
+        Pas de généralités : ce paragraphe doit être impossible à réutiliser
+        tel quel pour une autre ville.
+      </p>
+      <p class="hero-actions">
+        <a class="btn btn-call btn-large" href="tel:{{TELEPHONE_E164}}" data-track="appel" data-track-zone="hero-ville">
+          Appeler le {{TELEPHONE}}
+        </a>
+        <a class="btn btn-ghost btn-large" href="/devis-serrurerie" data-track="clic_devis" data-track-zone="hero-ville">Demander un devis</a>
+      </p>
+    </div>
+
+    <h2>Délais par quartier et par commune</h2>
+    <div class="tableau-wrap">
+      <table>
+        <caption>Fourchettes constatées en conditions normales de circulation</caption>
+        <thead>
+          <tr><th scope="col">Secteur</th><th scope="col">Quartiers et communes</th><th scope="col">Délai</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>SECTEUR 1</td><td>Liste des quartiers ou communes</td><td class="prix">X – Y min</td></tr>
+          <tr><td>SECTEUR 2</td><td>Liste des quartiers ou communes</td><td class="prix">X – Y min</td></tr>
+          <tr><td>SECTEUR 3</td><td>Liste des quartiers ou communes</td><td class="prix">Xh – Yh</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Une phrase sur ce qui fait varier ces délais : heures de pointe, saison, axe routier.</p>
+
+    <h2>Ce que nous rencontrons le plus souvent à NOM_VILLE</h2>
+
+    <h3>PREMIÈRE PARTICULARITÉ LOCALE</h3>
+    <p>Le bâti, son époque, ses fermetures typiques, ce que cela implique concrètement.</p>
+
+    <h3>DEUXIÈME PARTICULARITÉ LOCALE</h3>
+    <p>Profil dominant des demandes sur ce secteur, et la réponse adaptée.</p>
+
+    <h3>TROISIÈME PARTICULARITÉ LOCALE</h3>
+    <p>Climat, géographie, contrainte d'accès, saisonnalité.</p>
+
+    <div class="encadre">
+      <h2>UNE INFORMATION PRATIQUE UTILE SUR PLACE</h2>
+      <p>Stationnement, zone piétonne, accès résidence, permanence d'un gestionnaire…</p>
+    </div>
+
+    <h2>Nos prestations à NOM_VILLE</h2>
+    <ul class="liens-connexes">
+      <li><a href="/ouverture-porte">Ouverture de porte</a></li>
+      <li><a href="/porte-bloquee">Porte bloquée</a></li>
+      <li><a href="/cle-perdue">Clé perdue</a></li>
+      <li><a href="/changement-serrure">Changement de serrure</a></li>
+      <li><a href="/blindage-porte">Blindage de porte</a></li>
+      <li><a href="/effraction">Après effraction</a></li>
+      <li><a href="/zones/DEPARTEMENT">Tout le département</a></li>
+    </ul>
+
+    <div class="faq">
+      <h2>Questions fréquentes à NOM_VILLE</h2>
+      <!-- Le balisage FAQPage est généré automatiquement au build à partir de
+           ces blocs <details> : rien à écrire en JSON.
+           Écrivez des questions RÉELLEMENT posées sur ce secteur, et
+           différentes de celles des autres pages : deux pages portant la même
+           question se concurrencent dans les résultats enrichis. -->
+      <details>
+        <summary>QUESTION LOCALE 1 ?</summary>
+        <p>Réponse précise, sans promesse invérifiable.</p>
+      </details>
+      <details>
+        <summary>QUESTION LOCALE 2 ?</summary>
+        <p>Réponse précise.</p>
+      </details>
+      <details>
+        <summary>Les tarifs sont-ils différents à NOM_VILLE ?</summary>
+        <p>Non. {{FRAIS_DEPLACEMENT}} € de déplacement, {{TAUX_HORAIRE}} € de l'heure, majoration de {{MAJORATION_NUIT}} % la nuit, le dimanche et les jours fériés. Voir la page <a href="/tarifs">tarifs</a>.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <div class="wrap">
+    <h2>Un serrurier à NOM_VILLE</h2>
+    <p>Une phrase d'appel à l'action, adaptée au secteur.</p>
+    <p style="margin-top:1.5rem">
+      <a class="btn btn-call btn-large" href="tel:{{TELEPHONE_E164}}" data-track="appel" data-track-zone="cta-final">{{TELEPHONE}}</a>
+    </p>
+  </div>
+</section>

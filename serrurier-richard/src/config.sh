@@ -70,6 +70,8 @@ MAJORATION_NUIT="50"
 FORFAIT_OUVERTURE_SIMPLE="129"
 FORFAIT_OUVERTURE_BLINDEE="249"
 FORFAIT_CHANGEMENT_CYLINDRE="159"
+FORFAIT_OUVERTURE_VERROUILLEE="179"
+FORFAIT_EXTRACTION_CLE="99"
 
 # --- Analytics --------------------------------------------------------------
 # Laisser vide tant que la propriété GA4 n'est pas créée.
@@ -78,3 +80,50 @@ GA4_ID=""
 # --- Indexation -------------------------------------------------------------
 # "noindex" tant que le site n'est pas prêt à être référencé, "index" ensuite.
 ROBOTS_POLICY="noindex"
+
+# ---------------------------------------------------------------------------
+# --- Disponibilité et horaires ---------------------------------------------
+# ⚠ N'annoncez que la disponibilité réellement assurée. Une promesse « 24h/24 »
+# non tenue est une pratique commerciale trompeuse (art. L121-2 code de la
+# consommation) et fait chuter la note Google Business Profile.
+# Ces valeurs alimentent aussi le balisage LocalBusiness : elles doivent
+# correspondre exactement à ce qui est affiché sur le site.
+DISPONIBILITE="24h/24 et 7j/7"
+HORAIRES_URGENCE="24 heures sur 24, 7 jours sur 7, jours fériés compris"
+HORAIRES_BUREAU="du lundi au vendredi, 8h – 19h"
+DELAI_REPONSE="24 à 48 heures ouvrées"
+
+# --- Zone d'intervention (texte affiché) ------------------------------------
+ZONE_INTERVENTION="Ille-et-Vilaine (35), Morbihan (56), Finistère (29), Côtes-d'Armor (22), Loire-Atlantique (44) et Maine-et-Loire (49)"
+ZONE_COURTE="Bretagne et Pays de la Loire"
+
+# --- Formulaire de devis ----------------------------------------------------
+# Adresse qui REÇOIT les demandes de devis.
+EMAIL_DEVIS="contact@serrurier-richard.fr"
+# Adresse qui ENVOIE le message. Sur un mutualisé Hostinger, elle DOIT
+# appartenir au domaine du site, sinon le message part en spam ou est rejeté
+# (SPF/DKIM). Créez-la dans hPanel > Emails avant la mise en ligne.
+EMAIL_EXPEDITEUR="site@serrurier-richard.fr"
+# Poids maximal d'une photo jointe, en mégaoctets.
+DEVIS_PHOTO_MAX_MO="5"
+
+# --- Mesure d'audience et vérification Google -------------------------------
+# Laisser vide désactive proprement la fonctionnalité : aucun script tiers
+# n'est chargé, aucune balise vide n'est écrite dans le HTML.
+#
+#   GA4_ID    : « G-XXXXXXXXXX »   (Google Analytics 4)
+#   GTM_ID    : « GTM-XXXXXXX »    (Google Tag Manager — laisser vide si GA4
+#               est utilisé seul ; charger les deux compterait double)
+#   GSC_CODE  : contenu de l'attribut « content » de la balise fournie par
+#               Google Search Console, méthode « balise HTML ».
+#               La vérification par fichier HTML ou par DNS est préférable :
+#               elle ne pèse rien sur les pages.
+GTM_ID=""
+GSC_CODE=""
+
+# --- Réseaux sociaux et fiche Google Business Profile -----------------------
+# Renseignez uniquement les profils qui existent réellement : ils alimentent
+# le champ « sameAs » des données structurées, que Google recoupe.
+URL_GOOGLE_BUSINESS=""
+URL_FACEBOOK=""
+URL_LINKEDIN=""
