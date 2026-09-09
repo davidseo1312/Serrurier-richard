@@ -1,0 +1,123 @@
+name: Build et publication vers Hostinger
+
+# ---------------------------------------------------------------------------
+# Pourquoi ce workflow existe
+#
+# Le déploiement Git de Hostinger, sur une offre mutualisée, se contente de
+# cloner le dépôt dans le dossier choisi. Il n'exécute AUCUN build : ni npm,
+# ni script shell, ni post-receive. Un dépôt dont la page d'accueil se trouve
+# dans un sous-dossier produit donc une racine web sans index.html, et Apache
+# répond 403.
+#
+# Ce workflow déplace le build en amont : GitHub construit le site à chaque
+# poussée sur main, vérifie le résultat, puis publie le CONTENU de public/ à
+# la RACINE d'une branche « deploy ». Hostinger n'a plus qu'à cloner cette
+# branche : index.html s'y trouve au premier niveau.
+#
+#   main    -> sources + build + public/ (résultat versionné)
+#   deploy  -> uniquement le site, prêt à servir, index.html à la racine
+#
+# Aucun secret n'est nécessaire : GITHUB_TOKEN suffit à écrire dans le dépôt.
+# ---------------------------------------------------------------------------
+
+on:
+  push:
+    branches: [main]
+    # Une modification de documentation ne justifie pas une republication.
+    paths-ignore:
+      - 'docs/**'
+      - 'tests/**'
+      - '**/*.md'
+  workflow_dispatch:
+
+# Écriture limitée au contenu du dépôt, rien d'autre.
+permissions:
+  contents: write
+
+# Deux poussées rapprochées ne doivent pas publier dans le désordre.
+concurrency:
+  group: publication-hostinger
+  cancel-in-progress: false
+
+jobs:
+  construire-et-publier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer les sources
+        uses: actions/checkout@v4
+
+      # Aucune dépendance à installer : le build n'utilise que bash, perl et
+      # find, tous présents sur le runner. C'est volontaire — le site doit
+      # rester constructible sur n'importe quel poste.
+      - name: Construire le site
+        run: bash scripts/build.sh
+
+      - name: Contrôler le référencement et les liens
+        run: bash scripts/check-seo.sh
+
+      - name: Contrôler la structure HTML
+        run: python3 scripts/check-html.py
+
+      - name: Contrôler les données structurées
+        run: |
+          python3 - <<'PY'
+          import json, re, glob, sys
+          invalides, blocs = [], 0
+          for f in sorted(set(glob.glob('public/**/*.html', recursive=True))):
+              html = open(f, encoding='utf-8').read()
+              for bloc in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S):
+                  blocs += 1
+                  try:
+                      json.loads(bloc)
+                  except Exception as e:
+                      invalides.append(f"{f} : {e}")
+          print(f"{blocs} bloc(s) JSON-LD analysé(s)")
+          for i in invalides:
+              print("x", i)
+          sys.exit(1 if invalides else 0)
+          PY
+
+      # Dernier rempart avant publication. Si ce contrôle passait alors que le
+      # dossier est mal formé, Hostinger servirait de nouveau un 403.
+      - name: Vérifier que le dossier est servable tel quel
+        run: |
+          set -e
+          test -f public/index.html \
+            || { echo "public/index.html absent : Apache renverrait 403"; exit 1; }
+          test -f public/.htaccess \
+            || { echo ".htaccess absent : les URLs sans extension renverraient 404"; exit 1; }
+          for couche in public/public public/dist public/build public/serrurier-richard; do
+            test ! -d "$couche" || { echo "couche superflue : $couche"; exit 1; }
+          done
+          echo "Dossier de production conforme : $(find public -type f | wc -l) fichiers."
+
+      - name: Publier le site sur la branche deploy
+        run: |
+          set -e
+          git config --global user.name  "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # On part du dossier construit, et de lui seul : la branche deploy ne
+          # contient jamais les sources, ni les scripts, ni la documentation.
+          cd public
+          git init -q -b deploy
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          # Se rattacher à l'historique existant de la branche, s'il y en a un :
+          # la poussée reste ainsi en avance rapide. Hostinger fait un « git
+          # pull » de son côté, qu'une réécriture d'historique casserait.
+          if git fetch -q --depth=1 origin deploy 2>/dev/null; then
+            git reset -q --soft FETCH_HEAD
+          fi
+
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Aucun changement : rien à publier."
+            exit 0
+          fi
+
+          git commit -q -m "Publication du site — ${GITHUB_SHA::7}"
+          git push -q origin deploy
+          echo "Branche deploy mise à jour. Hostinger peut la récupérer."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

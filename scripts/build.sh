@@ -216,4 +216,81 @@ bash scripts/gen-sitemap.sh "$SITEMAP_ENTRIES"
 
 echo "✓ $PAGE_COUNT pages générées dans public/"
 [ "$PHP_COUNT" -gt 0 ] && echo "✓ $PHP_COUNT script(s) PHP traité(s)"
+
+# ---------------------------------------------------------------------------
+# Vérification du résultat.
+#
+# Un build « qui n'a pas planté » n'est pas un build valide : c'est exactement
+# ce qui a produit un déploiement en 403, un dossier sans index.html à
+# l'endroit servi par Apache. Le script refuse donc de rendre la main tant
+# que le dossier de production n'est pas réellement exploitable.
+# ---------------------------------------------------------------------------
+
+MANQUES=0
+manque() { echo "  ✗ $1"; MANQUES=$((MANQUES + 1)); }
+
+echo
+echo "Vérification du dossier de production…"
+
+# 1. La page d'accueil, à la RACINE de public/ et nulle part ailleurs.
+if [ -f "$OUT/index.html" ]; then
+  echo "  ✓ index.html présent à la racine de $OUT/"
+else
+  manque "index.html ABSENT de la racine de $OUT/ — Apache renverrait 403"
+fi
+
+# 2. Aucune couche superflue : public/public/, public/serrurier-richard/…
+for indesirable in "$OUT/public" "$OUT/dist" "$OUT/build" "$OUT/serrurier-richard"; do
+  [ -d "$indesirable" ] && manque "couche superflue détectée : $indesirable/"
+done
+
+# 3. Les fichiers indispensables au fonctionnement et au référencement.
+for requis in \
+  "$OUT/.htaccess" \
+  "$OUT/404.html" \
+  "$OUT/robots.txt" \
+  "$OUT/sitemap.xml" \
+  "$OUT/manifest.webmanifest" \
+  "$OUT/assets/css/style.css" \
+  "$OUT/assets/js/site.js" \
+  "$OUT/assets/img/favicon.svg" \
+  "$OUT/assets/img/og-default.jpg"; do
+  [ -f "$requis" ] || manque "fichier requis absent : ${requis#$OUT/}"
+done
+
+# 4. Toutes les ressources référencées par les pages existent réellement.
+#    C'est ce contrôle qui attrape un CSS ou une image manquante avant la
+#    mise en ligne, plutôt qu'après.
+RESSOURCES=$( { grep -rhoE 'src="/[^"]+"' "$OUT" --include='*.html'
+                grep -rhoE 'href="/assets/[^"]+"' "$OUT" --include='*.html'
+                grep -rhoE 'href="/manifest[^"]*"' "$OUT" --include='*.html'
+              } 2>/dev/null | sed 's/^[a-z]*="//;s/"$//' | sort -u )
+NB_RESSOURCES=0
+while IFS= read -r ref; do
+  [ -n "$ref" ] || continue
+  NB_RESSOURCES=$((NB_RESSOURCES + 1))
+  [ -f "$OUT$ref" ] || manque "ressource référencée mais absente : $ref"
+done <<< "$RESSOURCES"
+
+# 5. Le sitemap doit contenir des URLs, pas seulement son enveloppe XML.
+NB_URLS=$(grep -c '<loc>' "$OUT/sitemap.xml" 2>/dev/null || echo 0)
+if [ "${NB_URLS:-0}" -lt 1 ]; then
+  manque "sitemap.xml ne contient aucune URL"
+fi
+
+# 6. Aucun token de gabarit non résolu.
+if grep -rqo '{{[A-Za-z_]*}}' "$OUT" 2>/dev/null; then
+  manque "tokens {{...}} non résolus : $(grep -rho '{{[A-Za-z_]*}}' "$OUT" | sort -u | tr '\n' ' ')"
+fi
+
+echo
+
+if [ "$MANQUES" -gt 0 ]; then
+  echo "BUILD FAILED — $MANQUES problème(s). Le dossier $OUT/ n'est pas déployable."
+  exit 1
+fi
+
+echo "BUILD SUCCESS"
+echo "  $PAGE_COUNT pages · $NB_URLS URLs au sitemap · $NB_RESSOURCES ressources vérifiées"
+echo "  Dossier de production : $OUT/  (à servir comme document root)"
 exit 0

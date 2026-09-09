@@ -29,7 +29,7 @@ etape() {
 titre() { echo; echo "${GRAS}=== $1 ===${FIN}"; echo; }
 
 # --- 1. Construction --------------------------------------------------------
-titre "1/5  Construction"
+titre "1/6  Construction"
 if bash scripts/build.sh; then
   etape "BUILD" "OK"
 else
@@ -39,7 +39,7 @@ else
 fi
 
 # --- 2. SEO, liens, ressources ---------------------------------------------
-titre "2/5  Contrôle SEO, liens internes et ressources"
+titre "2/6  Contrôle SEO, liens internes et ressources"
 if bash scripts/check-seo.sh; then
   etape "SEO / LIENS" "OK"
 else
@@ -47,7 +47,7 @@ else
 fi
 
 # --- 3. Structure HTML ------------------------------------------------------
-titre "3/5  Structure HTML"
+titre "3/6  Structure HTML"
 if command -v python3 > /dev/null; then
   if python3 scripts/check-html.py; then
     etape "HTML" "OK"
@@ -60,7 +60,7 @@ else
 fi
 
 # --- 4. Données structurées -------------------------------------------------
-titre "4/5  Données structurées"
+titre "4/6  Données structurées"
 if command -v python3 > /dev/null; then
   if python3 - <<'PY'
 import json, re, glob, sys
@@ -89,7 +89,7 @@ else
 fi
 
 # --- 5. Parcours navigateur -------------------------------------------------
-titre "5/5  Parcours navigateur (mobile, tablette, ordinateur)"
+titre "5/6  Parcours navigateur (mobile, tablette, ordinateur)"
 if command -v node > /dev/null && command -v php > /dev/null \
    && node -e "require.resolve('playwright')" 2>/dev/null; then
   if bash tests/lancer.sh; then
@@ -103,6 +103,78 @@ else
   etape "TESTS NAVIGATEUR" "IGNOREE"
 fi
 
+# --- 6. Simulation du déploiement Hostinger --------------------------------
+# Une erreur 403 sur un mutualisé a presque toujours la même origine : le
+# dossier servi par Apache ne contient pas de page d'accueil. Cette étape
+# reconstitue ce qu'Apache verra et le vérifie, sans avoir besoin d'Apache.
+titre "6/6  Simulation du déploiement Hostinger"
+
+PB403=0
+signaler() { echo "  ${ROUGE}x${FIN} $1"; PB403=1; }
+valider()  { echo "  ${VERT}v${FIN} $1"; }
+
+# a) Ce que Hostinger servira comme racine web est le contenu de public/.
+if [ -f public/index.html ]; then
+  valider "index.html présent à la racine du document root"
+else
+  signaler "index.html ABSENT de la racine — Apache renverrait 403"
+fi
+
+# b) Aucune couche intermédiaire.
+COUCHE=0
+for d in public/public public/dist public/build public/serrurier-richard; do
+  if [ -d "$d" ]; then signaler "couche superflue : $d/"; COUCHE=1; fi
+done
+[ "$COUCHE" -eq 0 ] && valider "aucune couche superflue dans le document root"
+
+# c) Le dépôt lui-même ne doit pas réintroduire d'imbrication.
+if [ -d serrurier-richard ]; then
+  signaler "dossier serrurier-richard/ à la racine du dépôt : imbrication réintroduite"
+else
+  valider "racine du dépôt à plat"
+fi
+
+# d) Le .htaccess, sans lequel les URLs sans extension tombent en 404.
+if [ -f public/.htaccess ]; then
+  valider ".htaccess présent dans le document root"
+  grep -q 'ErrorDocument 404' public/.htaccess \
+    && valider "page 404 personnalisée déclarée" \
+    || signaler "ErrorDocument 404 absent du .htaccess"
+  grep -q 'RewriteRule \^\\\.git' public/.htaccess \
+    && valider "dossier .git bloqué (le déploiement Git en dépose un)" \
+    || signaler ".git non bloqué : le code source serait lisible en ligne"
+else
+  signaler ".htaccess absent : toutes les URLs sans extension renverraient 404"
+fi
+
+# e) Le workflow qui alimente la branche servie par Hostinger.
+if [ -f .github/workflows/deploy.yml ]; then
+  valider "workflow de publication présent"
+  grep -q 'HEAD:deploy\|origin deploy' .github/workflows/deploy.yml \
+    && valider "il publie bien vers la branche deploy" \
+    || signaler "le workflow ne publie pas vers la branche deploy"
+else
+  signaler "aucun workflow : la branche deploy ne serait jamais alimentée"
+fi
+
+# f) Reconstitution du dossier tel qu'il arrivera sur le serveur.
+TMP_SIM="$(mktemp -d)"
+cp -a public/. "$TMP_SIM"/ 2>/dev/null
+if [ -f "$TMP_SIM/index.html" ]; then
+  valider "simulation : le clone de la branche deploy expose index.html à sa racine"
+else
+  signaler "simulation : la racine du clone serait sans index.html"
+fi
+NB_FICHIERS=$(find "$TMP_SIM" -type f | wc -l | tr -d ' ')
+rm -rf "$TMP_SIM"
+echo "      ${NB_FICHIERS} fichiers seraient déployés"
+
+if [ "$PB403" -eq 0 ]; then
+  etape "403 CHECK" "OK"
+else
+  etape "403 CHECK" "ECHEC"; ECHEC=1
+fi
+
 # --- Synthèse ---------------------------------------------------------------
 echo
 echo "${GRAS}================ SYNTHÈSE DE L'AUDIT ================${FIN}"
@@ -114,12 +186,12 @@ while IFS='|' read -r libelle statut; do
     IGNOREE) couleur="$JAUNE" ;;
     *)       couleur="$ROUGE" ;;
   esac
-  printf '  %-25s %s%s%s\n' "$libelle" "$couleur" "$statut" "$FIN"
+  printf '  %-28s %s%s%s\n' "$libelle" "$couleur" "$statut" "$FIN"
 done <<< "$RESULTATS"
 
 # Le déploiement dépend uniquement des étapes techniques.
 if [ "$ECHEC" -eq 0 ]; then
-  printf '  %-25s %s%s%s\n' "DÉPLOIEMENT HOSTINGER" "$VERT" "PRÊT" "$FIN"
+  printf '  %-28s %s%s%s\n' "DÉPLOIEMENT HOSTINGER" "$VERT" "PRÊT" "$FIN"
   echo
   echo "  Le dossier public/ ($(find public -type f | wc -l | tr -d ' ') fichiers,"
   echo "  $(du -sh public | cut -f1)) peut être déposé tel quel dans public_html/."
@@ -128,7 +200,7 @@ if [ "$ECHEC" -eq 0 ]; then
   echo "  (assureur, médiateur) avant l'ouverture au public, et lisez la section"
   echo "  « Cohérence géographique » du README avant de passer le site en index."
 else
-  printf '  %-25s %s%s%s\n' "DÉPLOIEMENT HOSTINGER" "$ROUGE" "BLOQUÉ" "$FIN"
+  printf '  %-28s %s%s%s\n' "DÉPLOIEMENT HOSTINGER" "$ROUGE" "BLOQUÉ" "$FIN"
   echo
   echo "  Corrigez les étapes en échec ci-dessus, puis relancez cet audit."
 fi

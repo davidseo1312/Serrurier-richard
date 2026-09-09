@@ -29,7 +29,7 @@ Conçu pour un hébergement mutualisé Hostinger : on dépose le contenu de
 - [Le formulaire de devis](#le-formulaire-de-devis)
 - [Google Analytics, Tag Manager, Search Console](#google-analytics-tag-manager-search-console)
 - [Contrôles avant mise en ligne](#contrôles-avant-mise-en-ligne)
-- [Déploiement sur Hostinger](#déploiement-sur-hostinger)
+- [DEPLOYMENT HOSTINGER](#deployment-hostinger)
 - [Cohérence géographique — à trancher avant publication](#cohérence-géographique--à-trancher-avant-publication)
 - [Avant la mise en ligne : informations à fournir](#avant-la-mise-en-ligne--informations-à-fournir)
 
@@ -125,6 +125,10 @@ tests/
   lancer.sh                    Lance ces tests
 docs/
   modele-page-ville.html       Modèle commenté pour une nouvelle page locale
+  deploiement-hostinger.md     Marche à suivre détaillée
+  configuration.md             Référence de toutes les variables
+.github/workflows/
+  deploy.yml                   Build et publication vers la branche deploy
 ```
 
 `public/` **est versionné** : il permet de récupérer le dossier prêt à
@@ -417,72 +421,170 @@ npm install playwright && npx playwright install chromium
 
 ---
 
-## Déploiement sur Hostinger
+## DEPLOYMENT HOSTINGER
 
-### Option A — envoi FTP depuis votre poste
+### En une ligne
+
+| | |
+|---|---|
+| **Dépôt GitHub** | `https://github.com/davidseo1312/serrurier-richard` |
+| **Branche à déployer** | **`deploy`** — surtout pas `main` |
+| **Commande de build** | aucune côté Hostinger : GitHub construit en amont |
+| **Dossier de sortie du build** | `public/` (sur `main`) |
+| **Répertoire racine Hostinger** | `public_html` |
+| **Document root servi** | `public_html`, qui contient directement `index.html` |
+
+> **Le point décisif : la branche est `deploy`, pas `main`.**
+> Pointer Hostinger sur `main` reproduit exactement l'erreur 403 : la racine
+> web se retrouve sans `index.html`. La section « Pourquoi une branche
+> `deploy` » ci-dessous explique pourquoi.
+
+### Pourquoi une branche `deploy`
+
+Le déploiement Git de Hostinger, sur une offre mutualisée, **clone le dépôt et
+s'arrête là**. Il n'exécute aucun build : ni `npm`, ni script shell, ni
+`post-receive`. Ce que contient la branche est exactement ce qu'Apache servira.
+
+Or `main` contient les sources *et* le résultat du build, avec la page
+d'accueil dans `public/index.html`. Cloner `main` dans `public_html` donne
+donc une racine web sans page d'accueil, et Apache répond :
+
+```
+AH01276: Cannot serve directory /public_html/: No matching DirectoryIndex
+found, and server-generated directory index forbidden by Options directive
+```
+
+C'est-à-dire **403 Forbidden**.
+
+Le workflow `.github/workflows/deploy.yml` résout cela en déplaçant le build
+en amont : à chaque poussée sur `main`, GitHub construit le site, contrôle le
+résultat, et publie le **contenu** de `public/` à la **racine** de la branche
+`deploy`.
+
+```
+main    →  sources + scripts + public/   (le dépôt de travail)
+   │
+   │  GitHub Actions : build + vérifications
+   ▼
+deploy  →  index.html, assets/, blog/…   (uniquement le site)
+   │
+   │  Hostinger : git clone / git pull
+   ▼
+public_html/index.html                   →  le site répond
+```
+
+La branche `deploy` ne contient ni sources, ni scripts, ni documentation :
+rien de ce qui n'a pas à être publié.
+
+### Configuration dans hPanel
+
+*hPanel > Avancé > Git*
+
+| Champ | Valeur |
+|---|---|
+| Repository | `https://github.com/davidseo1312/serrurier-richard.git` |
+| Branch | `deploy` |
+| Directory | *laisser vide* (ou `public_html`) |
+
+Puis **Create**. Hostinger clone la branche dans la racine web.
+
+Pour les mises à jour, deux possibilités :
+
+- **Manuelle** : bouton *Deploy* dans hPanel après chaque poussée sur `main`.
+- **Automatique** : copiez l'URL du *webhook* affichée par hPanel et
+  collez-la dans GitHub, sous *Settings > Webhooks > Add webhook*, en
+  déclencheur `push`. Chaque publication sur `deploy` déclenche alors le
+  déploiement sans intervention.
+
+> Le dépôt étant public, aucune clé SSH n'est nécessaire. S'il devenait
+> privé, hPanel affiche une clé publique à déclarer dans
+> *GitHub > Settings > Deploy keys*.
+
+### Première mise en route
+
+1. **Fusionner le travail dans `main`.** Le workflow ne se déclenche que sur
+   `main` : tant que les correctifs vivent sur une autre branche, la branche
+   `deploy` n'existe pas.
+2. **Vérifier que le workflow a réussi** — onglet *Actions* du dépôt. Il doit
+   afficher « Build et publication vers Hostinger » au vert. En cas d'échec,
+   le journal indique l'étape fautive ; rien n'est publié.
+3. **Confirmer que la branche `deploy` existe** et que `index.html` est bien à
+   sa racine, directement sur GitHub.
+4. **Activer le SSL** — *hPanel > Sécurité > SSL* — et attendre « Actif ».
+   À faire **avant** le premier déploiement : le `.htaccess` force le HTTPS.
+5. **Créer la boîte d'expédition** `site@votre-domaine.fr` —
+   *hPanel > Emails*. Sans elle, le formulaire de devis n'envoie rien.
+6. **Configurer Git dans hPanel** comme indiqué ci-dessus, puis *Deploy*.
+
+### Vérifications après déploiement
+
+| # | URL | Attendu |
+|---|---|---|
+| 1 | `http://votre-domaine.fr` | redirige vers `https://` |
+| 2 | `https://www.votre-domaine.fr` | redirige vers la version sans `www` |
+| 3 | `/` | **200** — la page d'accueil |
+| 4 | `/tarifs` | **200**, sans `.html` dans l'URL |
+| 5 | `/tarifs.html` | **301** vers `/tarifs` |
+| 6 | `/blog/` | **200** |
+| 7 | `/services/ouverture-de-porte` | **301** vers `/ouverture-porte` |
+| 8 | `/une-url-inexistante` | **404**, la page 404 du site |
+| 9 | `/robots.txt`, `/sitemap.xml` | **200** |
+| 10 | `/.git/config` | **403** — le dépôt ne doit pas être lisible |
+| 11 | `/devis-serrurerie` puis envoi | redirection vers `/merci`, message reçu |
+
+Le point 10 n'est pas anecdotique : le déploiement Git dépose un dossier
+`.git` dans la racine web. Le `.htaccess` le bloque, mais autant le vérifier.
+
+### Si le site renvoie encore 403
+
+Le diagnostic tient en deux requêtes — comparez `/` et `/tarifs` :
+
+| Ce que vous obtenez | Cause | Correction |
+|---|---|---|
+| `/` **403** + `/tarifs` **404** | Racine web sans `index.html` | Hostinger pointe sur `main` au lieu de `deploy`, ou sur un sous-dossier |
+| `/` **403** + `/tarifs` **200** | `index.html` absent ou illisible | Vérifier sa présence, droits 644 |
+| **403 partout** | Droits, ou domaine non rattaché | Fichiers 644, dossiers 755 |
+| **500 partout** | Directive refusée dans le `.htaccess` | Commenter `Options -MultiViews -Indexes` |
+| `/` **200** + `/tarifs` **404** | `.htaccess` absent ou `mod_rewrite` inactif | Vérifier sa présence (fichier caché) |
+
+Ou laissez le script trancher :
 
 ```bash
-cp .env.exemple .env                      # puis renseigner les identifiants
+bash scripts/diag-hostinger.sh
+```
+
+### Méthodes de déploiement alternatives
+
+Le déploiement Git est la voie recommandée. Deux replis existent, utiles si
+GitHub Actions est indisponible :
+
+**Envoi FTP depuis votre poste**
+
+```bash
+cp .env.exemple .env                      # identifiants FTP (hPanel > Comptes FTP)
 bash scripts/build.sh
 bash scripts/deploy-hostinger.sh --dry    # simulation
 bash scripts/deploy-hostinger.sh          # envoi réel
 ```
 
-Les identifiants FTP se créent dans *hPanel > Fichiers > Comptes FTP*. Le mot
-de passe est celui du **compte FTP**, pas celui de votre compte Hostinger.
-
-`.env` est ignoré par Git : vos identifiants ne partiront jamais sur GitHub.
-
-### Option B — dépôt manuel
+**Dépôt manuel**
 
 Le contenu de `public/` se dépose tel quel dans `public_html/`, par le
-gestionnaire de fichiers de hPanel ou par FTP.
+gestionnaire de fichiers de hPanel.
 
-**Attention au fichier `.htaccess`** : il commence par un point et reste
-invisible par défaut dans beaucoup de clients FTP et dans le gestionnaire de
-fichiers. Activez l'affichage des fichiers cachés avant de copier. Sans lui,
-toutes les URLs sans extension renvoient une erreur 404 et le site paraît
-cassé.
+> **Attention au `.htaccess`** : il commence par un point et reste invisible
+> par défaut dans les clients FTP et le gestionnaire de fichiers. Activez
+> l'affichage des fichiers cachés avant de copier. Sans lui, toutes les URLs
+> sans extension renvoient 404.
 
-### Option C — déploiement Git de Hostinger
-
-`public/` étant versionné, vous pouvez connecter le dépôt dans
-*hPanel > Avancé > Git*. Indiquez `public` comme répertoire à publier.
-
-### Après le déploiement
-
-`deploy-hostinger.sh` affiche la liste des vérifications. Dans l'ordre :
-
-1. `https://votre-domaine.fr/` répond, et `http://` redirige vers `https://`
-2. Une URL sans extension fonctionne : `/tarifs`
-3. Une URL inexistante affiche la page 404 personnalisée
-4. Les anciennes adresses redirigent : `/services/ouverture-de-porte`
-5. `/sitemap.xml` et `/robots.txt` sont accessibles
-6. Le formulaire envoie réellement un message
-
-### Si les URLs sans extension renvoient 404
-
-Trois causes possibles, dans l'ordre de fréquence :
-
-1. **`.htaccess` n'a pas été copié** — c'est le cas le plus courant. Vérifiez
-   sa présence à la racine de `public_html/`, en affichant les fichiers cachés.
-2. **`mod_rewrite` est désactivé** — rare chez Hostinger, mais réglable dans
-   *hPanel > Avancé > Configuration PHP*.
-3. **Les fichiers sont dans un sous-dossier** — par exemple
-   `public_html/public/`. Lancez `bash scripts/diag-hostinger.sh`, qui
-   localise la racine réelle du site.
-
-### HTTPS
+### HTTPS et HSTS
 
 Le certificat SSL gratuit s'active dans *hPanel > Sécurité > SSL*. Le
-`.htaccess` force ensuite HTTPS de lui-même, sans configuration.
+`.htaccess` force ensuite le HTTPS de lui-même.
 
 Le HSTS est présent mais **commenté** dans le `.htaccess` : ne l'activez
 qu'une fois le certificat confirmé et stable, car la directive est mémorisée
-par les navigateurs pendant deux ans et un HTTPS défaillant rendrait alors le
-site inaccessible.
-
----
+par les navigateurs pendant deux ans.
 
 ## Cohérence géographique — à trancher avant publication
 
