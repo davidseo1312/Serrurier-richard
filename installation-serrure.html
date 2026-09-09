@@ -30,10 +30,6 @@
 <link rel="icon" href="/assets/img/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<!-- Les deux graisses présentes dès le premier écran sont préchargées : sans
-     cela le navigateur ne les découvre qu'après avoir analysé la feuille de
-     style, et le texte permute visiblement. Les autres se chargent à la
-     demande. crossorigin est requis même en même origine pour les polices. -->
 <link rel="preload" href="/assets/fonts/outfit-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/worksans-400.woff2" as="font" type="font/woff2" crossorigin>
 
@@ -45,6 +41,13 @@
   "name": "Installation de serrure",
   "description": "Pose sur porte neuve, ajout d'un verrou de sûreté, passage d'une serrure simple à une multipoints : contraintes à vérifier et déroulé de la pose.",
   "serviceType": "Installation de serrure",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://serrurier-richard.fr/assets/images/og/installation-serrure-porte.jpg",
+    "width": 1200,
+    "height": 630,
+    "caption": "Installation de serrure — pose et montée en sécurité"
+  },
   "url": "https://serrurier-richard.fr/installation-serrure",
   "provider": {
     "@type": "Locksmith",
@@ -124,26 +127,27 @@
 
     <nav id="nav-principal" class="nav" aria-label="Navigation principale">
       <ul>
+        <li><a href="/">Accueil</a></li>
         <li><a href="/serrurier">Prestations</a></li>
-        <li><a href="/serrurier-urgence">Dépannage</a></li>
-        <li><a href="/changement-serrure">Serrures</a></li>
-        <li><a href="/blindage-porte">Sécurité</a></li>
+        <li><a href="/serrurier-urgence">Urgence</a></li>
         <li><a href="/zones-d-intervention">Zones</a></li>
+        <li><a href="/tarifs">Tarifs</a></li>
         <li><a href="/blog/">Conseils</a></li>
         <li><a href="/contact">Contact</a></li>
-        <li><a href="/devis-serrurerie" class="nav-devis">Devis gratuit</a></li>
       </ul>
     </nav>
 
-    <a class="header-tel" href="tel:+33220060075" data-track="appel" data-track-zone="entete-numero">
-      <span>24h/24 et 7j/7</span>
-      <strong>02 20 06 00 75</strong>
-    </a>
+    <div class="header-actions">
+      <a class="btn btn-ghost header-devis" href="/devis-serrurerie" data-track="clic_devis" data-track-zone="entete">
+        Demander un devis
+      </a>
 
-    <a class="btn btn-call header-call" href="tel:+33220060075" data-track="appel" data-track-zone="entete">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.6 1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
-      <span>Intervention urgente</span>
-    </a>
+      <a class="btn btn-call header-call" href="tel:+33220060075" data-track="appel" data-track-zone="entete">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.6 1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
+        <span class="header-call-libelle">Appeler</span>
+        <strong class="header-call-numero">02 20 06 00 75</strong>
+      </a>
+    </div>
   </div>
 </header>
 
@@ -290,6 +294,18 @@
       possible, nous revenons vers vous sous 24 à 48 heures ouvrées.
     </p>
 
+    <div class="cta-bande">
+      <div class="cta-bande-texte">
+        <h2>Un projet de pose ou d'installation ?</h2>
+        <p>Un technicien décroche et vous annonce le prix et le délai réel avant tout déplacement.</p>
+      </div>
+      <div class="cta-bande-actions">
+        <a class="btn btn-call" href="tel:+33220060075" data-track="appel" data-track-zone="bande-installation-serrure">02 20 06 00 75</a>
+        <a class="btn btn-ghost" href="/devis-serrurerie" data-track="clic_devis" data-track-zone="bande-installation-serrure">Demander un devis</a>
+      </div>
+    </div>
+
+
     <div class="faq">
       <h2>Questions fréquentes</h2>
       <details>
@@ -321,6 +337,21 @@
   </div>
 </section>
 
+
+<section class="alt services-associes">
+  <div class="wrap">
+    <h2>Prestations associées</h2>
+    <p>Les pages qui traitent les situations voisines de celle-ci.</p>
+    <ul class="liens-connexes">
+      <li><a href="/serrure-3-points">Serrure 3 points</a></li>
+      <li><a href="/serrure-5-points">Serrure 5 points</a></li>
+      <li><a href="/blindage-porte">Blindage de porte</a></li>
+      <li><a href="/porte-blindee">Porte blindée</a></li>
+      <li><a href="/changement-serrure">Changement de serrure</a></li>
+      <li><a href="/devis-serrurerie">Demander un devis</a></li>
+    </ul>
+  </div>
+</section>
 
 <section class="cta-final">
   <div class="wrap">
