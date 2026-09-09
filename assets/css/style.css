@@ -1,0 +1,652 @@
+/* ==========================================================================
+   Serrurier Richard — feuille de style unique
+   Police système uniquement : aucune requête réseau externe (LCP optimal).
+   ========================================================================== */
+
+:root {
+  --bleu-900: #071d33;
+  --bleu-800: #0b2a4a;
+  --bleu-700: #123c68;
+  --bleu-100: #e7eff7;
+  --ambre:    #f5a524;
+  --ambre-fonce: #c97f0c;
+  --rouge:    #c62828;
+  --vert:     #1a7f4b;
+
+  --texte:      #16202b;
+  --texte-doux: #4a5b6d;
+  --fond:       #ffffff;
+  --fond-doux:  #f4f7fa;
+  --bordure:    #dbe3ec;
+
+  --rayon: 10px;
+  --ombre: 0 1px 2px rgba(7,29,51,.06), 0 6px 20px rgba(7,29,51,.08);
+  --largeur: 1140px;
+
+  --police: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --texte:      #e8eef5;
+    --texte-doux: #a7b7c8;
+    --fond:       #0d1721;
+    --fond-doux:  #131f2c;
+    --bordure:    #26374a;
+    --bleu-100:   #16283c;
+    --ombre: 0 1px 2px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.35);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+body {
+  margin: 0;
+  font-family: var(--police);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--texte);
+  background: var(--fond);
+  -webkit-text-size-adjust: 100%;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--bleu-700); }
+@media (prefers-color-scheme: dark) { a { color: #7cb8ec; } }
+
+h1, h2, h3, h4 { line-height: 1.2; margin: 0 0 .6em; font-weight: 700; letter-spacing: -.015em; }
+h1 { font-size: clamp(1.85rem, 1.2rem + 2.4vw, 2.9rem); }
+h2 { font-size: clamp(1.4rem, 1.1rem + 1.3vw, 2rem); }
+h3 { font-size: 1.2rem; }
+p  { margin: 0 0 1.1em; }
+
+.wrap { width: min(100% - 2.5rem, var(--largeur)); margin-inline: auto; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.skip-link {
+  position: absolute; left: -9999px; top: 0; z-index: 999;
+  background: var(--ambre); color: #000; padding: .8rem 1.2rem; font-weight: 700;
+}
+.skip-link:focus { left: 0; }
+
+:focus-visible { outline: 3px solid var(--ambre); outline-offset: 2px; }
+
+/* --- Boutons -------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .85rem 1.4rem;
+  border-radius: var(--rayon);
+  font-weight: 700; font-size: 1rem; text-decoration: none;
+  border: 2px solid transparent; cursor: pointer;
+  transition: transform .12s ease, background-color .12s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn svg { width: 1.25em; height: 1.25em; flex: none; }
+
+.btn-call { background: var(--ambre); color: #1a1200; }
+.btn-call:hover { background: var(--ambre-fonce); color: #fff; }
+
+.btn-ghost { border-color: currentColor; color: inherit; }
+.btn-ghost:hover { background: var(--bleu-100); }
+
+/* --- En-tête -------------------------------------------------------------- */
+
+.site-header {
+  background: var(--bleu-800); color: #fff;
+  position: sticky; top: 0; z-index: 100;
+}
+.header-inner {
+  display: flex; align-items: center; gap: 1rem;
+  padding: .7rem 0; flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: .6rem; color: #fff; text-decoration: none; margin-right: auto; }
+.brand-mark { width: 34px; height: 34px; color: var(--ambre); flex: none; }
+.brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.brand-text strong { font-size: 1.05rem; }
+.brand-text small { font-size: .74rem; color: #9dc0e0; font-weight: 400; }
+
+.nav ul { display: flex; gap: 1.2rem; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+.nav a { color: #dbe9f7; text-decoration: none; font-size: .92rem; font-weight: 500; }
+.nav a:hover { color: var(--ambre); text-decoration: underline; }
+
+.header-call { padding: .6rem 1rem; font-size: .95rem; }
+
+.nav-toggle { display: none; background: none; border: 0; padding: .5rem; cursor: pointer; }
+.nav-toggle-bars, .nav-toggle-bars::before, .nav-toggle-bars::after {
+  display: block; width: 24px; height: 3px; background: #fff; border-radius: 2px; content: "";
+}
+.nav-toggle-bars::before { transform: translateY(-8px); }
+.nav-toggle-bars::after  { transform: translateY(5px); }
+
+@media (max-width: 960px) {
+  .nav-toggle { display: block; order: 3; }
+  .nav { order: 4; flex-basis: 100%; display: none; }
+  .nav[data-ouvert="true"] { display: block; }
+  .nav ul { flex-direction: column; gap: 0; padding: .5rem 0; }
+  .nav li { border-top: 1px solid rgba(255,255,255,.12); }
+  .nav a { display: block; padding: .8rem .2rem; }
+  .header-call span { display: none; }
+  .header-call { padding: .6rem .8rem; }
+}
+
+/* --- Bandeau d'urgence ---------------------------------------------------- */
+
+.hero {
+  background: linear-gradient(160deg, var(--bleu-900), var(--bleu-700));
+  color: #fff; padding: 3.5rem 0 3rem;
+}
+.hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 2.5rem; align-items: center; }
+@media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+
+.hero h1 { color: #fff; }
+.hero p.chapeau { font-size: 1.12rem; color: #cfe1f2; max-width: 34em; }
+
+.urgence-badge {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: rgba(245,165,36,.16); color: var(--ambre);
+  border: 1px solid rgba(245,165,36,.4);
+  padding: .35rem .85rem; border-radius: 999px;
+  font-size: .85rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+  margin-bottom: 1rem;
+}
+.pastille {
+  width: 9px; height: 9px; border-radius: 50%; background: var(--ambre);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+.hero-actions { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.5rem; }
+.hero-actions .btn-ghost { color: #fff; }
+.hero-actions .btn-ghost:hover { background: rgba(255,255,255,.12); }
+
+.hero-preuves { display: flex; gap: 1.8rem; flex-wrap: wrap; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,.15); }
+.preuve { display: flex; flex-direction: column; }
+.preuve strong { font-size: 1.45rem; color: var(--ambre); }
+.preuve span { font-size: .85rem; color: #b9d2e8; }
+
+.hero-media img { border-radius: var(--rayon); box-shadow: 0 18px 40px rgba(0,0,0,.35); }
+
+/* --- Sections ------------------------------------------------------------- */
+
+section { padding: 3.2rem 0; }
+section.alt { background: var(--fond-doux); }
+
+.section-titre { max-width: 40em; margin-bottom: 2rem; }
+.section-titre p { color: var(--texte-doux); }
+
+.grille { display: grid; gap: 1.4rem; }
+.grille-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grille-2 { grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+
+.carte {
+  background: var(--fond); border: 1px solid var(--bordure);
+  border-radius: var(--rayon); padding: 1.5rem; box-shadow: var(--ombre);
+}
+.carte h3 { margin-bottom: .5rem; }
+.carte p { color: var(--texte-doux); margin-bottom: .8rem; }
+.carte .lien-fleche { font-weight: 600; text-decoration: none; }
+.carte .lien-fleche::after { content: " \2192"; }
+.carte .lien-fleche:hover { text-decoration: underline; }
+
+.carte-icone {
+  width: 44px; height: 44px; border-radius: 9px;
+  background: var(--bleu-100); color: var(--bleu-700);
+  display: grid; place-items: center; margin-bottom: 1rem;
+}
+.carte-icone svg { width: 24px; height: 24px; }
+@media (prefers-color-scheme: dark) { .carte-icone { color: #7cb8ec; } }
+
+/* --- Etapes --------------------------------------------------------------- */
+
+.etapes { counter-reset: etape; list-style: none; padding: 0; margin: 0; display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.etapes li { counter-increment: etape; padding-top: 3rem; position: relative; }
+.etapes li::before {
+  content: counter(etape); position: absolute; top: 0; left: 0;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--ambre); color: #1a1200;
+  display: grid; place-items: center; font-weight: 800; font-size: 1.1rem;
+}
+.etapes h3 { margin-bottom: .3rem; }
+.etapes p { color: var(--texte-doux); margin: 0; font-size: .95rem; }
+
+/* --- Tableau de tarifs ---------------------------------------------------- */
+
+.tableau-wrap { overflow-x: auto; border: 1px solid var(--bordure); border-radius: var(--rayon); }
+table { width: 100%; border-collapse: collapse; min-width: 480px; }
+caption { text-align: left; padding: 1rem; font-weight: 600; color: var(--texte-doux); }
+th, td { padding: .85rem 1rem; text-align: left; border-bottom: 1px solid var(--bordure); }
+thead th { background: var(--fond-doux); font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; color: var(--texte-doux); }
+tbody tr:last-child td { border-bottom: 0; }
+td.prix { font-weight: 700; white-space: nowrap; }
+
+/* --- Encadres ------------------------------------------------------------- */
+
+.encadre {
+  border-left: 4px solid var(--ambre);
+  background: var(--fond-doux);
+  padding: 1.2rem 1.4rem; border-radius: 0 var(--rayon) var(--rayon) 0;
+  margin: 1.8rem 0;
+}
+.encadre h3 { margin-bottom: .4rem; }
+.encadre p:last-child { margin-bottom: 0; }
+.encadre.alerte { border-left-color: var(--rouge); }
+.encadre.ok { border-left-color: var(--vert); }
+
+/* --- FAQ ------------------------------------------------------------------ */
+
+.faq details {
+  border: 1px solid var(--bordure); border-radius: var(--rayon);
+  padding: 1rem 1.2rem; margin-bottom: .8rem; background: var(--fond);
+}
+.faq summary { font-weight: 600; cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 1rem; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font-size: 1.4rem; line-height: 1; color: var(--ambre); flex: none; }
+.faq details[open] summary::after { content: "\2212"; }
+.faq details p { margin: .9rem 0 0; color: var(--texte-doux); }
+
+/* --- Fil d ariane --------------------------------------------------------- */
+
+.fil { font-size: .85rem; color: var(--texte-doux); padding: 1rem 0 0; }
+.fil ol { list-style: none; display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; }
+.fil li:not(:last-child)::after { content: "\203A"; margin-left: .4rem; opacity: .6; }
+
+/* --- Article -------------------------------------------------------------- */
+
+.article { max-width: 44em; margin-inline: auto; }
+.article h2 { margin-top: 2.2rem; }
+.article ul, .article ol { margin: 0 0 1.2em; padding-left: 1.3em; }
+.article li { margin-bottom: .45em; }
+.article-meta { color: var(--texte-doux); font-size: .9rem; margin-bottom: 1.5rem; }
+.article img { border-radius: var(--rayon); margin: 1.8rem 0; }
+
+.sommaire { background: var(--fond-doux); border-radius: var(--rayon); padding: 1.2rem 1.5rem; margin-bottom: 2rem; }
+.sommaire h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: .05em; color: var(--texte-doux); margin-bottom: .6rem; margin-top: 0; }
+.sommaire ol { margin: 0; padding-left: 1.2em; }
+
+/* --- Bandeau d appel final ------------------------------------------------ */
+
+.cta-final {
+  background: var(--bleu-800); color: #fff; text-align: center;
+  padding: 3rem 0;
+}
+.cta-final h2 { color: #fff; }
+.cta-final p { color: #cfe1f2; max-width: 38em; margin-inline: auto; }
+
+/* --- Pied de page --------------------------------------------------------- */
+
+.site-footer { background: var(--bleu-900); color: #c6d8e8; padding: 3rem 0 1.5rem; }
+.footer-grid { display: grid; gap: 2rem; grid-template-columns: 1.4fr 1fr 1fr 1fr; }
+@media (max-width: 900px) { .footer-grid { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); } }
+.footer-col h2 { font-size: .82rem; text-transform: uppercase; letter-spacing: .07em; color: #fff; margin-bottom: .9rem; }
+.footer-col ul { list-style: none; margin: 0; padding: 0; }
+.footer-col li { margin-bottom: .45rem; }
+.footer-col a { color: #c6d8e8; text-decoration: none; font-size: .92rem; }
+.footer-col a:hover { color: var(--ambre); text-decoration: underline; }
+.footer-brand strong { color: #fff; display: block; margin-bottom: .5rem; font-size: 1.05rem; }
+.footer-brand p { font-size: .92rem; }
+
+.footer-legal {
+  border-top: 1px solid rgba(255,255,255,.12);
+  margin-top: 2.2rem; padding-top: 1.2rem;
+  font-size: .82rem; color: #8fa9c1;
+}
+.footer-legal p { margin-bottom: .5rem; }
+.copyright { opacity: .75; }
+
+/* --- Barre d'action fixe (mobile) ----------------------------------------
+   Deux actions seulement : appeler, qui domine, et demander un devis pour
+   ceux qui ne veulent pas téléphoner. Hauteur >= 56 px : cible tactile
+   confortable, conforme aux recommandations WCAG 2.5.5.
+   ------------------------------------------------------------------------ */
+
+.barre-mobile { display: none; }
+
+@media (max-width: 760px) {
+  .barre-mobile {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 200;
+    display: grid; grid-template-columns: 2.1fr 1fr;
+    box-shadow: 0 -4px 18px rgba(0,0,0,.28);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .barre-mobile a {
+    display: flex; align-items: center; justify-content: center; gap: .55rem;
+    min-height: 58px; padding: .9rem .5rem;
+    font-weight: 800; font-size: 1.02rem; text-decoration: none;
+    line-height: 1.15;
+  }
+  .barre-mobile svg { width: 1.3em; height: 1.3em; flex: none; }
+  .barre-mobile-appel { background: var(--ambre); color: #1a1200; }
+  .barre-mobile-devis {
+    background: var(--bleu-800); color: #fff;
+    border-left: 1px solid rgba(255,255,255,.15);
+  }
+  body { padding-bottom: calc(58px + env(safe-area-inset-bottom)); }
+}
+
+/* --- Bandeau cookies ------------------------------------------------------ */
+
+.cookie-bandeau {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 300;
+  background: var(--bleu-900); color: #dbe9f7;
+  padding: 1.2rem; box-shadow: 0 -6px 24px rgba(0,0,0,.3);
+}
+.cookie-inner { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
+.cookie-inner p { margin: 0; font-size: .9rem; max-width: 46em; }
+.cookie-actions { display: flex; gap: .6rem; }
+.cookie-actions .btn { padding: .6rem 1.1rem; font-size: .9rem; }
+@media (max-width: 760px) { .cookie-bandeau { bottom: calc(58px + env(safe-area-inset-bottom)); } }
+
+/* ==========================================================================
+   Composants ajoutés — formulaire de devis, grilles de prestations,
+   réassurance, fil d'Ariane enrichi.
+   ========================================================================== */
+
+/* --- Navigation : lien de devis mis en avant ------------------------------ */
+
+.nav-devis {
+  color: var(--ambre) !important;
+  font-weight: 700 !important;
+}
+.nav-devis::before { content: "\203A "; }
+
+/* --- Pied de page : cinq colonnes ----------------------------------------- */
+
+.footer-grid { grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr; }
+@media (max-width: 1080px) { .footer-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); } }
+.footer-horaires { font-size: .84rem; margin-top: 1rem; color: #9dbad4; }
+.footer-h2-suite { margin-top: 1.4rem; }
+
+/* --- Boutons : variantes -------------------------------------------------- */
+
+.btn-devis { background: var(--bleu-700); color: #fff; }
+.btn-devis:hover { background: var(--bleu-800); color: #fff; }
+.btn-urgence { background: var(--rouge); color: #fff; }
+.btn-urgence:hover { background: #a31d1d; color: #fff; }
+.btn-large { padding: 1.05rem 1.9rem; font-size: 1.08rem; }
+.btn-bloc { display: flex; width: 100%; }
+
+/* --- Bandeau d'urgence pleine largeur ------------------------------------- */
+
+.bandeau-urgence {
+  background: var(--rouge); color: #fff;
+  padding: 2.6rem 0;
+}
+.bandeau-urgence h2 { color: #fff; }
+.bandeau-urgence p { color: #ffdede; }
+.bandeau-urgence .btn-call { background: #fff; color: var(--rouge); }
+.bandeau-urgence .btn-call:hover { background: #ffe9c7; color: #7f1414; }
+
+.urgence-inner { display: grid; grid-template-columns: 1.4fr .6fr; gap: 2rem; align-items: center; }
+@media (max-width: 860px) { .urgence-inner { grid-template-columns: 1fr; } }
+
+.liste-situations {
+  list-style: none; padding: 0; margin: 1rem 0 0;
+  display: grid; gap: .5rem 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.liste-situations li {
+  position: relative; padding-left: 1.6rem; font-size: .96rem;
+}
+.liste-situations li::before {
+  content: ""; position: absolute; left: 0; top: .55em;
+  width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: .55;
+}
+
+/* --- Cartes de prestation ------------------------------------------------- */
+
+.carte-service {
+  display: flex; flex-direction: column;
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+.carte-service:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(7,29,51,.14); }
+.carte-service .probleme {
+  font-size: .87rem; color: var(--texte-doux);
+  background: var(--fond-doux); border-radius: 6px;
+  padding: .5rem .7rem; margin: 0 0 .9rem;
+}
+.carte-service .probleme strong { color: var(--texte); }
+.carte-service .carte-pied { margin-top: auto; display: flex; gap: .8rem; flex-wrap: wrap; align-items: center; }
+.carte-service .carte-pied .btn { padding: .6rem 1rem; font-size: .92rem; }
+
+/* --- Réassurance ---------------------------------------------------------- */
+
+.reassurance {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+.reassurance li { display: flex; gap: .8rem; align-items: flex-start; }
+.reassurance svg { width: 26px; height: 26px; flex: none; color: var(--vert); margin-top: .15rem; }
+.reassurance strong { display: block; margin-bottom: .15rem; }
+.reassurance span { font-size: .93rem; color: var(--texte-doux); }
+
+/* --- Emplacement d'avis clients ------------------------------------------- */
+
+.avis-vide {
+  border: 2px dashed var(--bordure); border-radius: var(--rayon);
+  padding: 2rem 1.5rem; text-align: center; color: var(--texte-doux);
+}
+.avis-vide p:last-child { margin-bottom: 0; }
+
+.avis { display: grid; gap: 1.4rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.avis blockquote {
+  margin: 0; background: var(--fond); border: 1px solid var(--bordure);
+  border-radius: var(--rayon); padding: 1.4rem; box-shadow: var(--ombre);
+}
+.avis blockquote p { font-style: italic; }
+.avis figcaption { font-size: .88rem; color: var(--texte-doux); }
+
+/* --- Formulaires ---------------------------------------------------------- */
+
+.formulaire {
+  background: var(--fond); border: 1px solid var(--bordure);
+  border-radius: var(--rayon); padding: 1.8rem; box-shadow: var(--ombre);
+}
+.champs { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.champ { display: flex; flex-direction: column; gap: .35rem; }
+.champ-large { grid-column: 1 / -1; }
+
+.champ label { font-weight: 600; font-size: .94rem; }
+.champ .aide { font-size: .84rem; color: var(--texte-doux); font-weight: 400; }
+.champ .requis { color: var(--rouge); }
+
+.champ input,
+.champ select,
+.champ textarea {
+  font: inherit; font-size: 1rem;
+  color: var(--texte); background: var(--fond);
+  border: 1px solid var(--bordure); border-radius: 8px;
+  padding: .75rem .85rem;
+  width: 100%; min-height: 48px;
+}
+.champ textarea { min-height: 130px; resize: vertical; line-height: 1.5; }
+.champ input:focus, .champ select:focus, .champ textarea:focus {
+  outline: 3px solid var(--ambre); outline-offset: 1px; border-color: var(--bleu-700);
+}
+.champ input[aria-invalid="true"],
+.champ select[aria-invalid="true"],
+.champ textarea[aria-invalid="true"] { border-color: var(--rouge); background: rgba(198,40,40,.05); }
+.champ .erreur { font-size: .86rem; color: var(--rouge); font-weight: 600; }
+
+.champ-radio { display: flex; flex-wrap: wrap; gap: .6rem; }
+.champ-radio label {
+  display: flex; align-items: center; gap: .45rem;
+  border: 1px solid var(--bordure); border-radius: 999px;
+  padding: .55rem 1rem; cursor: pointer; font-weight: 500;
+  min-height: 44px;
+}
+.champ-radio input { width: auto; min-height: 0; margin: 0; accent-color: var(--bleu-700); }
+.champ-radio label:has(input:checked) { border-color: var(--bleu-700); background: var(--bleu-100); font-weight: 700; }
+
+.champ-case { flex-direction: row; align-items: flex-start; gap: .6rem; }
+.champ-case input { width: auto; min-height: 0; margin-top: .3rem; accent-color: var(--bleu-700); }
+.champ-case label { font-weight: 400; font-size: .92rem; }
+
+/* Piège à robots : invisible pour l'humain, rempli par les automates.
+   Ni display:none ni hidden, que certains robots savent détecter. */
+.pot-de-miel {
+  position: absolute !important; left: -9999px !important;
+  width: 1px; height: 1px; overflow: hidden;
+}
+
+.formulaire-actions { margin-top: 1.6rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.formulaire-note { font-size: .86rem; color: var(--texte-doux); margin: 1rem 0 0; }
+
+.message-etat {
+  border-radius: var(--rayon); padding: 1.1rem 1.3rem; margin-bottom: 1.6rem;
+  border-left: 4px solid;
+}
+.message-etat.ok    { border-color: var(--vert);  background: rgba(26,127,75,.08); }
+.message-etat.echec { border-color: var(--rouge); background: rgba(198,40,40,.08); }
+.message-etat p:last-child { margin-bottom: 0; }
+.message-etat ul { margin: .6rem 0 0; padding-left: 1.2rem; }
+
+/* --- Tableau comparatif --------------------------------------------------- */
+
+.comparatif td.oui { color: var(--vert); font-weight: 700; }
+.comparatif td.non { color: var(--texte-doux); }
+
+/* --- Ancres de sommaire --------------------------------------------------- */
+
+:target { scroll-margin-top: 5.5rem; }
+
+/* --- Blocs de mise en avant chiffrée -------------------------------------- */
+
+.chiffres {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.chiffres li {
+  background: var(--fond-doux); border-radius: var(--rayon);
+  padding: 1.2rem; text-align: center;
+}
+.chiffres strong { display: block; font-size: 1.7rem; color: var(--bleu-700); line-height: 1.1; }
+.chiffres span { font-size: .9rem; color: var(--texte-doux); }
+@media (prefers-color-scheme: dark) { .chiffres strong { color: #7cb8ec; } }
+
+/* --- Liens de maillage interne -------------------------------------------- */
+
+.liens-connexes {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-wrap: wrap; gap: .6rem;
+}
+.liens-connexes a {
+  display: inline-block; text-decoration: none;
+  border: 1px solid var(--bordure); border-radius: 999px;
+  padding: .45rem 1rem; font-size: .92rem; font-weight: 500;
+  background: var(--fond);
+}
+.liens-connexes a:hover { border-color: var(--bleu-700); background: var(--bleu-100); }
+
+/* --- Impression ----------------------------------------------------------- */
+
+@media print {
+  .site-header, .barre-mobile, .cookie-bandeau, .nav, .skip-link { display: none !important; }
+  body { padding-bottom: 0; font-size: 12pt; }
+  a[href^="/"]::after { content: " (serrurier-richard.fr" attr(href) ")"; font-size: .85em; }
+  .hero, .cta-final, .bandeau-urgence { background: none !important; color: #000 !important; }
+  .hero h1, .cta-final h2, .bandeau-urgence h2 { color: #000 !important; }
+}
+
+/* ==========================================================================
+   Ajustements mobiles issus du contrôle qualité
+   ========================================================================== */
+
+/* --- En-tête compact -----------------------------------------------------
+   Sur un écran de téléphone, la marque, le bouton d'appel et le menu doivent
+   tenir sur UNE ligne : un en-tête sur deux lignes repousse le titre H1 sous
+   la ligne de flottaison et coûte directement des appels.
+   ------------------------------------------------------------------------ */
+
+@media (max-width: 760px) {
+  .header-inner { flex-wrap: nowrap; gap: .6rem; }
+
+  /* Sans min-width:0, un élément flex refuse de passer sous la largeur de son
+     contenu : la marque pousserait alors le bouton d'appel hors de l'écran. */
+  .brand { min-width: 0; gap: .45rem; }
+  .brand-mark { width: 28px; height: 28px; }
+  .brand-text strong {
+    font-size: .95rem;
+    display: block;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  /* La baseline est déjà dans le <title> et le premier paragraphe : la
+     répéter ici coûte une ligne d'en-tête sans rien apporter. */
+  .brand-text small { display: none; }
+
+  .nav-toggle { order: 0; padding: .5rem .35rem; }
+  .header-call { order: 0; }
+}
+
+/* --- Cibles tactiles du pied de page -------------------------------------
+   WCAG 2.5.8 demande 24 px minimum. Les liens du pied de page tombaient à
+   17 px de haut : deux liens voisins devenaient difficiles à distinguer au
+   pouce.
+   ------------------------------------------------------------------------ */
+
+@media (max-width: 760px) {
+  .footer-col li { margin-bottom: 0; }
+  .footer-col a {
+    display: inline-block;
+    padding: .42rem 0;
+    min-height: 24px;
+  }
+  .footer-legal { font-size: .8rem; }
+}
+
+/* --- Fil d'Ariane sur petit écran ---------------------------------------- */
+
+@media (max-width: 560px) {
+  .fil { font-size: .8rem; }
+  .fil ol { row-gap: .2rem; }
+}
+
+/* --- Formulaire : colonne unique et pleine largeur ------------------------ */
+
+@media (max-width: 760px) {
+  .formulaire { padding: 1.2rem; }
+  .formulaire-actions .btn { width: 100%; }
+  .champ-radio label { flex: 1 1 auto; justify-content: center; }
+}
+
+/* --- Cibles tactiles restantes ------------------------------------------- */
+
+/* Le bouton du menu n'occupait que 19 px de haut : trois barres de 3 px et
+   presque rien autour. La zone cliquable est portée à 44 px sans changer
+   l'apparence du pictogramme. */
+.nav-toggle {
+  min-width: 44px; min-height: 44px;
+  display: none; align-items: center; justify-content: center;
+}
+@media (max-width: 960px) { .nav-toggle { display: flex; } }
+
+/* Les liens « flèche » terminent une carte : ce sont de vrais appels à
+   l'action, pas des liens noyés dans un paragraphe. Ils doivent donc
+   respecter la taille minimale de cible tactile. */
+.carte .lien-fleche,
+.encadre .lien-fleche {
+  display: inline-block;
+  padding: .25rem 0;
+  min-height: 24px;
+}
+
+/* Lien secondaire du bandeau d'urgence, sur fond rouge. */
+.bandeau-urgence a {
+  display: inline-block;
+  padding: .3rem .2rem;
+  min-height: 24px;
+}

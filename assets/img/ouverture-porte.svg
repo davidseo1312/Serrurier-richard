@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 620" width="1120" height="620" role="img" aria-label="Ouverture de porte claquee par la methode de la radiographie">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#123c68"/><stop offset="1" stop-color="#071d33"/></linearGradient>
+    <linearGradient id="or1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffc766"/><stop offset="1" stop-color="#c97f0c"/></linearGradient>
+  </defs>
+  <rect width="1120" height="620" fill="url(#bg1)"/>
+  <ellipse cx="560" cy="330" rx="430" ry="290" fill="#2a6ba8" opacity="0.16"/>
+  <rect x="300" y="70" width="330" height="490" rx="5" fill="#0a2743"/>
+  <rect x="312" y="82" width="306" height="478" rx="3" fill="#1d4f7f"/>
+  <g fill="none" stroke="#2f6ea8" stroke-width="3" opacity="0.5">
+    <rect x="340" y="110" width="250" height="160" rx="3"/><rect x="340" y="300" width="250" height="220" rx="3"/>
+  </g>
+  <rect x="618" y="70" width="16" height="490" fill="#f5a524" opacity="0.22"/>
+  <rect x="560" y="300" width="40" height="110" rx="9" fill="#0a2743"/>
+  <circle cx="580" cy="330" r="10" fill="#f5a524"/>
+  <rect x="530" y="368" width="58" height="12" rx="6" fill="url(#or1)"/>
+  <g transform="translate(626 322) rotate(-8)">
+    <rect x="0" y="0" width="180" height="112" rx="8" fill="#f7fafd" opacity="0.95"/>
+    <rect x="0" y="0" width="180" height="26" rx="8" fill="#f5a524"/>
+    <rect x="14" y="46" width="96" height="9" rx="4.5" fill="#c3d3e2"/>
+    <rect x="14" y="66" width="140" height="9" rx="4.5" fill="#dae4ee"/>
+  </g>
+  <path d="M626 352 L604 344" stroke="#f7fafd" stroke-width="7" stroke-linecap="round"/>
+  <g fill="none" stroke="#f5a524" stroke-width="4" opacity="0.75">
+    <path d="M690 210 q40 -30 82 0"/><path d="M706 178 q56 -42 114 0"/>
+  </g>
+  <rect x="270" y="560" width="400" height="14" rx="3" fill="#061826"/>
+</svg>

@@ -1,0 +1,224 @@
+# ===========================================================================
+#  Serrurier Richard — configuration Apache (Hostinger, hébergement mutualisé)
+#
+#  Ce fichier est copié tel quel dans public/ par scripts/build.sh puis
+#  déposé à la racine web (public_html/). Il ne contient aucun nom de domaine
+#  en dur : les redirections utilisent %{HTTP_HOST}, le site fonctionne donc
+#  à l'identique sur un domaine de test et en production.
+#
+#  Tous les blocs sont encadrés par <IfModule> : si un module manque sur le
+#  serveur, la règle est ignorée au lieu de provoquer une erreur 500.
+# ===========================================================================
+
+# --- Page d'erreur personnalisée -------------------------------------------
+ErrorDocument 404 /404.html
+
+# --- Index par défaut -------------------------------------------------------
+DirectoryIndex index.html index.php
+
+# MultiViews ferait deviner l'extension par Apache et entrerait en conflit
+# avec nos propres règles de réécriture. -Indexes empêche l'affichage du
+# contenu d'un dossier dépourvu de page d'accueil.
+#
+# ⚠ SI LE SITE RENVOIE 500 SUR TOUTES LES PAGES : commentez la ligne
+# ci-dessous en la préfixant par un #. Quelques offres mutualisées interdisent
+# la directive Options en .htaccess, et Apache répond alors « Options not
+# allowed here » avec une erreur 500. Le site fonctionne sans elle.
+Options -MultiViews -Indexes
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# -------------------------------------------------------------------------
+# 0. Chemins interdits — évalués AVANT toute redirection
+#
+#    Le déploiement Git de Hostinger dépose un dossier .git dans la racine
+#    web. Laissé accessible, il livre l'intégralité du code et de l'historique
+#    à qui demande /.git/config. Les dossiers de sources sont bloqués de la
+#    même façon, au cas où le dépôt entier serait servi par erreur : cela
+#    évite aussi de publier deux fois le même contenu, ce que Google
+#    sanctionne.
+# -------------------------------------------------------------------------
+RewriteRule ^\.git(/|$)                      - [F,L]
+RewriteRule ^\.github(/|$)                   - [F,L]
+RewriteRule ^(src|scripts|tests|docs)(/|$)   - [F,L]
+
+# -------------------------------------------------------------------------
+# 1. HTTPS obligatoire
+#    Hostinger place un reverse proxy devant Apache : la double condition
+#    couvre les deux cas (TLS terminé par Apache ou par le proxy).
+# -------------------------------------------------------------------------
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NE]
+
+# -------------------------------------------------------------------------
+# 2. Une seule forme d'hôte : sans www
+#    Pour préférer www., commentez ce bloc et décommentez le suivant.
+# -------------------------------------------------------------------------
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L,NE]
+
+# Variante « avec www » — décommenter les trois lignes et commenter le bloc 2.
+# RewriteCond %{HTTP_HOST} !^www\. [NC]
+# RewriteCond %{HTTP_HOST} !^localhost [NC]
+# RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NE]
+
+# -------------------------------------------------------------------------
+# 3. Redirections 301 des anciennes URLs
+#    Les pages de services vivaient sous /services/. Elles ont été remontées
+#    à la racine (URL plus courtes, meilleure pertinence sur la requête).
+#    Ces règles conservent le référencement acquis et évitent les 404.
+# -------------------------------------------------------------------------
+RewriteRule ^services/ouverture-de-porte/?$      /ouverture-porte            [R=301,L]
+RewriteRule ^services/changement-de-serrure/?$   /changement-serrure         [R=301,L]
+RewriteRule ^services/porte-blindee/?$           /porte-blindee              [R=301,L]
+RewriteRule ^services/apres-effraction/?$        /effraction                 [R=301,L]
+RewriteRule ^services/rideau-metallique/?$       /rideau-metallique          [R=301,L]
+RewriteRule ^services/coffre-fort/?$             /coffre-fort                [R=301,L]
+RewriteRule ^services/?$                         /serrurier                  [R=301,L]
+RewriteRule ^politique-de-confidentialite/?$     /politique-confidentialite  [R=301,L]
+
+# Variantes fréquemment saisies ou liées depuis l'extérieur.
+RewriteRule ^serrurier-urgent/?$                 /serrurier-urgence          [R=301,L]
+RewriteRule ^urgence/?$                          /serrurier-urgence          [R=301,L]
+RewriteRule ^devis/?$                            /devis-serrurerie           [R=301,L]
+RewriteRule ^tarif/?$                            /tarifs                     [R=301,L]
+
+# -------------------------------------------------------------------------
+# 4. Une seule URL par page
+#    /page.html et /page/ redirigent en 301 vers /page.
+#    Sans cela, trois URLs servent le même contenu : contenu dupliqué.
+# -------------------------------------------------------------------------
+
+# /dossier/index.html -> /dossier/
+RewriteCond %{THE_REQUEST} \s/+(.*?)index\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L,NE]
+
+# /page.html -> /page
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L,NE]
+
+# /page/ -> /page  (uniquement si ce n'est pas un vrai dossier :
+# /blog/ et /zones/ gardent leur barre oblique finale)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+?)/$ /$1 [R=301,L,NE]
+
+# -------------------------------------------------------------------------
+# 5. Service du fichier .html correspondant, sans afficher l'extension
+# -------------------------------------------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^(.+?)/?$ /$1.html [L]
+</IfModule>
+
+# ===========================================================================
+#  Compression
+# ===========================================================================
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+  AddOutputFilterByType DEFLATE application/json application/xml
+  AddOutputFilterByType DEFLATE application/rss+xml application/manifest+json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/xml text/css
+  AddOutputFilterByType BROTLI_COMPRESS application/javascript application/json
+  AddOutputFilterByType BROTLI_COMPRESS image/svg+xml
+</IfModule>
+
+# ===========================================================================
+#  Cache navigateur
+#
+#  Le HTML n'est pas mis en cache longtemps : une correction de contenu doit
+#  être visible immédiatement. Les fichiers CSS/JS/images le sont un an ; leur
+#  nom change à chaque modification (voir « Purge du cache » dans le README).
+# ===========================================================================
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault                          "access plus 1 month"
+  ExpiresByType text/html                 "access plus 0 seconds"
+  ExpiresByType text/css                  "access plus 1 year"
+  ExpiresByType application/javascript    "access plus 1 year"
+  ExpiresByType image/svg+xml             "access plus 1 year"
+  ExpiresByType image/jpeg                "access plus 1 year"
+  ExpiresByType image/png                 "access plus 1 year"
+  ExpiresByType image/webp                "access plus 1 year"
+  ExpiresByType image/avif                "access plus 1 year"
+  ExpiresByType font/woff2                "access plus 1 year"
+  ExpiresByType application/xml           "access plus 1 hour"
+  ExpiresByType text/xml                  "access plus 1 hour"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js|svg|jpg|jpeg|png|webp|avif|woff2|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(html|xml|txt)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+
+  # --- En-têtes de sécurité ------------------------------------------------
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+
+  # HSTS : à n'activer qu'une fois le certificat HTTPS confirmé et stable,
+  # car la directive est mémorisée par le navigateur pendant deux ans.
+  # Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+
+  # Content-Security-Policy
+  # 'unsafe-inline' sur script-src reste nécessaire pour les blocs JSON-LD et
+  # le snippet Google Analytics. Retirez googletagmanager.com si vous
+  # n'utilisez pas de mesure d'audience.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com; form-action 'self'; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
+
+  # Le nom du serveur applicatif n'a pas à être publié.
+  Header unset X-Powered-By
+</IfModule>
+
+# ===========================================================================
+#  Types MIME et jeu de caractères
+# ===========================================================================
+AddDefaultCharset UTF-8
+
+<IfModule mod_mime.c>
+  AddType image/svg+xml                 .svg
+  AddType image/webp                    .webp
+  AddType image/avif                    .avif
+  AddType application/manifest+json     .webmanifest
+  AddType font/woff2                    .woff2
+  AddCharset UTF-8                      .html .css .js .xml .json .webmanifest
+</IfModule>
+
+# ===========================================================================
+#  Protection des fichiers sensibles
+#
+#  Le dossier public/ ne contient normalement ni .env ni script shell, mais
+#  une copie manuelle par FTP peut en déposer par erreur.
+# ===========================================================================
+<FilesMatch "^\.env|\.(env|sh|bash|ini|log|sql|bak|old|yml|yaml|md)$">
+  Require all denied
+</FilesMatch>
+
+<FilesMatch "^(config\.php|\.htaccess|\.htpasswd|\.gitignore)$">
+  Require all denied
+</FilesMatch>
+
+
+# Le dossier des dépôts de formulaire ne doit jamais être servi.
+<IfModule mod_rewrite.c>
+  RewriteRule ^(stockage|logs)/ - [F,L]
+</IfModule>
+
+# Repli si mod_rewrite venait à manquer : les chemins les plus sensibles
+# restent refusés par mod_alias.
+<IfModule mod_alias.c>
+  RedirectMatch 403 ^/\.git(/|$)
+  RedirectMatch 403 ^/\.github(/|$)
+</IfModule>

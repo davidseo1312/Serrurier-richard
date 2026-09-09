@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 620" width="1120" height="620" role="img" aria-label="Porte d'entrée forcée, huisserie endommagée, remise en sécurité par un serrurier">
+  <defs>
+    <linearGradient id="fe" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#123c68"/><stop offset="1" stop-color="#071d33"/></linearGradient>
+    <linearGradient id="oe" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffc766"/><stop offset="1" stop-color="#c97f0c"/></linearGradient>
+  </defs>
+  <rect width="1120" height="620" fill="url(#fe)"/>
+  <ellipse cx="520" cy="330" rx="440" ry="300" fill="#2a6ba8" opacity="0.14"/>
+
+  <!-- Huisserie et porte entrouverte -->
+  <rect x="250" y="60" width="360" height="500" rx="5" fill="#0a2743"/>
+  <g transform="translate(262 72) skewY(-1.4)">
+    <rect width="336" height="486" rx="3" fill="#1d4f7f"/>
+    <g fill="none" stroke="#2f6ea8" stroke-width="3" opacity="0.45">
+      <rect x="30" y="28" width="276" height="164" rx="3"/>
+      <rect x="30" y="222" width="276" height="230" rx="3"/>
+    </g>
+  </g>
+
+  <!-- Zone de la serrure arrachée -->
+  <g transform="translate(566 290)">
+    <rect x="-14" y="-42" width="46" height="120" rx="8" fill="#0a2743"/>
+    <path d="M-14 -20 l46 14 -46 16 46 14" fill="none" stroke="#c62828" stroke-width="6" stroke-linejoin="round"/>
+    <circle cx="9" cy="42" r="9" fill="url(#oe)"/>
+  </g>
+  <!-- Éclats de bois -->
+  <g fill="#8a5a2b">
+    <path d="M604 250 l34 -12 -8 22z"/><path d="M612 300 l40 6 -30 16z"/><path d="M606 352 l28 20 -32 4z"/>
+  </g>
+
+  <!-- Plaque de renfort neuve posée par le technicien -->
+  <g transform="translate(680 210)">
+    <rect width="150" height="200" rx="10" fill="#f7fafd" opacity="0.94"/>
+    <rect width="150" height="30" rx="10" fill="#1a7f4b"/>
+    <rect x="18" y="54" width="114" height="10" rx="5" fill="#c3d3e2"/>
+    <rect x="18" y="80" width="86" height="10" rx="5" fill="#dae4ee"/>
+    <circle cx="75" cy="140" r="30" fill="none" stroke="#1a7f4b" stroke-width="7"/>
+    <path d="M61 140 l11 12 22 -25" fill="none" stroke="#1a7f4b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Faisceau de lampe -->
+  <path d="M880 120 L1040 240 L880 300z" fill="#f5a524" opacity="0.16"/>
+  <rect x="850" y="176" width="46" height="20" rx="6" fill="url(#oe)"/>
+  <rect x="220" y="560" width="470" height="14" rx="3" fill="#061826"/>
+</svg>
