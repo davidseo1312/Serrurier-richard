@@ -25,7 +25,10 @@ Conçu pour un hébergement mutualisé Hostinger : on dépose le contenu de
   - [Ajouter une page locale par ville](#ajouter-une-page-locale-par-ville)
   - [Ajouter un article de blog](#ajouter-un-article-de-blog)
   - [Modifier le menu et le pied de page](#modifier-le-menu-et-le-pied-de-page)
-  - [Remplacer les illustrations par des photos](#remplacer-les-illustrations-par-des-photos)
+  - [Ajouter une photo — sans écrire une ligne de code](#ajouter-une-photo--sans-écrire-une-ligne-de-code)
+  - [La galerie « Nos interventions »](#la-galerie--nos-interventions-)
+  - [La carte des zones d'intervention](#la-carte-des-zones-dintervention)
+  - [Les avis clients](#les-avis-clients)
 - [Le formulaire de devis](#le-formulaire-de-devis)
 - [Google Analytics, Tag Manager, Search Console](#google-analytics-tag-manager-search-console)
 - [Contrôles avant mise en ligne](#contrôles-avant-mise-en-ligne)
@@ -256,6 +259,15 @@ C'est le point le plus important du système visuel. **Déposer un fichier
 suffit** : le build préfère automatiquement une vraie photo à l'illustration
 vectorielle livrée.
 
+**Commencez toujours par l'état des lieux :**
+
+```bash
+bash scripts/verifier-photos.sh
+```
+
+Il liste les emplacements qui attendent une photographie, avec le **nom de
+fichier exact** et le format à respecter, et signale les fichiers trop lourds.
+
 ```
 static/assets/images/
 ├── serrurerie/        ouverture-porte/      porte-bloquee/
@@ -268,16 +280,26 @@ static/assets/images/
 
 **La marche à suivre**
 
-1. Ouvrez `src/images.conf` et repérez la ligne de l'image à remplacer. Elle
-   donne le dossier, le nom de fichier exact et les dimensions attendues.
-2. Préparez votre photo à ces dimensions, en **WEBP** de préférence
-   (<https://squoosh.app> suffit, rien à installer).
-3. Déposez-la dans le dossier indiqué, **sous le nom exact** de la ligne, avec
-   l'extension `.webp`.
+1. `bash scripts/verifier-photos.sh` — repérez la ligne de l'emplacement
+   voulu. Elle donne le chemin, le nom de fichier exact et les dimensions.
+2. Préparez la photo à ces dimensions, en **WEBP** de préférence
+   (<https://squoosh.app> suffit, rien à installer), sous 250 Ko.
+3. Déposez-la **sous le nom exact** indiqué, avec l'extension `.webp`.
 4. `bash scripts/build.sh`
+5. Relisez le texte alternatif dans `src/images.conf` : il est déjà écrit,
+   mais il doit décrire le cliché **réellement** déposé.
 
 L'illustration est remplacée **partout** : dans la page, dans la galerie de
 l'accueil, dans le sitemap images et dans la vignette de partage social.
+
+**Deux candidats par emplacement.** Chaque ligne de `src/images.conf` déclare
+la photographie attendue *et* l'illustration de repli, avec un texte
+alternatif pour chacune — une photo et un dessin ne montrent pas la même
+chose, et l'`alt` doit décrire ce qui est réellement affiché :
+
+```
+ID | photo | repli | largeur | hauteur | alt de la photo | alt du repli
+```
 
 **Ordre de préférence du build** : `.avif` → `.webp` → `.jpg` → `.jpeg` →
 `.png` → `.svg`. L'illustration vectorielle arrive en dernier : elle ne
@@ -286,14 +308,86 @@ reprend la main que si aucune photo n'existe.
 **Variantes responsives** : déposez en plus `nom-800.webp`, `nom-1200.webp`
 ou `nom-1600.webp` et le `srcset` se construit tout seul.
 
-**Texte alternatif** : mettez-le à jour dans `src/images.conf` en même temps
-que la photo. Il doit décrire ce que montre réellement l'image — c'est ce que
-lisent les lecteurs d'écran et ce sur quoi Google Images s'appuie.
+> **Le site dit lui-même ce qu'il affiche.** Chaque vignette de la galerie
+> porte la mention « Illustration » tant qu'elle en est une, et la phrase
+> d'introduction de la section « Nos interventions » change selon ce que le
+> build a réellement trouvé sur le disque. Une illustration ne peut donc pas
+> être présentée comme un chantier réel, même par inadvertance — et le site
+> cesse de s'en excuser dès que les photos arrivent.
 
-> **Une règle à ne pas enfreindre.** Les visuels livrés sont des
-> **illustrations**, pas des photographies d'intervention. Ne les présentez
-> jamais comme des chantiers réels. Une vraie photo d'intervention, elle,
-> peut l'être — avec l'accord du client concerné.
+> **Une règle à ne pas enfreindre.** N'utilisez ni image trouvée dans Google
+> Images, ni photo de concurrent, ni lien direct vers un fichier hébergé
+> ailleurs. Ne publiez pas la porte d'un client sans son accord, et retirez
+> les données GPS des fichiers (`exiftool -all= photo.jpg`).
+
+**Marche à suivre complète, cas particuliers compris :** [`docs/photos.md`](docs/photos.md).
+
+### La galerie « Nos interventions »
+
+Elle est pilotée par **`src/galerie.conf`**. Une ligne = une vignette :
+
+```
+ID D'IMAGE | FAMILLE | TITRE | LÉGENDE
+```
+
+L'ordre du fichier est l'ordre d'affichage. La `FAMILLE` alimente les boutons
+de filtre affichés au-dessus de la galerie : ils sont déduits du fichier, dans
+l'ordre de première apparition. Ajouter une famille ne demande donc ni CSS ni
+JavaScript. Sans JavaScript, les boutons restent inertes et la galerie affiche
+l'ensemble des vignettes — le comportement utile par défaut.
+
+### La carte des zones d'intervention
+
+Elle vit dans **`src/zones.conf`**, source unique des départements et des
+villes affichés. Le tracé lui-même est produit par :
+
+```bash
+python3 scripts/generer-carte.py
+```
+
+qui écrit `src/partials/carte-zones.svg` à partir de `src/zones.conf` et des
+contours de `src/geo/` (données IGN Admin Express, Licence ouverte Etalab).
+Le SVG est versionné : le build n'a donc besoin ni de Python ni du réseau.
+La **liste** des départements affichée à côté de la carte, elle, est
+régénérée à chaque construction depuis le même `src/zones.conf` — carte et
+liste ne peuvent pas diverger.
+
+Le jeton `{{CARTE_ZONES}}` pose le bloc complet dans une page. Il est
+actuellement utilisé sur l'accueil et sur `/zones-d-intervention`.
+
+> **N'ajoutez jamais dans `src/zones.conf` un département ou une ville où
+> l'entreprise n'intervient pas réellement.** La carte doit refléter
+> exactement les zones annoncées dans les pages.
+
+**Deux niveaux, et c'est délibéré.** La carte affichée par défaut est un SVG
+servi par le site : affichage instantané, aucune requête vers un tiers, aucune
+adresse IP transmise, donc aucun consentement à demander, et elle fonctionne
+sans JavaScript. La carte détaillée à tuiles (Leaflet + OpenStreetMap,
+`static/assets/vendor/leaflet/`, hébergée par le site) n'est chargée
+**qu'après un clic explicite** du visiteur, qui est prévenu que le service est
+extérieur. C'est aussi pour elle que la CSP autorise
+`tile.openstreetmap.org` : si vous retirez la carte détaillée, retirez ce
+domaine de `static/.htaccess`.
+
+### Les avis clients
+
+Le site n'affiche **aucun avis écrit en dur**, et n'en affichera jamais : le
+bloc dépend uniquement de `URL_GOOGLE_BUSINESS` dans `src/config.sh`.
+
+| `URL_GOOGLE_BUSINESS` | Ce qui s'affiche |
+|---|---|
+| vide (cas actuel) | un encadré qui annonce l'emplacement réservé aux avis vérifiés, sans note ni témoignage |
+| renseignée | un renvoi vers la fiche, où le visiteur lit les avis réels et à jour |
+
+Ni note, ni nombre d'étoiles, ni compteur ne sont écrits dans le site : ces
+valeurs changent en permanence, un chiffre figé dans le code serait faux le
+lendemain. Aucun balisage `AggregateRating` n'est émis non plus — un site qui
+se note lui-même relève des « avis auto-attribués », que Google ignore et qui
+exposent à une action manuelle.
+
+> **Ne fabriquez jamais un avis, une note, une étoile ou un témoignage.**
+> C'est une pratique commerciale trompeuse (art. L121-2 du code de la
+> consommation), et cela se repère.
 
 ### Contrôler les images
 

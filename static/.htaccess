@@ -176,7 +176,13 @@ RewriteRule ^(.+?)/?$ /$1.html [L]
   # 'unsafe-inline' sur script-src reste nécessaire pour les blocs JSON-LD et
   # le snippet Google Analytics. Retirez googletagmanager.com si vous
   # n'utilisez pas de mesure d'audience.
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com; form-action 'self'; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
+  #
+  # tile.openstreetmap.org sert UNIQUEMENT les tuiles de la carte détaillée,
+  # qui n'est chargée qu'après un clic explicite du visiteur. La carte
+  # affichée par défaut est un SVG servi par ce site : elle ne dépend
+  # d'aucun domaine extérieur. Si vous retirez la carte détaillée,
+  # retirez aussi ce domaine.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://tile.openstreetmap.org https://www.google-analytics.com https://www.googletagmanager.com; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com; form-action 'self'; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
 
   # Le nom du serveur applicatif n'a pas à être publié.
   Header unset X-Powered-By

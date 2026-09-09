@@ -45,6 +45,15 @@ json_escape() {
   printf '%s' "$1" | perl -pe 's/\\/\\\\/g; s/"/\\"/g; s/\n/ /g'
 }
 
+# Réduit un libellé à un identifiant sûr : minuscules, sans accent, sans
+# espace. Utilisé pour les familles de la galerie, qui viennent d'un fichier
+# de configuration rédigé en français.
+ardoise() {
+  printf '%s' "$1" | perl -CSD -MUnicode::Normalize -pe '
+    $_ = NFD($_); s/\p{NonspacingMark}//g; $_ = lc;
+    s/[^a-z0-9]+/-/g; s/^-|-$//g;'
+}
+
 # Lit une clé du bloc de métadonnées en tête de page.
 meta_get() {
   sed -n '/^<!--meta$/,/^-->$/p' "$1" | sed -n "s/^$2:[[:space:]]*//p" | head -1
@@ -106,15 +115,38 @@ construire_srcset() {
 }
 
 CATALOGUE_MANQUANT=0
-while IFS='|' read -r id base largeur hauteur alt; do
+PHOTOS_REELLES=0
+PHOTOS_ATTENDUES=0
+VISUELS_TOTAL=0
+
+while IFS='|' read -r id photo repli largeur hauteur alt_photo alt_repli; do
   case "$id" in ''|\#*) continue ;; esac
 
-  chemin="$(resoudre_image "$base" || true)"
-  if [ -z "$chemin" ]; then
-    echo "  ! image introuvable pour $id : static/assets/images/${base}.*"
+  # Une photographie réelle est attendue à cet emplacement dès lors que la
+  # deuxième colonne est renseignée, qu'elle ait été livrée ou non.
+  [ -n "$photo" ] && PHOTOS_ATTENDUES=$((PHOTOS_ATTENDUES + 1))
+
+  # La photographie prime toujours sur l'illustration. C'est le seul endroit
+  # du site où cet arbitrage est fait.
+  base=""; alt=""; nature="illustration"
+  if [ -n "$photo" ] && chemin="$(resoudre_image "$photo")"; then
+    base="$photo"; alt="$alt_photo"; nature="photo"
+    PHOTOS_REELLES=$((PHOTOS_REELLES + 1))
+  elif chemin="$(resoudre_image "$repli")"; then
+    base="$repli"; alt="$alt_repli"
+  else
+    echo "  ! aucun visuel pour $id : ni static/assets/images/${photo:-–}.* ni static/assets/images/${repli}.*"
     CATALOGUE_MANQUANT=$((CATALOGUE_MANQUANT + 1))
     continue
   fi
+
+  if [ -z "$alt" ]; then
+    echo "  ! texte alternatif absent pour $id (colonne « alt » vide)"
+    CATALOGUE_MANQUANT=$((CATALOGUE_MANQUANT + 1))
+    continue
+  fi
+
+  VISUELS_TOTAL=$((VISUELS_TOTAL + 1))
 
   ext="${chemin##*.}"
   srcset="$(construire_srcset "$base" "$ext")"
@@ -123,12 +155,132 @@ while IFS='|' read -r id base largeur hauteur alt; do
 
   # width et hauteur sont toujours écrits : c'est ce qui réserve la place et
   # évite que la page ne saute pendant le chargement (décalage cumulé).
-  export "IMG_${id}=<img src=\"${chemin}\"${attr_srcset} width=\"${largeur}\" height=\"${hauteur}\" alt=\"${alt}\" loading=\"lazy\" decoding=\"async\">"
+  export "IMG_${id}=<img src=\"${chemin}\"${attr_srcset} width=\"${largeur}\" height=\"${hauteur}\" alt=\"${alt}\" loading=\"lazy\" decoding=\"async\" data-visuel=\"${nature}\">"
   export "IMGSRC_${id}=${chemin}"
+  export "IMGNATURE_${id}=${nature}"
 
   IMAGES_SITEMAP="${IMAGES_SITEMAP}${id}|${chemin}|${alt}"$'\n'
 done < src/images.conf
 export IMAGES_SITEMAP
+
+# --- Ce que le site a le droit de dire de ses propres visuels ---------------
+# La phrase affichée sous la galerie n'est pas écrite en dur : elle décrit ce
+# que le build a réellement trouvé sur le disque. Le site ne peut donc pas
+# présenter une illustration comme un chantier réel, ni continuer à s'excuser
+# de n'avoir que des illustrations une fois les photos livrées.
+if [ "$PHOTOS_REELLES" -eq 0 ]; then
+  export MENTION_VISUELS="Ces visuels sont des <strong>illustrations</strong> : ils expliquent le geste technique, ils ne représentent pas un chantier particulier."
+elif [ "$PHOTOS_REELLES" -lt "$VISUELS_TOTAL" ]; then
+  export MENTION_VISUELS="Les photographies sont prises sur nos interventions, avec l'accord des clients concernés. Les visuels restants sont des <strong>illustrations</strong>, signalées comme telles sur chaque vignette."
+else
+  export MENTION_VISUELS="Photographies prises sur nos interventions, avec l'accord des clients concernés."
+fi
+export PHOTOS_REELLES PHOTOS_ATTENDUES VISUELS_TOTAL
+
+# --- Carte des zones d'intervention ----------------------------------------
+# Le tracé SVG est produit hors build par scripts/generer-carte.py, à partir
+# de src/zones.conf et des contours de src/geo/. Il est versionné : le build
+# reste sans dépendance Python et fonctionne hors ligne.
+#
+# La liste des départements, elle, est régénérée ici à chaque construction, à
+# partir de la même src/zones.conf. Carte et liste ne peuvent donc pas diverger.
+
+export CARTE_SVG=""
+export CARTE_LISTE=""
+export CARTE_ZONES=""
+
+if [ -f src/partials/carte-zones.svg ]; then
+  CARTE_SVG="$(cat src/partials/carte-zones.svg)"
+
+  liste=""
+  while IFS='|' read -r code nom url reste; do
+    case "$code" in ''|\#*|VILLE) continue ;; esac
+    villes="$(awk -F'|' -v d="$code" '$1=="VILLE" && $5==d { printf "%s%s", (n++ ? ", " : ""), $2 } END { print "" }' src/zones.conf)"
+    liste="${liste}      <li>
+        <a href=\"${url}\" data-zone=\"${code}\">
+          <strong>${nom} <span>(${code})</span></strong>
+          <span class=\"carte-villes\">${villes}</span>
+        </a>
+      </li>
+"
+  done < src/zones.conf
+
+  CARTE_LISTE="$liste"
+  export CARTE_SVG CARTE_LISTE
+  # Le partiel contient lui-même {{CARTE_SVG}} et {{CARTE_LISTE}} : une passe
+  # de substitution suffit, elle est faite ici pour que le jeton
+  # {{CARTE_ZONES}} livre un bloc déjà complet aux pages.
+  CARTE_ZONES="$(substituer < src/partials/carte-zones.html)"
+  export CARTE_ZONES
+else
+  echo "  ! src/partials/carte-zones.svg absent : lancez python3 scripts/generer-carte.py"
+fi
+
+# --- Galerie « Nos interventions » -----------------------------------------
+# Entièrement construite depuis src/galerie.conf : ajouter une vignette est
+# une ligne de configuration, jamais une modification de page.
+
+export GALERIE=""
+export GALERIE_FILTRES=""
+
+if [ -f src/galerie.conf ]; then
+  familles=""
+  vignettes=""
+  while IFS='|' read -r id famille titre legende; do
+    case "$id" in ''|\#*) continue ;; esac
+
+    balise="$(printf '%s' "$(eval "printf '%s' \"\${IMG_${id}:-}\"")")"
+    if [ -z "$balise" ]; then
+      echo "  ! galerie : identifiant d'image inconnu — $id"
+      CATALOGUE_MANQUANT=$((CATALOGUE_MANQUANT + 1))
+      continue
+    fi
+
+    # La famille alimente le filtre ; l'ordre de première apparition dans le
+    # fichier décide de l'ordre des boutons.
+    case "|${familles}|" in
+      *"|${famille}|"*) : ;;
+      *) familles="${familles}${familles:+|}${famille}" ;;
+    esac
+
+    cle="$(ardoise "$famille")"
+
+    vignettes="${vignettes}      <figure class=\"apparait\" data-famille=\"${cle}\">
+        ${balise}
+        <figcaption><strong>${titre}</strong>${legende}</figcaption>
+      </figure>
+"
+  done < src/galerie.conf
+
+  GALERIE="$vignettes"
+
+  filtres="        <button type=\"button\" class=\"filtre actif\" data-filtre=\"tout\" aria-pressed=\"true\">Tout voir</button>
+"
+  ancien_ifs="$IFS"; IFS='|'
+  for famille in $familles; do
+    cle="$(ardoise "$famille")"
+    filtres="${filtres}        <button type=\"button\" class=\"filtre\" data-filtre=\"${cle}\" aria-pressed=\"false\">${famille}</button>
+"
+  done
+  IFS="$ancien_ifs"
+  GALERIE_FILTRES="$filtres"
+
+  export GALERIE GALERIE_FILTRES
+fi
+
+# --- Avis clients -----------------------------------------------------------
+# Aucun avis n'est écrit dans le code du site : le bloc affiché dépend
+# uniquement de l'existence d'une fiche Google Business Profile renseignée
+# dans src/config.sh. Tant qu'il n'y en a pas, le site le dit, et n'invente
+# ni note, ni étoile, ni témoignage.
+if [ -n "${URL_GOOGLE_BUSINESS:-}" ]; then
+  export AVIS_GOOGLE="$(substituer < src/partials/avis-fiche.html)"
+  export AVIS_CHAPEAU="Ils sont hébergés par Google, pas par nous : nous ne pouvons ni les choisir, ni les réécrire."
+else
+  export AVIS_GOOGLE="$(substituer < src/partials/avis-vide.html)"
+  export AVIS_CHAPEAU="Nous préférons ne rien afficher plutôt que d'afficher des avis que nous n'aurions pas reçus."
+fi
+
 
 # Le visuel du héros est le plus grand élément affiché à l'ouverture : il ne
 # doit pas être différé, sans quoi il devient lui-même le frein au rendu.

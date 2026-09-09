@@ -1,0 +1,40 @@
+<!-- ---------------------------------------------------------------------
+     Carte des zones d'intervention.
+
+     Injectée par le build via {{CARTE_ZONES}}. Le tracé lui-même est
+     src/partials/carte-zones.svg, produit par scripts/generer-carte.py à
+     partir de src/zones.conf : pour modifier les zones, on modifie la
+     configuration, jamais ce fichier.
+
+     Sans JavaScript, la carte SVG et la liste des départements restent
+     entièrement utilisables. La carte détaillée à tuiles, elle, n'est
+     chargée que si le visiteur la demande : elle contacte un serveur
+     extérieur, ce qui ne doit pas se produire à son insu.
+     --------------------------------------------------------------------- -->
+<div class="carte-zones">
+  <figure class="carte-figure">
+    {{CARTE_SVG}}
+    <figcaption>
+      Les six départements du Grand Ouest où nous nous déplaçons. Cliquez sur un
+      département pour connaître les communes couvertes et les délais habituels.
+    </figcaption>
+  </figure>
+
+  <div class="carte-panneau">
+    <ul class="carte-liste">
+      {{CARTE_LISTE}}
+    </ul>
+
+    <div class="carte-detail" data-carte-tuiles>
+      <p class="carte-detail-texte">
+        Besoin de situer précisément votre commune ? La carte détaillée s'ouvre à
+        la demande. Elle est fournie par
+        <a href="https://www.openstreetmap.org/copyright" rel="noopener nofollow">OpenStreetMap</a>,
+        un service extérieur qui recevra alors votre adresse IP.
+      </p>
+      <button type="button" class="btn btn-ghost" data-carte-ouvrir>
+        Afficher la carte détaillée
+      </button>
+    </div>
+  </div>
+</div>

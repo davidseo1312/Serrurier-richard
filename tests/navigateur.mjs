@@ -151,6 +151,9 @@ const petites = await mobile.evaluate(() => {
 });
 verifier(petites.length === 0, `toutes les cibles font au moins 24 px${petites.length ? ' — ' + petites.slice(0, 4).join(', ') : ''}`);
 
+const ctxCarte = await navigateur.newContext({ viewport: { width: 1280, height: 900 }, locale: 'fr-FR' });
+const bureauCarte = await ctxCarte.newPage();
+
 titre('5. Galerie');
 
 await mobile.goto(BASE + '/');
@@ -166,6 +169,83 @@ verifier(await mobile.locator('.visionneuse').isVisible(), 'la visionneuse s’o
 await mobile.keyboard.press('Escape');
 await mobile.waitForTimeout(250);
 verifier((await mobile.locator('.visionneuse').count()) === 0, 'la touche Échap la referme');
+
+titre('5 bis. Filtres de la galerie');
+
+await mobile.goto(BASE + '/');
+const boutonsFiltre = mobile.locator('.galerie-filtres .filtre');
+verifier((await boutonsFiltre.count()) >= 2, `${await boutonsFiltre.count()} familles proposées`);
+const avantFiltre = await mobile.locator('.galerie figure:visible').count();
+await mobile.locator('.galerie-filtres .filtre').nth(1).click();
+await mobile.waitForTimeout(250);
+const apresFiltre = await mobile.locator('.galerie figure:visible').count();
+verifier(apresFiltre > 0 && apresFiltre < avantFiltre, 'un filtre réduit la galerie sans la vider');
+verifier(
+  (await mobile.locator('.galerie-filtres .filtre[aria-pressed="true"]').count()) === 1,
+  'un seul bouton est marqué actif pour les lecteurs d’écran'
+);
+await mobile.locator('.galerie-filtres .filtre[data-filtre="tout"]').click();
+await mobile.waitForTimeout(250);
+verifier(
+  (await mobile.locator('.galerie figure:visible').count()) === avantFiltre,
+  '« Tout voir » restaure la galerie complète'
+);
+
+titre('5 ter. Carte des zones d’intervention');
+
+await bureauCarte.goto(BASE + '/');
+const zones = bureauCarte.locator('.carte-svg a.zone');
+const lignesZone = bureauCarte.locator('.carte-liste a[data-zone]');
+verifier((await zones.count()) > 0, `${await zones.count()} départements tracés sur la carte`);
+verifier(
+  (await zones.count()) === (await lignesZone.count()),
+  'la carte et la liste annoncent exactement les mêmes départements'
+);
+verifier(
+  (await bureauCarte.locator('.carte-svg title#carte-titre').count()) === 1 &&
+    (await bureauCarte.locator('.carte-svg desc#carte-desc').count()) === 1,
+  'la carte porte un titre et une description accessibles'
+);
+const premiereZone = await zones.first().getAttribute('href');
+verifier(
+  typeof premiereZone === 'string' && premiereZone.startsWith('/zones/'),
+  'chaque département renvoie vers sa page de zone'
+);
+await lignesZone.first().hover();
+await bureauCarte.waitForTimeout(200);
+verifier(
+  (await bureauCarte.locator('.carte-svg .zone.active').count()) === 1,
+  'survoler la liste met le département en avant sur la carte'
+);
+
+// La carte détaillée contacte openstreetmap.org : elle ne doit jamais partir
+// toute seule. C'est le point vérifié ici.
+const domainesTiers = [];
+bureauCarte.on('request', (r) => {
+  const hote = new URL(r.url()).hostname;
+  if (!/^(localhost|127\.0\.0\.1)$/.test(hote)) domainesTiers.push(hote);
+});
+await bureauCarte.reload({ waitUntil: 'networkidle' });
+verifier(domainesTiers.length === 0, 'aucune requête tierce à l’ouverture de la page');
+verifier(
+  await bureauCarte.evaluate(() => typeof window.L === 'undefined'),
+  'la bibliothèque de carte n’est pas chargée tant qu’on ne la demande pas'
+);
+await bureauCarte.locator('[data-carte-ouvrir]').click();
+await bureauCarte.waitForTimeout(2500);
+verifier(
+  await bureauCarte.evaluate(() => typeof window.L !== 'undefined'),
+  'elle se charge après le clic explicite du visiteur'
+);
+verifier(
+  (await bureauCarte.locator('.carte-tuiles .leaflet-marker-icon').count()) ===
+    (await lignesZone.count()),
+  'la carte détaillée pose un repère par département annoncé, et pas un de plus'
+);
+verifier(
+  (await bureauCarte.locator('.leaflet-control-attribution').innerText()).includes('OpenStreetMap'),
+  'l’attribution OpenStreetMap est affichée'
+);
 
 titre('5. FAQ et sommaire');
 

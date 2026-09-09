@@ -271,6 +271,155 @@
     document.addEventListener('keydown', surTouche);
   }
 
+  /* --- 7. Galerie : filtres par famille -------------------------------------
+     Les boutons sont écrits par le build depuis src/galerie.conf. Sans
+     JavaScript ils restent visibles mais inertes : la galerie affiche alors
+     l'ensemble des vignettes, ce qui est le comportement utile par défaut.
+     ------------------------------------------------------------------------ */
+
+  var filtres = document.querySelectorAll('.galerie-filtres .filtre');
+
+  if (filtres.length) {
+    var vignettes = document.querySelectorAll('.galerie figure');
+    var messageVide = document.querySelector('.galerie-vide');
+
+    filtres.forEach(function (bouton) {
+      bouton.addEventListener('click', function () {
+        var choix = bouton.getAttribute('data-filtre');
+        var visibles = 0;
+
+        filtres.forEach(function (autre) {
+          var actif = autre === bouton;
+          autre.classList.toggle('actif', actif);
+          autre.setAttribute('aria-pressed', actif ? 'true' : 'false');
+        });
+
+        vignettes.forEach(function (figure) {
+          var garde = choix === 'tout' || figure.getAttribute('data-famille') === choix;
+          figure.hidden = !garde;
+          if (garde) { visibles++; }
+        });
+
+        if (messageVide) { messageVide.hidden = visibles > 0; }
+      });
+    });
+  }
+
+  /* --- 8. Carte des zones ---------------------------------------------------
+     Deux niveaux, et c'est délibéré.
+
+     Le premier est le SVG servi par le site : il s'affiche immédiatement,
+     fonctionne sans JavaScript, et ne fait sortir aucune donnée. Ce bloc n'y
+     ajoute qu'un lien de survol entre un département et sa ligne de liste.
+
+     Le second est la carte à tuiles. Elle contacte openstreetmap.org, donc
+     transmet l'adresse IP du visiteur à un tiers : elle n'est chargée
+     qu'après un clic explicite, jamais à l'ouverture de la page.
+     ------------------------------------------------------------------------ */
+
+  var carte = document.querySelector('.carte-zones');
+
+  if (carte) {
+    // Survol croisé carte ↔ liste.
+    carte.querySelectorAll('.carte-liste a[data-zone]').forEach(function (lien) {
+      var zone = carte.querySelector('#zone-' + lien.getAttribute('data-zone'));
+      if (!zone) { return; }
+      function allumer() { zone.classList.add('active'); }
+      function eteindre() { zone.classList.remove('active'); }
+      lien.addEventListener('mouseenter', allumer);
+      lien.addEventListener('mouseleave', eteindre);
+      lien.addEventListener('focus', allumer);
+      lien.addEventListener('blur', eteindre);
+    });
+
+    var declencheur = carte.querySelector('[data-carte-ouvrir]');
+    var panneau = carte.querySelector('[data-carte-tuiles]');
+
+    if (declencheur && panneau) {
+      declencheur.addEventListener('click', function () {
+        declencheur.disabled = true;
+        declencheur.textContent = 'Chargement de la carte…';
+
+        var conteneur = document.createElement('div');
+        conteneur.className = 'carte-tuiles';
+        conteneur.innerHTML =
+          '<p class="carte-tuiles-etat">Chargement de la carte détaillée…</p>';
+        panneau.appendChild(conteneur);
+
+        chargerCarteTuiles(conteneur, declencheur);
+      });
+    }
+  }
+
+  // Charge Leaflet, puis dessine les zones. Les fichiers sont hébergés par le
+  // site : seules les tuiles viennent de l'extérieur.
+  function chargerCarteTuiles(conteneur, declencheur) {
+    var css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = '/assets/vendor/leaflet/leaflet.css';
+    document.head.appendChild(css);
+
+    var js = document.createElement('script');
+    js.src = '/assets/vendor/leaflet/leaflet.js';
+
+    js.onerror = function () {
+      conteneur.innerHTML =
+        '<p class="carte-tuiles-etat">La carte détaillée n\'a pas pu être chargée. ' +
+        'La carte ci-dessus reste utilisable.</p>';
+      if (declencheur) { declencheur.remove(); }
+    };
+
+    js.onload = function () {
+      if (declencheur) { declencheur.remove(); }
+      conteneur.innerHTML = '';
+
+      var plan = L.map(conteneur, { scrollWheelZoom: false });
+
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '© les contributeurs d\'<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(plan);
+
+      // Les repères viennent des données déjà présentes dans la page : la
+      // carte ne peut donc pas afficher une zone que le site n'annonce pas.
+      var reperes = [];
+      carte.querySelectorAll('.carte-liste a[data-zone]').forEach(function (lien) {
+        var nom = lien.querySelector('strong');
+        var point = REPERES[lien.getAttribute('data-zone')];
+        if (!point || !nom) { return; }
+        reperes.push(point);
+        L.marker(point)
+          .addTo(plan)
+          .bindPopup('<strong>' + nom.textContent.trim() + '</strong><br>' +
+                     '<a href="' + lien.getAttribute('href') + '">Voir la page</a>');
+      });
+
+      if (reperes.length) {
+        plan.fitBounds(reperes, { padding: [30, 30] });
+      } else {
+        plan.setView([48.0, -2.4], 7);
+      }
+
+      // Le zoom à la molette dérouterait un visiteur qui fait simplement
+      // défiler la page ; il s'active au clic sur la carte.
+      plan.once('click', function () { plan.scrollWheelZoom.enable(); });
+    };
+
+    document.body.appendChild(js);
+  }
+
+  // Chefs-lieux des départements desservis. Cette table sert uniquement à
+  // centrer la carte détaillée : les zones affichées restent celles de la
+  // liste écrite par le build depuis src/zones.conf.
+  var REPERES = {
+    '22': [48.5136, -2.7653],
+    '29': [48.3904, -4.4861],
+    '35': [48.1113, -1.6800],
+    '44': [47.2184, -1.5536],
+    '49': [47.4784, -0.5632],
+    '56': [47.6587, -2.7603]
+  };
+
   /* --- 5. Formulaire de devis ---------------------------------------------
      Le formulaire est entièrement validé côté serveur : ce bloc n'ajoute que
      le confort d'un message immédiat et l'horodatage anti-robot. Le retirer

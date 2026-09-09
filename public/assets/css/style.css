@@ -1138,3 +1138,358 @@ td.prix { font-family: var(--font-title); font-weight: 700; color: var(--color-p
 }
 .visionneuse-fermer:hover { background: rgba(255,255,255,.22); }
 .galerie figure:focus-visible { outline: 3px solid var(--color-primary-light); outline-offset: 3px; }
+
+/* ==========================================================================
+   18. CARTE DES ZONES D'INTERVENTION
+   --------------------------------------------------------------------------
+   Le tracé est un SVG servi par le site : pas de requête vers un service
+   extérieur, pas d'adresse IP transmise à un tiers, pas de consentement à
+   demander, et un affichage instantané. La carte à tuiles n'apparaît que si
+   le visiteur clique sur « Afficher la carte détaillée ».
+   ========================================================================== */
+
+.carte-zones {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+  margin-bottom: var(--space-7);
+}
+
+.carte-figure {
+  margin: 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  overflow: hidden;
+}
+.carte-figure figcaption {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  padding: var(--space-3) var(--space-2) var(--space-1);
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-3);
+}
+
+.carte-svg { display: block; width: 100%; height: auto; }
+
+/* Les départements sont des liens : ils réagissent au survol comme au clavier,
+   et restent parfaitement lisibles sans JavaScript. */
+/* Six teintes d'une même famille : deux départements voisins ne peuvent pas
+   se confondre, et l'ensemble reste une seule couleur, pas un arc-en-ciel.
+   Le numéro de teinte est posé par scripts/generer-carte.py ; la CSS ne
+   connaît donc aucun département en particulier. */
+.carte-svg .zone[data-teinte="1"] path { fill: #BAE6FD; }
+.carte-svg .zone[data-teinte="2"] path { fill: #E0F2FE; }
+.carte-svg .zone[data-teinte="3"] path { fill: #A5DBF7; }
+.carte-svg .zone[data-teinte="4"] path { fill: #CFE9FB; }
+.carte-svg .zone[data-teinte="5"] path { fill: #93CFF2; }
+.carte-svg .zone[data-teinte="6"] path { fill: #DBEEFC; }
+
+.carte-svg .zone path {
+  stroke: var(--color-white);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  transition: fill 180ms ease;
+  cursor: pointer;
+}
+.carte-svg .zone:hover path,
+.carte-svg .zone:focus path,
+.carte-svg .zone.active path {
+  fill: var(--color-primary-light);
+}
+.carte-svg .zone:focus { outline: none; }
+.carte-svg .zone:focus-visible path {
+  stroke: var(--color-dark);
+  stroke-width: 2.6;
+}
+
+.carte-svg .ville { fill: var(--color-dark-3); }
+.carte-svg .ville-forte {
+  fill: var(--color-secondary);
+  stroke: var(--color-white);
+  stroke-width: 2;
+}
+.carte-svg .etiquette {
+  font-family: var(--font-title);
+  font-size: 15px;
+  font-weight: 600;
+  fill: var(--color-dark);
+  paint-order: stroke;
+  stroke: rgba(255, 255, 255, .85);
+  stroke-width: 3.5px;
+  stroke-linejoin: round;
+}
+
+/* --- Panneau latéral : liste des départements ---------------------------- */
+
+.carte-liste { list-style: none; margin: 0 0 var(--space-4); padding: 0; }
+.carte-liste li { margin: 0 0 var(--space-2); }
+.carte-liste a {
+  display: block;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-primary-soft);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: border-color var(--transition), transform var(--transition),
+              box-shadow var(--transition);
+}
+.carte-liste a:hover,
+.carte-liste a:focus-visible {
+  border-left-color: var(--color-secondary);
+  transform: translateX(3px);
+  box-shadow: var(--shadow-sm);
+}
+.carte-liste strong {
+  display: block;
+  font-family: var(--font-title);
+  color: var(--color-dark);
+  font-size: var(--text-base);
+}
+.carte-liste strong span { color: var(--color-primary); font-weight: 600; }
+.carte-villes {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  line-height: 1.45;
+  margin-top: 2px;
+}
+
+/* --- Carte détaillée, chargée à la demande ------------------------------- */
+
+.carte-detail {
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary-soft);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+.carte-detail-texte {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  margin-bottom: var(--space-3);
+}
+.carte-detail .btn { width: 100%; justify-content: center; }
+
+/* Conteneur Leaflet. La hauteur est fixée avant le chargement : la page ne
+   saute pas au moment où la carte apparaît. */
+.carte-tuiles {
+  height: 380px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: var(--color-background-2);
+}
+.carte-tuiles-etat {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  padding: var(--space-4);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .carte-zones { grid-template-columns: 1fr; }
+  .carte-svg .etiquette { font-size: 19px; }
+  .carte-tuiles { height: 320px; }
+}
+
+/* ==========================================================================
+   19. GALERIE FILTRABLE
+   ========================================================================== */
+
+.galerie-filtres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+.filtre {
+  font: 600 var(--text-sm)/1 var(--font-title);
+  /* 44 px de haut : la cible reste confortable au doigt (WCAG 2.5.8). */
+  min-height: 44px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: 999px;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-white);
+  color: var(--color-dark-3);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition),
+              border-color var(--transition);
+}
+.filtre:hover { border-color: var(--color-primary); color: var(--color-primary-dark); }
+.filtre.actif {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  color: var(--color-white);
+}
+.galerie figure[hidden] { display: none; }
+.galerie-vide {
+  text-align: center;
+  color: var(--color-muted);
+  padding: var(--space-6);
+}
+
+/* La photographie se rapproche légèrement au survol : le mouvement se produit
+   à l'intérieur du cadre, la mise en page n'est donc jamais déplacée. */
+.galerie figure img { transition: transform 420ms ease; }
+.galerie figure:hover img { transform: scale(1.04); }
+
+/* Chaque vignette dit ce qu'elle est. L'attribut est posé par le build selon
+   le fichier réellement trouvé sur le disque : une illustration ne peut donc
+   pas être présentée comme un chantier réel, même par inadvertance. */
+.galerie figure { position: relative; }
+.galerie figure img[data-visuel="illustration"] + figcaption::before,
+.galerie figure > img[data-visuel="illustration"] ~ figcaption::before {
+  content: "Illustration";
+  display: inline-block;
+  margin-bottom: var(--space-2);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-background-2);
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+/* ==========================================================================
+   20. FRISE DU DÉROULÉ D'INTERVENTION
+   --------------------------------------------------------------------------
+   Reprend la liste numérotée existante et la relie par un fil continu. Sur
+   mobile la frise bascule à la verticale, ce qui reste lisible au pouce.
+   ========================================================================== */
+
+/* Le fil de liaison déborde volontairement dans la gouttière de la grille,
+   pour relier deux colonnes voisines. « overflow: hidden » l'arrête au bord
+   de la liste : sans lui, le dernier fil de chaque rangée pousserait la page
+   de 8 px vers la droite lorsque la grille passe sur deux rangées. */
+.etapes.frise { position: relative; counter-reset: etape; overflow: hidden; }
+.etapes.frise li { padding-top: calc(var(--space-8) + var(--space-3)); }
+
+/* Le fil relie les pastilles ; il s'arrête à la dernière. */
+.etapes.frise li::after {
+  content: "";
+  position: absolute;
+  top: 22px;
+  left: 3.2rem;
+  right: calc(var(--space-5) * -1);
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-primary-soft), transparent);
+}
+.etapes.frise li:last-child::after { display: none; }
+
+.etapes.frise li::before {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: var(--text-lg);
+}
+section.sombre .etapes.frise li::after {
+  background: linear-gradient(90deg, rgba(56, 189, 248, .35), transparent);
+}
+
+@media (max-width: 760px) {
+  .etapes.frise li::after {
+    top: 44px;
+    bottom: calc(var(--space-5) * -1);
+    left: 21px;
+    right: auto;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(180deg, var(--color-primary-soft), transparent);
+  }
+  .etapes.frise li { padding-left: calc(44px + var(--space-4)); padding-top: 0; min-height: 44px; }
+  .etapes.frise li::before { top: 0; }
+  section.sombre .etapes.frise li::after {
+    background: linear-gradient(180deg, rgba(56, 189, 248, .35), transparent);
+  }
+}
+
+/* ==========================================================================
+   21. AVIS — RENVOI VERS LA FICHE RÉELLE
+   --------------------------------------------------------------------------
+   Aucune note, aucune étoile, aucun témoignage n'est mis en forme ici : il
+   n'y en a pas dans le HTML. Ce bloc n'est qu'un renvoi vers la source.
+   ========================================================================== */
+
+.avis-fiche {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: stretch;
+}
+.avis-fiche-texte,
+.avis-appel {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+.avis-appel {
+  background: var(--color-primary-tint);
+  border-color: var(--color-primary-soft);
+}
+.avis-fiche h3 { font-size: var(--text-xl); margin-bottom: var(--space-3); }
+.avis-actions { margin: var(--space-5) 0 0; }
+
+@media (max-width: 760px) {
+  .avis-fiche { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   22. BANDEAU D'URGENCE — COLONNE MÉDIA
+   ========================================================================== */
+
+.urgence-media { display: grid; gap: var(--space-4); }
+.urgence-photo {
+  margin: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, .28);
+  box-shadow: var(--shadow-lg);
+}
+.urgence-photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  /* Sur mobile le bouton d'appel doit rester au-dessus de la ligne de
+     flottaison : la photo passe donc après lui. */
+  .urgence-photo { order: 2; }
+  .urgence-media .btn { order: 1; }
+}
+
+/* ==========================================================================
+   23. MICRO-INTERACTIONS
+   --------------------------------------------------------------------------
+   Toutes sont désactivées par la requête « prefers-reduced-motion » traitée
+   plus bas : elles ajoutent du confort, elles ne portent aucune information.
+   ========================================================================== */
+
+/* Décalage d'apparition entre voisins d'une même grille. Le retard est posé
+   en CSS et non en JavaScript : il ne coûte aucune tâche au fil principal. */
+.apparait { transition-delay: 0ms; }
+.grille > .apparait:nth-child(3n + 2),
+.galerie > .apparait:nth-child(3n + 2) { transition-delay: 70ms; }
+.grille > .apparait:nth-child(3n + 3),
+.galerie > .apparait:nth-child(3n + 3) { transition-delay: 140ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .apparait { transition-delay: 0ms !important; }
+  .galerie figure:hover img { transform: none; }
+  .carte-liste a:hover, .carte-liste a:focus-visible { transform: none; }
+  .carte-svg .zone path { transition: none; }
+}

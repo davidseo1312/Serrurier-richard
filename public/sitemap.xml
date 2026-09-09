@@ -150,14 +150,18 @@
       <image:title>Rideau métallique de commerce bloqué et matériel de déblocage</image:title>
       <image:loc>https://serrurier-richard.fr/assets/images/coffre-fort/ouverture-coffre-fort.svg</image:loc>
       <image:title>Ouverture d'un coffre-fort par auscultation du mécanisme</image:title>
-      <image:loc>https://serrurier-richard.fr/assets/images/cle-cassee/extraction-cle-cassee-cylindre.svg</image:loc>
-      <image:title>Fragment de clé cassée resté dans le cylindre et outil d'extraction</image:title>
-      <image:loc>https://serrurier-richard.fr/assets/images/serrure-3-points/serrure-trois-points-porte.svg</image:loc>
-      <image:title>Serrure trois points avec condamnation en haut, au centre et en bas de la porte</image:title>
-      <image:loc>https://serrurier-richard.fr/assets/images/blindage/blindage-porte-corniere-anti-pince.svg</image:loc>
-      <image:title>Blindage d'une porte existante avec plaque d'acier et cornière anti-pince</image:title>
       <image:loc>https://serrurier-richard.fr/assets/images/interventions/serrurier-au-travail.svg</image:loc>
       <image:title>Technicien serrurier au travail sur une porte d'entrée</image:title>
+      <image:loc>https://serrurier-richard.fr/assets/images/cle-cassee/extraction-cle-cassee-cylindre.svg</image:loc>
+      <image:title>Fragment de clé cassée resté dans le cylindre et outil d'extraction</image:title>
+      <image:loc>https://serrurier-richard.fr/assets/images/porte-bloquee/diagnostic-porte-bloquee-serrure.svg</image:loc>
+      <image:title>Porte bloquée dont la clé tourne dans le vide, signe d'un mécanisme défaillant</image:title>
+      <image:loc>https://serrurier-richard.fr/assets/images/serrure-3-points/serrure-trois-points-porte.svg</image:loc>
+      <image:title>Serrure trois points avec condamnation en haut, au centre et en bas de la porte</image:title>
+      <image:loc>https://serrurier-richard.fr/assets/images/installation/installation-serrure-porte.svg</image:loc>
+      <image:title>Relevé des cotes avant l'installation d'une serrure sur une porte</image:title>
+      <image:loc>https://serrurier-richard.fr/assets/images/blindage/blindage-porte-corniere-anti-pince.svg</image:loc>
+      <image:title>Blindage d'une porte existante avec plaque d'acier et cornière anti-pince</image:title>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/installation-serrure</loc>

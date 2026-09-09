@@ -1,0 +1,37 @@
+<!-- ---------------------------------------------------------------------
+     Avis clients — fiche Google Business Profile renseignée.
+
+     Ce bloc ne contient AUCUN avis écrit en dur, et n'affiche ni note ni
+     nombre d'avis : ces valeurs changent en permanence et un chiffre figé
+     dans le code du site serait faux le lendemain. Le visiteur est envoyé
+     vers la fiche, où il lit les avis réels, à jour, et vérifiables.
+
+     Aucun balisage AggregateRating n'est émis : un site qui note lui-même
+     ses propres prestations relève des « avis auto-attribués », que Google
+     ignore et qui exposent à une action manuelle.
+     --------------------------------------------------------------------- -->
+<div class="avis-fiche">
+  <div class="avis-fiche-texte">
+    <h3>Les avis que nous affichons sont ceux que vous écrivez</h3>
+    <p>
+      Nos avis sont publics et hébergés par Google, pas par nous : nous ne
+      pouvons ni les choisir, ni les modifier, ni en écrire. Consultez-les
+      directement sur notre fiche, avec leur date et la réponse que nous y
+      avons apportée.
+    </p>
+    <p class="avis-actions">
+      <a class="btn btn-devis" href="{{URL_GOOGLE_BUSINESS}}" rel="noopener nofollow" data-track="clic_avis" data-track-zone="section-avis">
+        Lire les avis sur Google
+      </a>
+    </p>
+  </div>
+  <aside class="avis-appel">
+    <h3>Vous avez fait appel à nous ?</h3>
+    <p>
+      Un avis, même bref, aide réellement les personnes qui cherchent un
+      serrurier en urgence et ne savent pas à qui se fier. Il nous aide aussi
+      à corriger ce qui doit l'être.
+    </p>
+    <p><a class="lien-fleche" href="{{URL_GOOGLE_BUSINESS}}" rel="noopener nofollow" data-track="clic_avis" data-track-zone="depot-avis">Laisser un avis</a></p>
+  </aside>
+</div>

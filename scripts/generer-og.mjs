@@ -33,12 +33,17 @@ const HAUTEUR = 630;   // proportion 1.91:1 attendue par les réseaux sociaux
 
 // Le catalogue est la source de vérité : une image ajoutée à src/images.conf
 // obtient sa vignette sans qu'on touche à ce script.
+//
+// Chaque ligne donne deux candidats — la photographie réelle puis
+// l'illustration de repli. L'arbitrage est le même que dans scripts/build.sh :
+// la photographie prime, sinon l'illustration. La vignette sociale montre donc
+// toujours ce que la page affiche réellement.
 const catalogue = readFileSync(join(RACINE, 'src/images.conf'), 'utf8')
   .split('\n')
   .filter((l) => /^[A-Z]/.test(l))
   .map((l) => {
-    const [id, chemin, , , alt] = l.split('|');
-    return { id, chemin, alt };
+    const [id, photo, repli, , , altPhoto, altRepli] = l.split('|');
+    return { id, photo, repli, altPhoto, altRepli };
   });
 
 function trouverSource(chemin) {
@@ -59,8 +64,10 @@ const page = await navigateur.newPage({
 
 let produites = 0;
 
-for (const { id, chemin, alt } of catalogue) {
-  const source = trouverSource(chemin);
+for (const { id, photo, repli, altPhoto, altRepli } of catalogue) {
+  const source = (photo && trouverSource(photo)) || trouverSource(repli);
+  const chemin = photo && trouverSource(photo) ? photo : repli;
+  const alt = photo && trouverSource(photo) ? altPhoto : altRepli;
   if (!source) {
     console.log(`  source introuvable pour ${id}`);
     continue;

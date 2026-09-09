@@ -135,11 +135,16 @@ def main() -> int:
                 "Google Images s'appuie dessus"
             )
 
-        # Icônes, favicons et vignettes sociales ne sont pas posées en <img> :
-        # les compter comme inutilisées serait un faux positif.
+        # Certains fichiers ne sont jamais posés en <img> dans une page :
+        #   - icônes, favicons et vignettes sociales, référencés dans <head> ;
+        #   - ressources d'une bibliothèque tierce (Leaflet), chargées par sa
+        #     propre feuille de style au moment où le visiteur ouvre la carte
+        #     détaillée.
+        # Les compter comme inutilisés serait un faux positif.
         exempt = any(
             p in rel_web
-            for p in ("/img/favicon", "/img/icone-", "/img/apple-touch", "/images/og/", "/img/og-")
+            for p in ("/img/favicon", "/img/icone-", "/img/apple-touch",
+                      "/images/og/", "/img/og-", "/vendor/")
         )
         if rel_web not in utilisees and not exempt:
             a.note(f"{rel_web} : présent mais utilisé dans aucune page")
