@@ -1,26 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" role="img" aria-label="Porte blindée équipée d'une serrure multipoints certifiée">
   <defs>
     <linearGradient id="fond" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#16233D"/><stop offset="1" stop-color="#0F172A"/>
+      <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E4F3F0"/>
     </linearGradient>
     <radialGradient id="halo" cx="0.72" cy="0.18" r="0.75">
-      <stop offset="0" stop-color="#0EA5E9" stop-opacity="0.30"/>
-      <stop offset="1" stop-color="#0EA5E9" stop-opacity="0"/>
+      <stop offset="0" stop-color="#14B8A6" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#14B8A6" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="acier" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#475569"/><stop offset="1" stop-color="#1E293B"/>
+      <stop offset="0" stop-color="#B7C4C6"/><stop offset="1" stop-color="#6B7F84"/>
     </linearGradient>
     <linearGradient id="cuivre" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#FDBA74"/><stop offset="1" stop-color="#EA580C"/>
+      <stop offset="0" stop-color="#FB923C"/><stop offset="1" stop-color="#C2410C"/>
     </linearGradient>
     <linearGradient id="porte" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#1E3A5F"/><stop offset="1" stop-color="#12233C"/>
+      <stop offset="0" stop-color="#DCE8E7"/><stop offset="1" stop-color="#BCCFCC"/>
     </linearGradient>
     <pattern id="grille" width="60" height="60" patternUnits="userSpaceOnUse">
-      <path d="M60 0H0V60" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+      <path d="M60 0H0V60" fill="none" stroke="#0F766E" stroke-opacity="0.06" stroke-width="1"/>
     </pattern>
   </defs>
   <rect width="1200" height="750" fill="url(#fond)"/>
   <rect width="1200" height="750" fill="url(#grille)"/>
-  <rect width="1200" height="750" fill="url(#halo)"/><rect x="316" y="46" width="458" height="634" rx="6" fill="#1E293B"/><g><rect x="330" y="60" width="430" height="620" rx="4" fill="url(#porte)"/><rect x="340" y="70" width="410" height="600" rx="3" fill="none" stroke="#0284C7" stroke-opacity="0.5" stroke-width="3"/><circle cx="356" cy="120" r="4" fill="#38BDF8" opacity="0.55"/><circle cx="356" cy="160" r="4" fill="#38BDF8" opacity="0.55"/><circle cx="356" cy="200" r="4" fill="#38BDF8" opacity="0.55"/><circle cx="356" cy="240" r="4" fill="#38BDF8" opacity="0.55"/></g><rect x="706" y="324" width="20" height="92" rx="10" fill="url(#acier)"/><rect x="682" y="361" width="42" height="18" rx="9" fill="url(#cuivre)"/><circle cx="716" cy="452" r="41" fill="#1E293B"/><circle cx="716" cy="452" r="32" fill="url(#cuivre)"/><circle cx="716" cy="452" r="11" fill="#0F172A"/><rect x="713" y="452" width="6" height="26" rx="3" fill="#0F172A"/><rect x="762" y="135" width="60" height="30" rx="9" fill="url(#cuivre)"/><rect x="762" y="285" width="60" height="30" rx="9" fill="url(#cuivre)"/><rect x="762" y="435" width="60" height="30" rx="9" fill="url(#cuivre)"/><rect x="762" y="585" width="60" height="30" rx="9" fill="url(#cuivre)"/><rect x="756" y="150" width="10" height="450" rx="5" fill="#0284C7" opacity="0.45"/><g transform="translate(80 80)"><rect x="0" y="0" width="236" height="46" rx="23" fill="#0F172A" fill-opacity="0.72" stroke="#38BDF8" stroke-opacity="0.5" stroke-width="2"/><text x="118" y="31" text-anchor="middle" fill="#38BDF8" font-family="system-ui,sans-serif" font-size="22" font-weight="700" letter-spacing="1">HAUTE SÉCURITÉ</text></g><rect x="60" y="678" width="960" height="14" rx="4" fill="#0A1120"/>
+  <rect width="1200" height="750" fill="url(#halo)"/><rect x="316" y="46" width="458" height="634" rx="6" fill="#6B7F84"/><g><rect x="330" y="60" width="430" height="620" rx="4" fill="url(#porte)"/><rect x="340" y="70" width="410" height="600" rx="3" fill="none" stroke="#0F766E" stroke-opacity="0.5" stroke-width="3"/><circle cx="356" cy="120" r="4" fill="#0D9488" opacity="0.55"/><circle cx="356" cy="160" r="4" fill="#0D9488" opacity="0.55"/><circle cx="356" cy="200" r="4" fill="#0D9488" opacity="0.55"/><circle cx="356" cy="240" r="4" fill="#0D9488" opacity="0.55"/></g><rect x="706" y="324" width="20" height="92" rx="10" fill="url(#acier)"/><rect x="682" y="361" width="42" height="18" rx="9" fill="url(#cuivre)"/><circle cx="716" cy="452" r="41" fill="#6B7F84"/><circle cx="716" cy="452" r="32" fill="url(#cuivre)"/><circle cx="716" cy="452" r="11" fill="#14231F"/><rect x="713" y="452" width="6" height="26" rx="3" fill="#14231F"/><rect x="762" y="135" width="60" height="30" rx="9" fill="url(#cuivre)"/><rect x="762" y="285" width="60" height="30" rx="9" fill="url(#cuivre)"/><rect x="762" y="435" width="60" height="30" rx="9" fill="url(#cuivre)"/><rect x="762" y="585" width="60" height="30" rx="9" fill="url(#cuivre)"/><rect x="756" y="150" width="10" height="450" rx="5" fill="#0F766E" opacity="0.45"/><g transform="translate(80 80)"><rect x="0" y="0" width="236" height="46" rx="23" fill="#FFFFFF" fill-opacity="0.92" stroke="#0D9488" stroke-opacity="0.55" stroke-width="2"/><text x="118" y="31" text-anchor="middle" fill="#0D9488" font-family="system-ui,sans-serif" font-size="22" font-weight="700" letter-spacing="1">HAUTE SÉCURITÉ</text></g><rect x="60" y="678" width="960" height="14" rx="4" fill="#AEC5C1"/>
 </svg>
