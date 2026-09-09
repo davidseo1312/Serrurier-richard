@@ -7,7 +7,7 @@
 <meta name="description" content="Clé qui tourne dans le vide, porte coincée, serrure grippée : diagnostic des causes d'une porte bloquée et intervention de déblocage sans casse.">
 <link rel="canonical" href="https://serrurier-richard.fr/porte-bloquee">
 <meta name="robots" content="noindex, follow, max-image-preview:large">
-<meta name="theme-color" content="#0b2a4a">
+<meta name="theme-color" content="#0F172A">
 <meta name="format-detection" content="telephone=yes">
 
 
@@ -17,19 +17,25 @@
 <meta property="og:title" content="Porte bloquée — déblocage et réparation de serrure">
 <meta property="og:description" content="Clé qui tourne dans le vide, porte coincée, serrure grippée : diagnostic des causes d'une porte bloquée et intervention de déblocage sans casse.">
 <meta property="og:url" content="https://serrurier-richard.fr/porte-bloquee">
-<meta property="og:image" content="https://serrurier-richard.fr/assets/img/og-default.jpg">
+<meta property="og:image" content="https://serrurier-richard.fr/assets/images/og/diagnostic-porte-bloquee-serrure.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Serrurier Richard — Dépannage serrurerie 24h/24 dans le Grand Ouest">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Porte bloquée — déblocage et réparation de serrure">
 <meta name="twitter:description" content="Clé qui tourne dans le vide, porte coincée, serrure grippée : diagnostic des causes d'une porte bloquée et intervention de déblocage sans casse.">
-<meta name="twitter:image" content="https://serrurier-richard.fr/assets/img/og-default.jpg">
+<meta name="twitter:image" content="https://serrurier-richard.fr/assets/images/og/diagnostic-porte-bloquee-serrure.jpg">
 
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
+<!-- Les deux graisses présentes dès le premier écran sont préchargées : sans
+     cela le navigateur ne les découvre qu'après avoir analysé la feuille de
+     style, et le texte permute visiblement. Les autres se chargent à la
+     demande. crossorigin est requis même en même origine pour les polices. -->
+<link rel="preload" href="/assets/fonts/outfit-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/worksans-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/style.css">
 <script type="application/ld+json">
 {
@@ -99,10 +105,10 @@
 <a class="skip-link" href="#contenu">Aller au contenu principal</a>
 <header class="site-header">
   <div class="wrap header-inner">
-    <a class="brand" href="/">
+    <a class="brand" href="/" aria-label="Serrurier Richard — retour à l'accueil">
       <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-        <circle cx="16" cy="12" r="6.5" fill="none" stroke="currentColor" stroke-width="3"/>
-        <path d="M16 18.5v10M16 25h5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="16" cy="11.5" r="6.5" fill="none" stroke="currentColor" stroke-width="3"/>
+        <path d="M16 18v11M16 25.5h5.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
       </svg>
       <span class="brand-text">
         <strong>Serrurier Richard</strong>
@@ -117,18 +123,25 @@
 
     <nav id="nav-principal" class="nav" aria-label="Navigation principale">
       <ul>
-        <li><a href="/serrurier">Nos prestations</a></li>
-        <li><a href="/serrurier-urgence">Urgence</a></li>
-        <li><a href="/tarifs">Tarifs</a></li>
+        <li><a href="/serrurier">Prestations</a></li>
+        <li><a href="/serrurier-urgence">Dépannage</a></li>
+        <li><a href="/changement-serrure">Serrures</a></li>
+        <li><a href="/blindage-porte">Sécurité</a></li>
         <li><a href="/zones-d-intervention">Zones</a></li>
-        <li><a href="/faq">FAQ</a></li>
+        <li><a href="/blog/">Conseils</a></li>
+        <li><a href="/contact">Contact</a></li>
         <li><a href="/devis-serrurerie" class="nav-devis">Devis gratuit</a></li>
       </ul>
     </nav>
 
+    <a class="header-tel" href="tel:+33220060075" data-track="appel" data-track-zone="entete-numero">
+      <span>24h/24 et 7j/7</span>
+      <strong>02 20 06 00 75</strong>
+    </a>
+
     <a class="btn btn-call header-call" href="tel:+33220060075" data-track="appel" data-track-zone="entete">
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.6 1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
-      <span>02 20 06 00 75</span>
+      <span>Intervention urgente</span>
     </a>
   </div>
 </header>
@@ -166,6 +179,8 @@
         appelez.
       </p>
     </div>
+
+    <div class="media-large"><img src="/assets/images/porte-bloquee/diagnostic-porte-bloquee-serrure.svg" width="1200" height="750" alt="Porte bloquée dont la clé tourne dans le vide, signe d'un mécanisme défaillant" loading="lazy" decoding="async"></div>
 
     <h2>Les six causes possibles</h2>
 
@@ -279,9 +294,15 @@
   <div class="wrap footer-grid">
     <div class="footer-col footer-brand">
       <strong>Serrurier Richard</strong>
-      <p>Dépannage serrurerie 24h/24 dans le Grand Ouest. Intervention en Ille-et-Vilaine (35), Morbihan (56), Finistère (29), Côtes-d'Armor (22), Loire-Atlantique (44) et Maine-et-Loire (49).</p>
-      <a class="btn btn-call" href="tel:+33220060075" data-track="appel" data-track-zone="pied-de-page">Appeler le 02 20 06 00 75</a>
-      <p class="footer-horaires">Dépannage : 24 heures sur 24, 7 jours sur 7, jours fériés compris.<br>Devis et administratif : du lundi au vendredi, 8h – 19h.</p>
+      <p>Dépannage serrurerie 24h/24 dans le Grand Ouest. Dépannage et travaux de serrurerie en Ille-et-Vilaine (35), Morbihan (56), Finistère (29), Côtes-d'Armor (22), Loire-Atlantique (44) et Maine-et-Loire (49).</p>
+      <a class="btn btn-call" href="tel:+33220060075" data-track="appel" data-track-zone="pied-de-page">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.6 1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
+        02 20 06 00 75
+      </a>
+      <p class="footer-horaires">
+        Dépannage : 24 heures sur 24, 7 jours sur 7, jours fériés compris.<br>
+        Devis et administratif : du lundi au vendredi, 8h – 19h.
+      </p>
     </div>
 
     <div class="footer-col">
@@ -297,30 +318,30 @@
     </div>
 
     <div class="footer-col">
-      <h2>Serrures et sécurité</h2>
+      <h2>Serrures</h2>
       <ul>
         <li><a href="/changement-serrure">Changement de serrure</a></li>
         <li><a href="/remplacement-serrure">Remplacement de serrure</a></li>
         <li><a href="/installation-serrure">Installation de serrure</a></li>
         <li><a href="/serrure-3-points">Serrure 3 points</a></li>
         <li><a href="/serrure-5-points">Serrure 5 points</a></li>
-        <li><a href="/porte-blindee">Porte blindée</a></li>
-        <li><a href="/blindage-porte">Blindage de porte</a></li>
       </ul>
     </div>
 
     <div class="footer-col">
-      <h2>Professionnels</h2>
+      <h2>Sécurité</h2>
       <ul>
+        <li><a href="/porte-blindee">Porte blindée</a></li>
+        <li><a href="/blindage-porte">Blindage de porte</a></li>
         <li><a href="/rideau-metallique">Rideau métallique</a></li>
         <li><a href="/coffre-fort">Coffre-fort</a></li>
         <li><a href="/serrurier">Toutes nos prestations</a></li>
       </ul>
       <h2 class="footer-h2-suite">Zones</h2>
       <ul>
-        <li><a href="/zones/ille-et-vilaine-35">Ille-et-Vilaine (35)</a></li>
-        <li><a href="/zones/morbihan-56">Morbihan (56)</a></li>
-        <li><a href="/zones/loire-atlantique-44">Loire-Atlantique (44)</a></li>
+        <li><a href="/serrurier-rennes">Serrurier à Rennes</a></li>
+        <li><a href="/serrurier-nantes">Serrurier à Nantes</a></li>
+        <li><a href="/serrurier-vannes">Serrurier à Vannes</a></li>
         <li><a href="/zones-d-intervention">Toutes les zones</a></li>
       </ul>
     </div>
@@ -344,7 +365,7 @@
   <div class="wrap footer-legal">
     <p>Bilal Assoul — SIRET 901 133 041 00011 — Assurance responsabilité civile professionnelle [ASSUREUR RC PRO].</p>
     <p>Devis gratuit et écrit remis avant toute intervention, conformément à l'arrêté du 24 janvier 2017. Aucun travaux n'est engagé sans votre accord signé.</p>
-    <p class="copyright">&copy; <span id="annee">2026</span> Serrurier Richard. Tous droits réservés.</p>
+    <p class="copyright">&copy; <span id="annee">2026</span> Serrurier Richard. Tous droits réservés. Illustrations propriété de l'éditeur.</p>
   </div>
 </footer>
 

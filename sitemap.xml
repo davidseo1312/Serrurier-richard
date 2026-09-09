@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://serrurier-richard.fr/a-propos</loc>
     <lastmod>2026-09-09</lastmod>
@@ -9,16 +10,28 @@
     <loc>https://serrurier-richard.fr/blindage-porte</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/blindage/blindage-porte-corniere-anti-pince.svg</image:loc>
+      <image:title>Blindage d'une porte existante avec plaque d'acier et cornière anti-pince</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/blog/choisir-serrure-a2p</loc>
     <lastmod>2026-09-08</lastmod>
     <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/serrure-3-points/serrure-trois-points-porte.svg</image:loc>
+      <image:title>Serrure trois points avec condamnation en haut, au centre et en bas de la porte</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/blog/eviter-arnaques-serrurier</loc>
     <lastmod>2026-09-08</lastmod>
     <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/interventions/serrurier-au-travail.svg</image:loc>
+      <image:title>Technicien serrurier au travail sur une porte d'entrée</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/blog/</loc>
@@ -29,36 +42,64 @@
     <loc>https://serrurier-richard.fr/blog/porte-claquee-que-faire</loc>
     <lastmod>2026-09-08</lastmod>
     <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/ouverture-porte/serrurier-ouverture-porte-claquee.svg</image:loc>
+      <image:title>Ouverture d'une porte claquée par glissement d'une feuille souple le long du pêne</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/blog/prix-ouverture-de-porte</loc>
     <lastmod>2026-09-08</lastmod>
     <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/interventions/devis-serrurerie-detaille.svg</image:loc>
+      <image:title>Devis de serrurerie détaillé poste par poste, remis avant intervention</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/blog/securiser-son-logement</loc>
     <lastmod>2026-09-08</lastmod>
     <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/blindage/blindage-porte-corniere-anti-pince.svg</image:loc>
+      <image:title>Blindage d'une porte existante avec plaque d'acier et cornière anti-pince</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/changement-serrure</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/serrure/remplacement-cylindre-serrure.svg</image:loc>
+      <image:title>Remplacement du cylindre d'une serrure sur le chant d'une porte</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/cle-cassee</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/cle-cassee/extraction-cle-cassee-cylindre.svg</image:loc>
+      <image:title>Fragment de clé cassée resté dans le cylindre et outil d'extraction</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/cle-perdue</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/cle-perdue/remplacement-cylindre-cles-perdues.svg</image:loc>
+      <image:title>Trousseau de clés perdu et remplacement du cylindre de la porte d'entrée</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/coffre-fort</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/coffre-fort/ouverture-coffre-fort.svg</image:loc>
+      <image:title>Ouverture d'un coffre-fort par auscultation du mécanisme</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/conditions-generales</loc>
@@ -79,6 +120,10 @@
     <loc>https://serrurier-richard.fr/effraction</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/effraction/securisation-porte-apres-effraction.svg</image:loc>
+      <image:title>Porte forcée après effraction et remise en sécurité du logement</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/faq</loc>
@@ -89,11 +134,39 @@
     <loc>https://serrurier-richard.fr/</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/serrurerie/serrurier-intervention-porte-entree.svg</image:loc>
+      <image:title>Illustration d'une porte d'entrée équipée d'une serrure de sécurité multipoints, avec les outils du serrurier</image:title>
+    </image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/ouverture-porte/serrurier-ouverture-porte-claquee.svg</image:loc>
+      <image:title>Ouverture d'une porte claquée par glissement d'une feuille souple le long du pêne</image:title>
+      <image:loc>https://serrurier-richard.fr/assets/images/serrure/remplacement-cylindre-serrure.svg</image:loc>
+      <image:title>Remplacement du cylindre d'une serrure sur le chant d'une porte</image:title>
+      <image:loc>https://serrurier-richard.fr/assets/images/porte-blindee/porte-blindee-serrure-multipoints.svg</image:loc>
+      <image:title>Porte blindée équipée d'une serrure multipoints et de pênes latéraux</image:title>
+      <image:loc>https://serrurier-richard.fr/assets/images/effraction/securisation-porte-apres-effraction.svg</image:loc>
+      <image:title>Porte forcée après effraction et remise en sécurité du logement</image:title>
+      <image:loc>https://serrurier-richard.fr/assets/images/rideau-metallique/deblocage-rideau-metallique-commerce.svg</image:loc>
+      <image:title>Rideau métallique de commerce bloqué et matériel de déblocage</image:title>
+      <image:loc>https://serrurier-richard.fr/assets/images/coffre-fort/ouverture-coffre-fort.svg</image:loc>
+      <image:title>Ouverture d'un coffre-fort par auscultation du mécanisme</image:title>
+      <image:loc>https://serrurier-richard.fr/assets/images/cle-cassee/extraction-cle-cassee-cylindre.svg</image:loc>
+      <image:title>Fragment de clé cassée resté dans le cylindre et outil d'extraction</image:title>
+      <image:loc>https://serrurier-richard.fr/assets/images/serrure-3-points/serrure-trois-points-porte.svg</image:loc>
+      <image:title>Serrure trois points avec condamnation en haut, au centre et en bas de la porte</image:title>
+      <image:loc>https://serrurier-richard.fr/assets/images/blindage/blindage-porte-corniere-anti-pince.svg</image:loc>
+      <image:title>Blindage d'une porte existante avec plaque d'acier et cornière anti-pince</image:title>
+      <image:loc>https://serrurier-richard.fr/assets/images/interventions/serrurier-au-travail.svg</image:loc>
+      <image:title>Technicien serrurier au travail sur une porte d'entrée</image:title>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/installation-serrure</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/installation/installation-serrure-porte.svg</image:loc>
+      <image:title>Relevé des cotes avant l'installation d'une serrure sur une porte</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/mentions-legales</loc>
@@ -104,6 +177,10 @@
     <loc>https://serrurier-richard.fr/ouverture-porte</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/ouverture-porte/serrurier-ouverture-porte-claquee.svg</image:loc>
+      <image:title>Ouverture d'une porte claquée par glissement d'une feuille souple le long du pêne</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/politique-confidentialite</loc>
@@ -114,61 +191,109 @@
     <loc>https://serrurier-richard.fr/porte-blindee</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/porte-blindee/porte-blindee-serrure-multipoints.svg</image:loc>
+      <image:title>Porte blindée équipée d'une serrure multipoints et de pênes latéraux</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/porte-bloquee</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/porte-bloquee/diagnostic-porte-bloquee-serrure.svg</image:loc>
+      <image:title>Porte bloquée dont la clé tourne dans le vide, signe d'un mécanisme défaillant</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/remplacement-serrure</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/serrure/remplacement-cylindre-serrure.svg</image:loc>
+      <image:title>Remplacement du cylindre d'une serrure sur le chant d'une porte</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/rideau-metallique</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/rideau-metallique/deblocage-rideau-metallique-commerce.svg</image:loc>
+      <image:title>Rideau métallique de commerce bloqué et matériel de déblocage</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/serrure-3-points</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/serrure-3-points/serrure-trois-points-porte.svg</image:loc>
+      <image:title>Serrure trois points avec condamnation en haut, au centre et en bas de la porte</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/serrure-5-points</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.75</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/serrure-5-points/serrure-cinq-points-porte.svg</image:loc>
+      <image:title>Serrure cinq points répartis sur la hauteur d'une porte de grande dimension</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/serrurier-nantes</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/interventions/serrurier-au-travail.svg</image:loc>
+      <image:title>Technicien serrurier au travail sur une porte d'entrée</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/serrurier-rennes</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/interventions/serrurier-au-travail.svg</image:loc>
+      <image:title>Technicien serrurier au travail sur une porte d'entrée</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/serrurier-urgence</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/interventions/serrurier-au-travail.svg</image:loc>
+      <image:title>Technicien serrurier au travail sur une porte d'entrée</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/serrurier-vannes</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/interventions/serrurier-au-travail.svg</image:loc>
+      <image:title>Technicien serrurier au travail sur une porte d'entrée</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/serrurier</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/interventions/serrurier-au-travail.svg</image:loc>
+      <image:title>Technicien serrurier au travail sur une porte d'entrée</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/tarifs</loc>
     <lastmod>2026-09-09</lastmod>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://serrurier-richard.fr/assets/images/interventions/devis-serrurerie-detaille.svg</image:loc>
+      <image:title>Devis de serrurerie détaillé poste par poste, remis avant intervention</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/zones-d-intervention</loc>
