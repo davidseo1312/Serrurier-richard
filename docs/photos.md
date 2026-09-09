@@ -179,11 +179,31 @@ famille ne demande donc ni CSS ni JavaScript.
 
 ---
 
-## 9. Les visuels actuels
+## 9. Préparer une photo automatiquement
 
-Les illustrations livrées avec le site sont produites par
-`scripts/generer-illustrations.py` : ce sont des dessins vectoriels créés pour
-ce projet, sans photographie source. Elles expliquent un geste technique ;
+Un script fait le recadrage, la conversion et les variantes responsives :
+
+```bash
+python3 scripts/preparer-photos.py ~/photos/IMG_2043.jpg HERO
+```
+
+Il lit `src/images.conf`, y trouve le chemin, le nom et les dimensions attendus
+pour cet identifiant, écrit le fichier WebP au bon endroit, produit les
+variantes `-800` et `-1200`, et rappelle le texte alternatif enregistré pour
+que vous le relisiez. Le recadrage est fait **au centre** : si un cadrage
+particulier est nécessaire, recadrez la source avant.
+
+Les métadonnées EXIF, position GPS comprise, ne sont pas recopiées.
+
+---
+
+## 10. Les visuels actuels
+
+Six emplacements affichent aujourd'hui de **vraies photographies
+d'intervention**. Les autres sont encore illustrés.
+
+Les illustrations sont produites par `scripts/generer-illustrations.py` : ce
+sont des dessins vectoriels créés pour ce projet, sans photographie source. Elles expliquent un geste technique ;
 elles ne représentent aucun chantier. Elles pèsent 3 à 4 Ko chacune et se
 remplacent une par une, dans n'importe quel ordre.
 

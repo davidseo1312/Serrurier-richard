@@ -1,26 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" role="img" aria-label="Porte bloquée : la clé tourne dans le vide, le mécanisme est en cause">
   <defs>
     <linearGradient id="fond" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#16233D"/><stop offset="1" stop-color="#0F172A"/>
+      <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E4F3F0"/>
     </linearGradient>
     <radialGradient id="halo" cx="0.72" cy="0.18" r="0.75">
-      <stop offset="0" stop-color="#0EA5E9" stop-opacity="0.30"/>
-      <stop offset="1" stop-color="#0EA5E9" stop-opacity="0"/>
+      <stop offset="0" stop-color="#14B8A6" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#14B8A6" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="acier" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#475569"/><stop offset="1" stop-color="#1E293B"/>
+      <stop offset="0" stop-color="#B7C4C6"/><stop offset="1" stop-color="#6B7F84"/>
     </linearGradient>
     <linearGradient id="cuivre" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#FDBA74"/><stop offset="1" stop-color="#EA580C"/>
+      <stop offset="0" stop-color="#FB923C"/><stop offset="1" stop-color="#C2410C"/>
     </linearGradient>
     <linearGradient id="porte" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#1E3A5F"/><stop offset="1" stop-color="#12233C"/>
+      <stop offset="0" stop-color="#DCE8E7"/><stop offset="1" stop-color="#BCCFCC"/>
     </linearGradient>
     <pattern id="grille" width="60" height="60" patternUnits="userSpaceOnUse">
-      <path d="M60 0H0V60" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+      <path d="M60 0H0V60" fill="none" stroke="#0F766E" stroke-opacity="0.06" stroke-width="1"/>
     </pattern>
   </defs>
   <rect width="1200" height="750" fill="url(#fond)"/>
   <rect width="1200" height="750" fill="url(#grille)"/>
-  <rect width="1200" height="750" fill="url(#halo)"/><rect x="326" y="56" width="428" height="614" rx="6" fill="#1E293B"/><g><rect x="340" y="70" width="400" height="600" rx="4" fill="url(#porte)"/><rect x="374" y="108" width="332" height="204" rx="4" fill="none" stroke="#0284C7" stroke-opacity="0.34" stroke-width="3"/><rect x="374" y="346" width="332" height="264" rx="4" fill="none" stroke="#0284C7" stroke-opacity="0.34" stroke-width="3"/></g><rect x="686" y="334" width="20" height="92" rx="10" fill="url(#acier)"/><rect x="662" y="371" width="42" height="18" rx="9" fill="url(#cuivre)"/><circle cx="696" cy="452" r="39" fill="#1E293B"/><circle cx="696" cy="452" r="30" fill="url(#acier)"/><circle cx="696" cy="452" r="10" fill="#0F172A"/><rect x="693" y="452" width="6" height="24" rx="3" fill="#0F172A"/><g transform="translate(696 452) rotate(20) scale(0.55)"><circle cx="0" cy="0" r="26" fill="none" stroke="#94A3B8" stroke-width="13"/><rect x="24" y="-6" width="112" height="12" rx="5" fill="#94A3B8"/><rect x="104" y="-22" width="12" height="17" rx="3" fill="#94A3B8"/><rect x="124" y="-26" width="12" height="21" rx="3" fill="#94A3B8"/></g><g transform="translate(880 300)" fill="none" stroke="#F97316" stroke-width="9" stroke-linecap="round"><path d="M0 0 a56 56 0 1 1 -40 96"/><path d="M-40 96 l-26 -14 M-40 96 l6 -28"/></g><g stroke="#F97316" stroke-width="6" stroke-linecap="round" opacity="0.8"><path d="M696 384 v-26"/><path d="M734 398 l19 -19"/><path d="M658 398 l-19 -19"/></g><g transform="translate(80 80)"><rect x="0" y="0" width="176" height="46" rx="23" fill="#0F172A" fill-opacity="0.72" stroke="#FDBA74" stroke-opacity="0.5" stroke-width="2"/><text x="88" y="31" text-anchor="middle" fill="#FDBA74" font-family="system-ui,sans-serif" font-size="22" font-weight="700" letter-spacing="1">DIAGNOSTIC</text></g><rect x="60" y="668" width="900" height="14" rx="4" fill="#0A1120"/>
+  <rect width="1200" height="750" fill="url(#halo)"/><rect x="326" y="56" width="428" height="614" rx="6" fill="#6B7F84"/><g><rect x="340" y="70" width="400" height="600" rx="4" fill="url(#porte)"/><rect x="374" y="108" width="332" height="204" rx="4" fill="none" stroke="#0F766E" stroke-opacity="0.34" stroke-width="3"/><rect x="374" y="346" width="332" height="264" rx="4" fill="none" stroke="#0F766E" stroke-opacity="0.34" stroke-width="3"/></g><rect x="686" y="334" width="20" height="92" rx="10" fill="url(#acier)"/><rect x="662" y="371" width="42" height="18" rx="9" fill="url(#cuivre)"/><circle cx="696" cy="452" r="39" fill="#6B7F84"/><circle cx="696" cy="452" r="30" fill="url(#acier)"/><circle cx="696" cy="452" r="10" fill="#14231F"/><rect x="693" y="452" width="6" height="24" rx="3" fill="#14231F"/><g transform="translate(696 452) rotate(20) scale(0.55)"><circle cx="0" cy="0" r="26" fill="none" stroke="#6B7F84" stroke-width="13"/><rect x="24" y="-6" width="112" height="12" rx="5" fill="#6B7F84"/><rect x="104" y="-22" width="12" height="17" rx="3" fill="#6B7F84"/><rect x="124" y="-26" width="12" height="21" rx="3" fill="#6B7F84"/></g><g transform="translate(880 300)" fill="none" stroke="#EA580C" stroke-width="9" stroke-linecap="round"><path d="M0 0 a56 56 0 1 1 -40 96"/><path d="M-40 96 l-26 -14 M-40 96 l6 -28"/></g><g stroke="#EA580C" stroke-width="6" stroke-linecap="round" opacity="0.8"><path d="M696 384 v-26"/><path d="M734 398 l19 -19"/><path d="M658 398 l-19 -19"/></g><g transform="translate(80 80)"><rect x="0" y="0" width="176" height="46" rx="23" fill="#FFFFFF" fill-opacity="0.92" stroke="#FB923C" stroke-opacity="0.55" stroke-width="2"/><text x="88" y="31" text-anchor="middle" fill="#FB923C" font-family="system-ui,sans-serif" font-size="22" font-weight="700" letter-spacing="1">DIAGNOSTIC</text></g><rect x="60" y="668" width="900" height="14" rx="4" fill="#AEC5C1"/>
 </svg>

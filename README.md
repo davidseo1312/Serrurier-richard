@@ -414,23 +414,43 @@ relancer seulement après un changement de charte.
 
 ### Modifier la charte graphique
 
-Tout est regroupé en variables CSS au début de `static/assets/css/style.css` :
+Tout est en jetons CSS, en tête de `static/assets/css/style.css`. Modifier une
+valeur y repeint le site entier.
 
-| Variable | Rôle |
-|---|---|
-| `--color-primary` | Bleu de marque, couleur dominante |
-| `--color-primary-dark` / `--color-primary-light` | Déclinaisons |
-| `--color-secondary` | Orange d'urgence — téléphone et appels à l'action |
-| `--color-dark` | Bleu nuit : en-tête, pied de page, sections premium |
-| `--color-text` / `--color-muted` | Textes |
-| `--font-title` / `--font-body` | Outfit et Work Sans |
-| `--space-*`, `--radius-*`, `--shadow-*` | Espacements, rayons, ombres |
+| Jeton | Rôle | Valeur |
+|---|---|---|
+| `--color-primary` | vert d'eau, couleur dominante — texte et liens | `#0F766E` |
+| `--color-primary-dark` | fonds de bouton, contours affirmés | `#115E59` |
+| `--color-primary-soft` / `-tint` | aplats de section, badges | `#CCFBF1` / `#F0FDFA` |
+| `--color-secondary` | orange, **urgence uniquement** | `#F97316` |
+| `--color-dark` | encre du texte — jamais un fond | `#14231F` |
+| `--color-background` / `-2` | surfaces claires | `#F5FAF9` / `#EAF3F1` |
+| `--font-title` / `--font-body` | Outfit / Work Sans | — |
 
-Changer `--color-primary` et `--color-secondary` suffit à repeindre le site
-entier. **Vérifiez le contraste** après un changement de couleur : le texte
-doit atteindre 4,5 pour 1 sur son fond (WCAG AA). Les couleurs actuelles ont
-toutes été vérifiées — notamment le bouton d'appel, dont le texte est brun
-très sombre et non blanc, parce que blanc sur cet orange ne donne que 2,80.
+**Le site est clair de bout en bout** : en-tête, héros, sections, bandeau
+d'urgence, appel à l'action final et pied de page. Il n'y a plus aucune
+surface sombre, et donc plus aucune règle d'inversion de couleur à maintenir.
+La classe `section.sombre` a gardé son nom — elle est employée dans les pages —
+mais désigne désormais un aplat vert d'eau très clair entre deux sections
+blanches.
+
+**L'orange est réservé à l'urgence.** Bouton d'appel, badge du héros, barre
+d'appel fixe sur mobile. L'employer ailleurs userait le seul signal du site.
+
+> **Deux règles de contraste à ne pas enfreindre**, vérifiées par le script de
+> contraste des tests :
+> - le texte du bouton d'appel est **brun très sombre**, pas blanc : blanc sur
+>   `#F97316` ne donne que 2,80 de contraste là où WCAG AA en exige 4,5 ;
+> - l'astérisque de champ obligatoire utilise `--color-secondary-dark`, pas
+>   `--color-secondary`, pour la même raison.
+
+Après un changement de charte, régénérez les visuels qui la reprennent :
+
+```bash
+python3 scripts/generer-illustrations.py   # les 16 illustrations de repli
+node scripts/generer-og.mjs                # les vignettes de partage social
+bash scripts/build.sh
+```
 
 ### Clés de métadonnées disponibles
 

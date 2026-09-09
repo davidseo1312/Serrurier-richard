@@ -103,14 +103,25 @@ resoudre_image() {
 }
 
 # Construit un srcset si des variantes -800 / -1200 / -1600 existent.
+#
+# Le fichier principal est TOUJOURS ajouté à la liste, avec sa largeur réelle.
+# Sans lui, un srcset ne contenant que « -800 800w » ne laisse au navigateur
+# aucun autre candidat : un écran large afficherait la version 800 px étirée,
+# c'est-à-dire moins bien qu'avant l'ajout des variantes.
 construire_srcset() {
-  local base="$1" ext="$2" srcset="" largeur
+  local base="$1" ext="$2" largeur_reelle="$3" srcset="" largeur
   for largeur in 800 1200 1600; do
-    if [ -f "static/assets/images/${base}-${largeur}.${ext}" ]; then
+    if [ "$largeur" -lt "$largeur_reelle" ] \
+       && [ -f "static/assets/images/${base}-${largeur}.${ext}" ]; then
       [ -n "$srcset" ] && srcset="${srcset}, "
       srcset="${srcset}/assets/images/${base}-${largeur}.${ext} ${largeur}w"
     fi
   done
+  # Une liste réduite au seul fichier principal n'apporte rien : on la laisse
+  # vide, et la balise garde son simple « src ».
+  if [ -n "$srcset" ]; then
+    srcset="${srcset}, /assets/images/${base}.${ext} ${largeur_reelle}w"
+  fi
   printf '%s' "$srcset"
 }
 
@@ -149,7 +160,7 @@ while IFS='|' read -r id photo repli largeur hauteur alt_photo alt_repli; do
   VISUELS_TOTAL=$((VISUELS_TOTAL + 1))
 
   ext="${chemin##*.}"
-  srcset="$(construire_srcset "$base" "$ext")"
+  srcset="$(construire_srcset "$base" "$ext" "$largeur")"
   attr_srcset=""
   [ -n "$srcset" ] && attr_srcset=" srcset=\"${srcset}\" sizes=\"(max-width: 900px) 100vw, 600px\""
 
@@ -158,6 +169,15 @@ while IFS='|' read -r id photo repli largeur hauteur alt_photo alt_repli; do
   export "IMG_${id}=<img src=\"${chemin}\"${attr_srcset} width=\"${largeur}\" height=\"${hauteur}\" alt=\"${alt}\" loading=\"lazy\" decoding=\"async\" data-visuel=\"${nature}\">"
   export "IMGSRC_${id}=${chemin}"
   export "IMGNATURE_${id}=${nature}"
+
+  # Vignette sociale correspondante, produite par scripts/generer-og.mjs à
+  # partir du MÊME fichier que la page affiche. Une page écrit « image: og:HERO »
+  # dans ses métadonnées : l'aperçu partagé suit alors automatiquement le
+  # visuel réel, y compris quand une photographie remplace une illustration.
+  og_nom="$(basename "$base")"
+  if [ -f "static/assets/images/og/${og_nom}.jpg" ]; then
+    export "OGIMG_${id}=/assets/images/og/${og_nom}.jpg"
+  fi
 
   IMAGES_SITEMAP="${IMAGES_SITEMAP}${id}|${chemin}|${alt}"$'\n'
 done < src/images.conf
@@ -288,6 +308,31 @@ if [ -n "${IMG_HERO:-}" ]; then
   export IMG_HERO="${IMG_HERO/ loading=\"lazy\" decoding=\"async\"/ fetchpriority=\"high\" decoding=\"async\"}"
 fi
 
+# Le navigateur ne découvre l'image d'ouverture qu'après avoir analysé le corps
+# de la page. Le préchargement la lui annonce dès l'en-tête : elle part en même
+# temps que la feuille de style au lieu d'attendre son tour.
+#
+# Il est calculé PAR PAGE, à partir de la balise réellement présente dans son
+# corps — celle qui porte fetchpriority="high". Un préchargement global ferait
+# télécharger le visuel d'accueil sur les 43 pages, y compris celles qui ne
+# l'affichent pas : le gain sur une page se paierait par une centaine de
+# kilo-octets perdus sur les quarante-deux autres.
+#
+# imagesrcset et imagesizes reprennent exactement ceux de la balise, sans quoi
+# le navigateur téléchargerait deux fichiers différents.
+precharger_visuel_principal() {
+  printf '%s' "$1" | perl -0ne '
+    exit unless /(<img[^>]*fetchpriority="high"[^>]*>)/;
+    my $b = $1;
+    my ($src)    = $b =~ /\ssrc="([^"]*)"/;
+    my ($srcset) = $b =~ /\ssrcset="([^"]*)"/;
+    my ($sizes)  = $b =~ /\ssizes="([^"]*)"/;
+    exit unless $src;
+    my $attrs = $srcset ? qq( imagesrcset="$srcset" imagesizes="$sizes") : "";
+    print qq(<link rel="preload" href="$src" as="image"$attrs fetchpriority="high">);
+  '
+}
+
 # --- Formulaire de devis ---------------------------------------------------
 # Le formulaire n'existe qu'en un seul exemplaire, dans src/partials/. Les
 # pages qui l'affichent écrivent simplement {{FORMULAIRE_DEVIS}} : une
@@ -347,6 +392,20 @@ while IFS= read -r src_file; do
   PAGE_PARENT_URL="$(meta_get "$src_file" parent_url)"
 
   [ -n "$PAGE_PRIORITY" ] || PAGE_PRIORITY="0.6"
+  # « image: og:HERO » désigne la vignette sociale de l'entrée HERO du
+  # catalogue, quel que soit le fichier réellement retenu pour cette entrée.
+  case "$PAGE_IMAGE" in
+    og:*)
+      cle_og="OGIMG_${PAGE_IMAGE#og:}"
+      resolue="$(eval "printf '%s' \"\${${cle_og}:-}\"")"
+      if [ -n "$resolue" ]; then
+        PAGE_IMAGE="$resolue"
+      else
+        echo "  ! aperçu social introuvable pour ${PAGE_IMAGE} (page ${rel})"
+        PAGE_IMAGE=""
+      fi
+      ;;
+  esac
   [ -n "$PAGE_IMAGE" ] || PAGE_IMAGE="/assets/img/og-default.jpg"
   [ -n "$PAGE_DATE" ] || PAGE_DATE="$(date +%Y-%m-%d)"
 
@@ -381,6 +440,8 @@ while IFS= read -r src_file; do
   # Le corps est substitué d'abord : le balisage FAQPage doit contenir les
   # valeurs finales (tarifs, téléphone), pas les tokens.
   CORPS="$(sed '/^<!--meta$/,/^-->$/d' "$src_file" | substituer)"
+
+  export PRECHARGEMENT_HERO="$(precharger_visuel_principal "$CORPS")"
 
   # FAQPage dérivé des blocs <details> réellement affichés. « faq: non » dans
   # les métadonnées désactive la génération pour une page donnée.

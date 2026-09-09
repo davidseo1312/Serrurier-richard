@@ -1,26 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" role="img" aria-label="Remplacement du cylindre d'une serrure sur le chant d'une porte">
   <defs>
     <linearGradient id="fond" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#16233D"/><stop offset="1" stop-color="#0F172A"/>
+      <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E4F3F0"/>
     </linearGradient>
     <radialGradient id="halo" cx="0.72" cy="0.18" r="0.75">
-      <stop offset="0" stop-color="#0EA5E9" stop-opacity="0.30"/>
-      <stop offset="1" stop-color="#0EA5E9" stop-opacity="0"/>
+      <stop offset="0" stop-color="#14B8A6" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#14B8A6" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="acier" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#475569"/><stop offset="1" stop-color="#1E293B"/>
+      <stop offset="0" stop-color="#B7C4C6"/><stop offset="1" stop-color="#6B7F84"/>
     </linearGradient>
     <linearGradient id="cuivre" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#FDBA74"/><stop offset="1" stop-color="#EA580C"/>
+      <stop offset="0" stop-color="#FB923C"/><stop offset="1" stop-color="#C2410C"/>
     </linearGradient>
     <linearGradient id="porte" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#1E3A5F"/><stop offset="1" stop-color="#12233C"/>
+      <stop offset="0" stop-color="#DCE8E7"/><stop offset="1" stop-color="#BCCFCC"/>
     </linearGradient>
     <pattern id="grille" width="60" height="60" patternUnits="userSpaceOnUse">
-      <path d="M60 0H0V60" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+      <path d="M60 0H0V60" fill="none" stroke="#0F766E" stroke-opacity="0.06" stroke-width="1"/>
     </pattern>
   </defs>
   <rect width="1200" height="750" fill="url(#fond)"/>
   <rect width="1200" height="750" fill="url(#grille)"/>
-  <rect width="1200" height="750" fill="url(#halo)"/><rect x="120" y="60" width="300" height="630" rx="6" fill="url(#porte)"/><rect x="420" y="60" width="64" height="630" fill="#1E293B"/><rect x="432" y="240" width="40" height="270" rx="6" fill="url(#acier)"/><rect x="484" y="276" width="66" height="26" rx="7" fill="url(#cuivre)"/><rect x="484" y="372" width="66" height="26" rx="7" fill="url(#cuivre)"/><rect x="484" y="468" width="66" height="26" rx="7" fill="url(#cuivre)"/><circle cx="330" cy="376" r="43" fill="#1E293B"/><circle cx="330" cy="376" r="34" fill="url(#cuivre)"/><circle cx="330" cy="376" r="12" fill="#0F172A"/><rect x="327" y="376" width="6" height="27" rx="3" fill="#0F172A"/><g transform="translate(560 376) rotate(-18)"><rect x="0" y="-9" width="86" height="18" rx="6" fill="url(#cuivre)"/><rect x="86" y="-5" width="80" height="10" rx="3" fill="#94A3B8"/><rect x="160" y="-7" width="16" height="14" rx="2" fill="#E2E8F0"/></g><g transform="translate(820 570)"><rect x="0" y="0" width="168" height="96" rx="10" fill="#1E293B"/><rect x="0" y="-16" width="168" height="22" rx="9" fill="url(#cuivre)"/><rect x="66" y="-40" width="36" height="26" rx="8" fill="none" stroke="#F97316" stroke-width="7"/><rect x="20" y="30" width="52" height="11" rx="5" fill="#64748B"/><rect x="20" y="56" width="88" height="11" rx="5" fill="#475569"/></g><g transform="translate(840 300)"><rect width="200" height="72" rx="14" fill="url(#acier)"/><circle cx="52" cy="36" r="26" fill="url(#cuivre)"/><circle cx="52" cy="36" r="9" fill="#0F172A"/><rect x="94" y="28" width="92" height="16" rx="6" fill="#475569"/></g><g transform="translate(820 240)"><rect x="0" y="0" width="191" height="46" rx="23" fill="#0F172A" fill-opacity="0.72" stroke="#38BDF8" stroke-opacity="0.5" stroke-width="2"/><text x="96" y="31" text-anchor="middle" fill="#38BDF8" font-family="system-ui,sans-serif" font-size="22" font-weight="700" letter-spacing="1">PIÈCE NEUVE</text></g><rect x="60" y="688" width="980" height="14" rx="4" fill="#0A1120"/>
+  <rect width="1200" height="750" fill="url(#halo)"/><rect x="120" y="60" width="300" height="630" rx="6" fill="url(#porte)"/><rect x="420" y="60" width="64" height="630" fill="#6B7F84"/><rect x="432" y="240" width="40" height="270" rx="6" fill="url(#acier)"/><rect x="484" y="276" width="66" height="26" rx="7" fill="url(#cuivre)"/><rect x="484" y="372" width="66" height="26" rx="7" fill="url(#cuivre)"/><rect x="484" y="468" width="66" height="26" rx="7" fill="url(#cuivre)"/><circle cx="330" cy="376" r="43" fill="#6B7F84"/><circle cx="330" cy="376" r="34" fill="url(#cuivre)"/><circle cx="330" cy="376" r="12" fill="#14231F"/><rect x="327" y="376" width="6" height="27" rx="3" fill="#14231F"/><g transform="translate(560 376) rotate(-18)"><rect x="0" y="-9" width="86" height="18" rx="6" fill="url(#cuivre)"/><rect x="86" y="-5" width="80" height="10" rx="3" fill="#94A3B8"/><rect x="160" y="-7" width="16" height="14" rx="2" fill="#3F534D"/></g><g transform="translate(820 570)"><rect x="0" y="0" width="168" height="96" rx="10" fill="#6B7F84"/><rect x="0" y="-16" width="168" height="22" rx="9" fill="url(#cuivre)"/><rect x="66" y="-40" width="36" height="26" rx="8" fill="none" stroke="#EA580C" stroke-width="7"/><rect x="20" y="30" width="52" height="11" rx="5" fill="#B7C4C6"/><rect x="20" y="56" width="88" height="11" rx="5" fill="#CBD8D9"/></g><g transform="translate(840 300)"><rect width="200" height="72" rx="14" fill="url(#acier)"/><circle cx="52" cy="36" r="26" fill="url(#cuivre)"/><circle cx="52" cy="36" r="9" fill="#14231F"/><rect x="94" y="28" width="92" height="16" rx="6" fill="#B7C4C6"/></g><g transform="translate(820 240)"><rect x="0" y="0" width="191" height="46" rx="23" fill="#FFFFFF" fill-opacity="0.92" stroke="#0D9488" stroke-opacity="0.55" stroke-width="2"/><text x="96" y="31" text-anchor="middle" fill="#0D9488" font-family="system-ui,sans-serif" font-size="22" font-weight="700" letter-spacing="1">PIÈCE NEUVE</text></g><rect x="60" y="688" width="980" height="14" rx="4" fill="#AEC5C1"/>
 </svg>

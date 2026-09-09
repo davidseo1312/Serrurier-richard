@@ -63,33 +63,35 @@
    ------------------------------------------------------------------------ */
 
 :root {
-  /* Bleu — couleur dominante, celle de la confiance et du technique */
-  --color-primary:        #0284C7;
-  --color-primary-light:  #0EA5E9;
-  --color-primary-lighter:#38BDF8;
-  --color-primary-dark:   #0369A1;
-  --color-primary-soft:   #E0F2FE;
-  --color-primary-tint:   #F0F9FF;
+  /* Vert d'eau profond — couleur dominante. Calme, technique, et assez
+     soutenu pour rester lisible en texte sur blanc. */
+  --color-primary:        #0F766E;   /* 5,26:1 sur blanc — texte et liens */
+  --color-primary-light:  #14B8A6;
+  --color-primary-lighter:#5EEAD4;
+  --color-primary-dark:   #115E59;   /* 7,05:1 — fonds de bouton */
+  --color-primary-soft:   #CCFBF1;
+  --color-primary-tint:   #F0FDFA;
 
-  /* Bleu nuit — en-tête, pied de page, sections premium */
-  --color-dark:           #0F172A;
-  --color-dark-2:         #1E293B;
-  --color-dark-3:         #334155;
+  /* Encre — la couleur du texte. Elle ne sert plus de fond : le site est
+     clair de bout en bout, en-tête et pied de page compris. */
+  --color-dark:           #14231F;
+  --color-dark-2:         #24352F;
+  --color-dark-3:         #3F534D;
 
   /* Orange — urgence uniquement, employé avec parcimonie */
   --color-secondary:      #F97316;
-  --color-secondary-dark: #EA580C;
+  --color-secondary-dark: #C2410C;
   --color-secondary-soft: #FFF7ED;
 
-  /* Neutres */
+  /* Neutres, très légèrement teintés de vert pour s'accorder au dominant */
   --color-white:          #FFFFFF;
-  --color-background:     #F8FAFC;
-  --color-background-2:   #F1F5F9;
-  --color-text:           #0F172A;
-  --color-muted:          #64748B;
-  --color-muted-light:    #94A3B8;
-  --color-border:         #E2E8F0;
-  --color-border-strong:  #CBD5E1;
+  --color-background:     #F5FAF9;
+  --color-background-2:   #EAF3F1;
+  --color-text:           #14231F;
+  --color-muted:          #566A66;   /* 6,17:1 sur blanc */
+  --color-muted-light:    #7A8D89;
+  --color-border:         #DEEAE7;
+  --color-border-strong:  #C0D3CF;
 
   /* Sémantique */
   --color-success:        #059669;
@@ -188,18 +190,8 @@ p:last-child { margin-bottom: 0; }
 
 strong, b { font-weight: 700; color: var(--color-dark); }
 
-/* Sur fond sombre, un « strong » en bleu nuit devient illisible. Il reprend
-   la couleur du texte environnant, en blanc pur pour rester détaché.
-   La vignette flottante du héros, elle, est posée sur du blanc : elle est
-   explicitement exclue. */
-.hero strong, .hero b,
-.cta-final strong, .cta-final b,
-.bandeau-urgence strong, .bandeau-urgence b,
-section.sombre strong, section.sombre b,
-.cookie-bandeau strong, .site-footer strong {
-  color: #fff;
-}
-.hero-vignette strong { color: var(--color-dark); }
+/* Toutes les sections du site sont désormais claires : un « strong » garde
+   partout la couleur d'encre, il n'y a plus d'inversion à gérer. */
 
 ul, ol { margin: 0 0 var(--space-4); padding-left: 1.4em; }
 li { margin-bottom: var(--space-2); }
@@ -225,7 +217,7 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 
 .skip-link {
   position: absolute; left: -9999px; top: 0; z-index: 999;
-  background: var(--color-secondary); color: #fff;
+  background: var(--color-primary-dark); color: #fff;
   padding: var(--space-3) var(--space-5);
   font-weight: 700; border-radius: 0 0 var(--radius-sm) 0;
 }
@@ -283,7 +275,7 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
   background: var(--color-primary-dark); color: #fff;
   box-shadow: var(--shadow-primary);
 }
-.btn-devis:hover { background: #075985; color: #fff; }
+.btn-devis:hover { background: #0B4F4A; color: #fff; }
 
 .btn-urgence { background: var(--color-danger); color: #fff; }
 .btn-urgence:hover { background: #B91C1C; color: #fff; }
@@ -295,15 +287,18 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 }
 .btn-ghost:hover { border-color: var(--color-primary); color: var(--color-primary-dark); background: var(--color-primary-tint); }
 
-/* Sur fond sombre, le bouton fantôme s'inverse */
+/* Dans le héros et les appels à l'action, le bouton fantôme est posé sur une
+   surface claire : il garde son dessin, avec un contour un peu plus affirmé
+   pour ne pas disparaître dans le fond. */
 .hero .btn-ghost, .cta-final .btn-ghost, .bandeau-urgence .btn-ghost {
-  background: rgba(255,255,255,.08);
-  border-color: rgba(255,255,255,.30);
-  color: #fff;
-  backdrop-filter: blur(8px);
+  background: var(--color-white);
+  border-color: var(--color-border-strong);
+  color: var(--color-dark);
 }
 .hero .btn-ghost:hover, .cta-final .btn-ghost:hover, .bandeau-urgence .btn-ghost:hover {
-  background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.55); color: #fff;
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
+  background: var(--color-primary-tint);
 }
 
 .btn-large { padding: 1.0625rem 2rem; font-size: var(--text-lg); min-height: 58px; }
@@ -320,12 +315,13 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 }
 .badge-urgence { background: var(--color-secondary-soft); color: var(--color-secondary-dark); }
 
-/* Badge du héros, sur fond sombre */
+/* Badge du héros. L'orange est réservé à l'urgence : ici il annonce une
+   ligne ouverte, pas une décoration. */
 .urgence-badge {
   display: inline-flex; align-items: center; gap: var(--space-2);
-  background: rgba(249,115,22,.14);
-  color: #FDBA74;
-  border: 1px solid rgba(249,115,22,.35);
+  background: var(--color-secondary-soft);
+  color: #9A3412;                       /* 6,44:1 sur #FFF7ED */
+  border: 1px solid #FDBA74;
   padding: 0.4375rem 1rem;
   border-radius: var(--radius-full);
   font-family: var(--font-title);
@@ -349,10 +345,10 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(15,23,42,.92);
+  background: rgba(255,255,255,.90);
   backdrop-filter: saturate(180%) blur(12px);
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  color: #fff;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-dark);
 }
 .header-inner {
   display: flex; align-items: center; gap: var(--space-4);
@@ -361,15 +357,15 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 
 .brand {
   display: flex; align-items: center; gap: var(--space-3);
-  color: #fff; text-decoration: none; margin-right: auto;
+  color: var(--color-dark); text-decoration: none; margin-right: auto;
   flex-shrink: 0;
 }
 .header-call { flex-shrink: 0; }
 .brand-mark {
   width: 40px; height: 40px; flex: none;
-  color: var(--color-secondary);
-  background: rgba(249,115,22,.12);
-  border: 1px solid rgba(249,115,22,.28);
+  color: var(--color-primary-dark);
+  background: var(--color-primary-soft);
+  border: 1px solid #99E6DC;
   border-radius: var(--radius-sm);
   padding: 6px;
 }
@@ -378,7 +374,7 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
    réclame de la place, et l'en-tête double de hauteur. */
 .brand-text strong {
   font-family: var(--font-title); font-size: 1.0625rem;
-  color: #fff; letter-spacing: -0.02em; white-space: nowrap;
+  color: var(--color-dark); letter-spacing: -0.02em; white-space: nowrap;
 }
 /* La baseline n'est pas reprise dans l'en-tête : avec huit entrées de menu,
    un numéro et un bouton, elle ne tient sur aucune largeur sans chevaucher la
@@ -391,13 +387,13 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 .nav { min-width: 0; }
 .nav a {
   display: block; padding: 0.5rem 0.5rem;
-  color: #CBD5E1; text-decoration: none;
+  color: var(--color-dark-3); text-decoration: none;
   font-size: var(--text-xs); font-weight: 500;
   border-radius: var(--radius-sm); white-space: nowrap;
   transition: color var(--transition), background-color var(--transition);
 }
-.nav a:hover { color: #fff; background: rgba(255,255,255,.08); }
-.nav-devis { color: var(--color-primary-lighter) !important; font-weight: 700 !important; }
+.nav a:hover { color: var(--color-primary-dark); background: var(--color-primary-tint); }
+.nav-devis { color: var(--color-primary-dark) !important; font-weight: 700 !important; }
 
 .header-call {
   padding: 0.625rem 1.125rem; min-height: 44px; font-size: var(--text-sm);
@@ -407,8 +403,8 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
   display: flex; flex-direction: column; align-items: flex-end;
   text-decoration: none; line-height: 1.2;
 }
-.header-tel span { font-size: var(--text-xs); color: var(--color-muted-light); white-space: nowrap; }
-.header-tel strong { font-family: var(--font-title); font-size: 1.0625rem; color: #fff; white-space: nowrap; }
+.header-tel span { font-size: var(--text-xs); color: var(--color-muted); white-space: nowrap; }
+.header-tel strong { font-family: var(--font-title); font-size: 1.0625rem; color: var(--color-dark); white-space: nowrap; }
 /* Le numéro écrit en toutes lettres demande de la place. En dessous, le
    bouton orange le porte déjà : on évite la redondance plutôt que de tasser. */
 @media (max-width: 1400px) { .header-tel { display: none; } }
@@ -416,11 +412,11 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 .nav-toggle {
   display: none; align-items: center; justify-content: center;
   min-width: 46px; min-height: 46px;
-  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+  background: var(--color-background-2); border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-sm); padding: 0; cursor: pointer;
 }
 .nav-toggle-bars, .nav-toggle-bars::before, .nav-toggle-bars::after {
-  display: block; width: 20px; height: 2px; background: #fff;
+  display: block; width: 20px; height: 2px; background: var(--color-dark);
   border-radius: 2px; content: ""; transition: transform var(--transition);
 }
 .nav-toggle-bars::before { transform: translateY(-6px); }
@@ -430,13 +426,13 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
   .nav-toggle { display: flex; order: 3; }
   .nav {
     order: 4; flex-basis: 100%; display: none;
-    border-top: 1px solid rgba(255,255,255,.10);
+    border-top: 1px solid var(--color-border);
     margin-top: var(--space-3); padding-top: var(--space-2);
   }
   .nav[data-ouvert="true"] { display: block; }
   .nav ul { flex-direction: column; gap: 0; padding-bottom: var(--space-3); }
   .nav a { padding: 0.875rem 0.5rem; font-size: var(--text-base); border-radius: 0; }
-  .nav li + li { border-top: 1px solid rgba(255,255,255,.07); }
+  .nav li + li { border-top: 1px solid var(--color-border); }
   .header-inner { flex-wrap: wrap; }
   .header-tel { display: none; }
 }
@@ -454,10 +450,10 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 .hero {
   position: relative;
   background:
-    radial-gradient(1100px 520px at 78% 12%, rgba(14,165,233,.20), transparent 62%),
-    radial-gradient(760px 420px at 8% 88%, rgba(249,115,22,.12), transparent 60%),
-    linear-gradient(165deg, #0F172A 0%, #14243F 48%, #0C1B33 100%);
-  color: #fff;
+    radial-gradient(1100px 520px at 78% 10%, var(--color-primary-soft), transparent 64%),
+    radial-gradient(760px 420px at 6% 92%, rgba(249,115,22,.10), transparent 60%),
+    linear-gradient(168deg, var(--color-primary-tint) 0%, #FFFFFF 55%, var(--color-background) 100%);
+  color: var(--color-text);
   padding: var(--space-9) 0 var(--space-10);
   overflow: hidden;
 }
@@ -465,19 +461,18 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 .hero::before {
   content: ""; position: absolute; inset: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    linear-gradient(rgba(15,118,110,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15,118,110,.055) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(circle at 50% 0%, #000 30%, transparent 72%);
   pointer-events: none;
 }
 .hero > * { position: relative; }
 
-.hero h1 { color: #fff; margin-bottom: var(--space-5); }
-.hero h2 { color: #fff; }
-.hero p { color: #CBD5E1; }
-.hero .chapeau { font-size: var(--text-lg); color: #CBD5E1; max-width: 38ch; line-height: 1.65; }
-.hero a:not(.btn) { color: var(--color-primary-lighter); }
+.hero h1 { margin-bottom: var(--space-5); }
+.hero p { color: var(--color-dark-3); }
+.hero .chapeau { font-size: var(--text-lg); color: var(--color-dark-3); max-width: 38ch; line-height: 1.65; }
+.hero a:not(.btn) { color: var(--color-primary-dark); }
 
 .hero-grid {
   display: grid; grid-template-columns: 1.02fr 0.98fr;
@@ -493,23 +488,23 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
   display: grid; grid-template-columns: repeat(2, minmax(0,1fr));
   gap: var(--space-3) var(--space-5);
   margin: var(--space-7) 0 0; padding: var(--space-6) 0 0;
-  border-top: 1px solid rgba(255,255,255,.13);
+  border-top: 1px solid var(--color-border);
   list-style: none;
 }
 .preuve { display: flex; align-items: flex-start; gap: var(--space-3); margin: 0; }
 .preuve::before {
   content: ""; flex: none; width: 22px; height: 22px; margin-top: 2px;
   border-radius: 50%;
-  background: rgba(14,165,233,.18) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338BDF8' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center/13px no-repeat;
+  background: var(--color-primary-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23115E59' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center/13px no-repeat;
 }
-.preuve strong { display: block; font-family: var(--font-title); font-size: var(--text-base); color: #fff; }
-.preuve span { font-size: var(--text-sm); color: #94A3B8; }
+.preuve strong { display: block; font-family: var(--font-title); font-size: var(--text-base); }
+.preuve span { font-size: var(--text-sm); color: var(--color-muted); }
 
 .hero-media { position: relative; }
 .hero-media img, .hero-media picture {
   border-radius: var(--radius-lg);
-  box-shadow: 0 32px 64px rgba(0,0,0,.42);
-  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 28px 56px rgba(20,35,31,.18);
+  border: 1px solid var(--color-border);
 }
 /* Pastille flottante posée sur la photo */
 .hero-vignette {
@@ -544,11 +539,16 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 
 section { padding: var(--space-9) 0; }
 section.alt { background: var(--color-background); }
+/* Anciennement la seule section sombre du site. Elle reste une respiration
+   visuelle — un aplat teinté entre deux sections blanches — mais en clair,
+   comme le reste. Le nom de classe est conservé : il est employé dans les
+   pages, et le renommer aurait modifié du contenu sans rien apporter. */
 section.sombre {
-  background: linear-gradient(165deg, var(--color-dark), #16233D);
-  color: #E2E8F0;
+  background:
+    radial-gradient(900px 420px at 15% 0%, var(--color-primary-soft), transparent 62%),
+    linear-gradient(170deg, var(--color-primary-tint), var(--color-background));
+  border-block: 1px solid var(--color-border);
 }
-section.sombre h2, section.sombre h3 { color: #fff; }
 
 .section-titre { max-width: 46rem; margin-bottom: var(--space-7); }
 .section-titre .badge { margin-bottom: var(--space-4); }
@@ -651,9 +651,7 @@ section.sombre h2, section.sombre h3 { color: #fff; }
 }
 .reassurance strong { display: block; font-family: var(--font-title); font-size: var(--text-lg); margin-bottom: var(--space-1); }
 .reassurance span { font-size: var(--text-sm); color: var(--color-muted); line-height: 1.6; }
-section.sombre .reassurance span { color: #94A3B8; }
-section.sombre .reassurance strong { color: #fff; }
-section.sombre .reassurance svg { background: rgba(56,189,248,.14); color: var(--color-primary-lighter); }
+section.sombre .reassurance svg { background: var(--color-primary-soft); color: var(--color-primary-dark); }
 
 .chiffres {
   list-style: none; padding: 0; margin: 0;
@@ -691,8 +689,7 @@ section.sombre .reassurance svg { background: rgba(56,189,248,.14); color: var(-
 }
 .etapes h3 { margin-bottom: var(--space-2); font-size: var(--text-lg); }
 .etapes p { color: var(--color-muted); font-size: var(--text-sm); margin: 0; }
-section.sombre .etapes li::before { background: rgba(56,189,248,.14); color: var(--color-primary-lighter); }
-section.sombre .etapes p { color: #94A3B8; }
+section.sombre .etapes li::before { background: var(--color-primary-soft); color: var(--color-primary-dark); }
 
 /* --- 11. Galerie et médias ------------------------------------------------ */
 
@@ -744,22 +741,23 @@ section.sombre .etapes p { color: #94A3B8; }
 
 /* --- 12. Urgence et appels à l'action ------------------------------------- */
 
+/* L'urgence se signale par la couleur, pas par l'obscurité : un aplat chaud
+   très clair, un liseré orange, et le bouton d'appel qui reste le seul
+   élément pleinement saturé de la section. */
 .bandeau-urgence {
   background:
-    radial-gradient(700px 320px at 85% 20%, rgba(249,115,22,.22), transparent 60%),
-    linear-gradient(150deg, #7C2D12 0%, #9A3412 55%, #7C2D12 100%);
-  color: #fff;
+    radial-gradient(700px 320px at 85% 15%, rgba(249,115,22,.16), transparent 62%),
+    linear-gradient(150deg, #FFF7ED 0%, #FFEDD5 60%, #FFF7ED 100%);
+  color: var(--color-text);
+  border-block: 1px solid #FDBA74;
   padding: var(--space-8) 0;
 }
-.bandeau-urgence h2 { color: #fff; }
-.bandeau-urgence p { color: #FED7AA; }
-.bandeau-urgence .btn-call { background: #fff; color: #9A3412; box-shadow: 0 10px 28px rgba(0,0,0,.28); }
-.bandeau-urgence .btn-call:hover { background: #FFF7ED; color: #7C2D12; }
+.bandeau-urgence p { color: #7C2D12; }
 /* Ce lien est un appel à l'action à part entière, pas un lien noyé dans un
    paragraphe : il doit respecter la taille minimale de cible tactile
    demandée par WCAG 2.5.8 (24 px). */
 .bandeau-urgence a:not(.btn) {
-  color: #FED7AA;
+  color: #9A3412;
   display: inline-block; padding: var(--space-2) var(--space-1); min-height: 24px;
 }
 
@@ -782,12 +780,13 @@ section.sombre .etapes p { color: #94A3B8; }
 
 .cta-final {
   background:
-    radial-gradient(800px 380px at 50% 0%, rgba(14,165,233,.20), transparent 62%),
-    linear-gradient(165deg, var(--color-dark), #16233D);
-  color: #fff; text-align: center; padding: var(--space-9) 0;
+    radial-gradient(800px 380px at 50% 0%, var(--color-primary-soft), transparent 64%),
+    linear-gradient(165deg, var(--color-primary-tint), var(--color-background));
+  border-top: 1px solid var(--color-border);
+  text-align: center; padding: var(--space-9) 0;
 }
-.cta-final h2 { color: #fff; }
-.cta-final p { color: #CBD5E1; max-width: 44rem; margin-inline: auto; font-size: var(--text-lg); }
+.cta-final p { color: var(--color-dark-3); max-width: 44rem; margin-inline: auto; font-size: var(--text-lg); }
+.cta-final a:not(.btn) { color: var(--color-primary-dark); }
 .cta-final .hero-actions { justify-content: center; }
 
 /* --- 13. Tableaux et encadrés --------------------------------------------- */
@@ -896,7 +895,9 @@ td.prix { font-family: var(--font-title); font-weight: 700; color: var(--color-p
 .champ-large { grid-column: 1 / -1; }
 .champ label { font-family: var(--font-title); font-weight: 700; font-size: var(--text-sm); color: var(--color-dark); }
 .champ .aide { font-size: var(--text-xs); color: var(--color-muted); font-weight: 400; line-height: 1.55; }
-.champ .requis { color: var(--color-secondary); }
+/* L'astérisque de champ obligatoire est une information, pas une décoration :
+   l'orange vif ne donne que 2,80 de contraste sur blanc, l'orange foncé 4,89. */
+.champ .requis { color: var(--color-secondary-dark); }
 
 .champ input, .champ select, .champ textarea {
   font-family: var(--font-body); font-size: var(--text-base);
@@ -1000,8 +1001,9 @@ td.prix { font-family: var(--font-title); font-weight: 700; color: var(--color-p
 /* --- 17. Pied de page ----------------------------------------------------- */
 
 .site-footer {
-  background: linear-gradient(180deg, var(--color-dark), #0A1120);
-  color: #94A3B8; padding: var(--space-9) 0 var(--space-5);
+  background: var(--color-background-2);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-dark-3); padding: var(--space-9) 0 var(--space-5);
 }
 .footer-grid { display: grid; gap: var(--space-7); grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr; }
 @media (max-width: 1080px) { .footer-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); } }
@@ -1009,30 +1011,33 @@ td.prix { font-family: var(--font-title); font-weight: 700; color: var(--color-p
 .footer-col h2 {
   font-family: var(--font-title); font-size: var(--text-xs);
   text-transform: uppercase; letter-spacing: .09em;
-  color: #fff; margin-bottom: var(--space-4);
+  color: var(--color-dark); margin-bottom: var(--space-4);
 }
 .footer-col ul { list-style: none; margin: 0; padding: 0; }
 .footer-col li { margin-bottom: var(--space-1); }
-.footer-col a {
-  color: #94A3B8; text-decoration: none; font-size: var(--text-sm);
+/* « :not(.btn) » est indispensable : sans lui, cette règle est plus
+   spécifique que .btn et écrase display, padding et taille de police du
+   bouton d'appel du pied de page, dont le libellé chevauche alors l'icône. */
+.footer-col a:not(.btn) {
+  color: var(--color-dark-3); text-decoration: none; font-size: var(--text-sm);
   display: inline-block; padding: var(--space-1) 0; min-height: 24px;
   transition: color var(--transition);
 }
-.footer-col a:hover { color: var(--color-primary-lighter); }
+.footer-col a:not(.btn):hover { color: var(--color-primary-dark); }
 .footer-h2-suite { margin-top: var(--space-6); }
 
 .footer-brand strong {
-  color: #fff; display: block; margin-bottom: var(--space-3);
+  color: var(--color-dark); display: block; margin-bottom: var(--space-3);
   font-family: var(--font-title); font-size: var(--text-xl);
 }
 .footer-brand p { font-size: var(--text-sm); line-height: 1.7; }
 .footer-brand .btn { margin-top: var(--space-4); }
-.footer-horaires { font-size: var(--text-xs); margin-top: var(--space-4); color: #8598AE; }
+.footer-horaires { font-size: var(--text-xs); margin-top: var(--space-4); color: var(--color-muted); }
 
 .footer-legal {
-  border-top: 1px solid rgba(255,255,255,.09);
+  border-top: 1px solid var(--color-border-strong);
   margin-top: var(--space-8); padding-top: var(--space-5);
-  font-size: var(--text-xs); color: #8598AE;
+  font-size: var(--text-xs); color: var(--color-muted);
 }
 .footer-legal p { margin-bottom: var(--space-2); }
 .copyright { opacity: .8; }
@@ -1045,8 +1050,8 @@ td.prix { font-family: var(--font-title); font-weight: 700; color: var(--color-p
   .barre-mobile {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 200;
     display: grid; grid-template-columns: 1.9fr 1fr;
-    gap: 1px; background: rgba(255,255,255,.14);
-    box-shadow: 0 -6px 24px rgba(15,23,42,.30);
+    gap: 1px; background: var(--color-border-strong);
+    box-shadow: 0 -6px 24px rgba(20,35,31,.18);
     padding-bottom: env(safe-area-inset-bottom);
   }
   .barre-mobile a {
@@ -1057,15 +1062,15 @@ td.prix { font-family: var(--font-title); font-weight: 700; color: var(--color-p
   }
   .barre-mobile svg { width: 1.25em; height: 1.25em; flex: none; }
   .barre-mobile-appel { background: var(--color-secondary); color: #1A1200; }
-  .barre-mobile-devis { background: var(--color-dark); color: #fff; }
+  .barre-mobile-devis { background: var(--color-primary-dark); color: #fff; }
   body { padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
 }
 
 .cookie-bandeau {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 300;
-  background: var(--color-dark); color: #CBD5E1;
-  padding: var(--space-5); box-shadow: 0 -8px 32px rgba(0,0,0,.32);
-  border-top: 1px solid rgba(255,255,255,.10);
+  background: var(--color-white); color: var(--color-dark-3);
+  padding: var(--space-5); box-shadow: 0 -8px 32px rgba(20,35,31,.16);
+  border-top: 1px solid var(--color-border-strong);
 }
 .cookie-inner {
   display: flex; align-items: center; gap: var(--space-5);
@@ -1073,10 +1078,10 @@ td.prix { font-family: var(--font-title); font-weight: 700; color: var(--color-p
   width: min(100% - var(--space-6), var(--container)); margin-inline: auto;
 }
 .cookie-inner p { margin: 0; font-size: var(--text-sm); max-width: 46rem; }
-.cookie-inner a { color: var(--color-primary-lighter); }
+.cookie-inner a { color: var(--color-primary-dark); }
 .cookie-actions { display: flex; gap: var(--space-3); }
 .cookie-actions .btn { padding: 0.625rem 1.25rem; min-height: 44px; font-size: var(--text-sm); }
-.cookie-actions .btn-ghost { background: transparent; border-color: rgba(255,255,255,.3); color: #fff; }
+.cookie-actions .btn-ghost { background: var(--color-white); border-color: var(--color-border-strong); color: var(--color-dark); }
 @media (max-width: 860px) { .cookie-bandeau { bottom: calc(60px + env(safe-area-inset-bottom)); } }
 
 /* --- 19. Animations ------------------------------------------------------- */
@@ -1181,12 +1186,12 @@ td.prix { font-family: var(--font-title); font-weight: 700; color: var(--color-p
    se confondre, et l'ensemble reste une seule couleur, pas un arc-en-ciel.
    Le numéro de teinte est posé par scripts/generer-carte.py ; la CSS ne
    connaît donc aucun département en particulier. */
-.carte-svg .zone[data-teinte="1"] path { fill: #BAE6FD; }
-.carte-svg .zone[data-teinte="2"] path { fill: #E0F2FE; }
-.carte-svg .zone[data-teinte="3"] path { fill: #A5DBF7; }
-.carte-svg .zone[data-teinte="4"] path { fill: #CFE9FB; }
-.carte-svg .zone[data-teinte="5"] path { fill: #93CFF2; }
-.carte-svg .zone[data-teinte="6"] path { fill: #DBEEFC; }
+.carte-svg .zone[data-teinte="1"] path { fill: #99E6DC; }
+.carte-svg .zone[data-teinte="2"] path { fill: #DCF7F2; }
+.carte-svg .zone[data-teinte="3"] path { fill: #7FDCD0; }
+.carte-svg .zone[data-teinte="4"] path { fill: #C2F0E9; }
+.carte-svg .zone[data-teinte="5"] path { fill: #66D0C3; }
+.carte-svg .zone[data-teinte="6"] path { fill: #EAFBF7; }
 
 .carte-svg .zone path {
   stroke: var(--color-white);
@@ -1394,7 +1399,7 @@ td.prix { font-family: var(--font-title); font-weight: 700; color: var(--color-p
   font-size: var(--text-lg);
 }
 section.sombre .etapes.frise li::after {
-  background: linear-gradient(90deg, rgba(56, 189, 248, .35), transparent);
+  background: linear-gradient(90deg, #99E6DC, transparent);
 }
 
 @media (max-width: 760px) {
@@ -1410,7 +1415,7 @@ section.sombre .etapes.frise li::after {
   .etapes.frise li { padding-left: calc(44px + var(--space-4)); padding-top: 0; min-height: 44px; }
   .etapes.frise li::before { top: 0; }
   section.sombre .etapes.frise li::after {
-    background: linear-gradient(180deg, rgba(56, 189, 248, .35), transparent);
+    background: linear-gradient(180deg, #99E6DC, transparent);
   }
 }
 

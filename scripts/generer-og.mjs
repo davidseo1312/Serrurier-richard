@@ -21,7 +21,7 @@
  * ======================================================================== */
 
 import { chromium } from 'playwright';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'fs';
 import { dirname, join, basename } from 'path';
 
 const RACINE = process.cwd();
@@ -54,6 +54,11 @@ function trouverSource(chemin) {
   return null;
 }
 
+// Le dossier est vidé avant régénération : sinon une vignette produite pour
+// une illustration remplacée par une photographie resterait sur le disque, et
+// finirait par être servie à Facebook ou LinkedIn alors que la page montre
+// autre chose.
+rmSync(SORTIE, { recursive: true, force: true });
 mkdirSync(SORTIE, { recursive: true });
 
 const navigateur = await chromium.launch();

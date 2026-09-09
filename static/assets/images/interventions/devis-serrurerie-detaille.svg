@@ -1,26 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" role="img" aria-label="Devis de serrurerie détaillé remis avant intervention">
   <defs>
     <linearGradient id="fond" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#16233D"/><stop offset="1" stop-color="#0F172A"/>
+      <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E4F3F0"/>
     </linearGradient>
     <radialGradient id="halo" cx="0.72" cy="0.18" r="0.75">
-      <stop offset="0" stop-color="#0EA5E9" stop-opacity="0.30"/>
-      <stop offset="1" stop-color="#0EA5E9" stop-opacity="0"/>
+      <stop offset="0" stop-color="#14B8A6" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#14B8A6" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="acier" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#475569"/><stop offset="1" stop-color="#1E293B"/>
+      <stop offset="0" stop-color="#B7C4C6"/><stop offset="1" stop-color="#6B7F84"/>
     </linearGradient>
     <linearGradient id="cuivre" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#FDBA74"/><stop offset="1" stop-color="#EA580C"/>
+      <stop offset="0" stop-color="#FB923C"/><stop offset="1" stop-color="#C2410C"/>
     </linearGradient>
     <linearGradient id="porte" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#1E3A5F"/><stop offset="1" stop-color="#12233C"/>
+      <stop offset="0" stop-color="#DCE8E7"/><stop offset="1" stop-color="#BCCFCC"/>
     </linearGradient>
     <pattern id="grille" width="60" height="60" patternUnits="userSpaceOnUse">
-      <path d="M60 0H0V60" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+      <path d="M60 0H0V60" fill="none" stroke="#0F766E" stroke-opacity="0.06" stroke-width="1"/>
     </pattern>
   </defs>
   <rect width="1200" height="750" fill="url(#fond)"/>
   <rect width="1200" height="750" fill="url(#grille)"/>
-  <rect width="1200" height="750" fill="url(#halo)"/><g transform="translate(340 110) rotate(-3)"><rect width="440" height="560" rx="16" fill="#F8FAFC"/><rect width="440" height="70" rx="16" fill="#0284C7"/><rect x="40" y="120" width="240" height="16" rx="8" fill="#CBD5E1"/><rect x="40" y="158" width="360" height="12" rx="6" fill="#E2E8F0"/><rect x="40" y="220" width="200" height="13" rx="6" fill="#E2E8F0"/><rect x="308" y="220" width="92" height="13" rx="6" fill="#38BDF8" opacity="0.6"/><rect x="40" y="274" width="200" height="13" rx="6" fill="#E2E8F0"/><rect x="308" y="274" width="92" height="13" rx="6" fill="#38BDF8" opacity="0.6"/><rect x="40" y="328" width="200" height="13" rx="6" fill="#E2E8F0"/><rect x="308" y="328" width="92" height="13" rx="6" fill="#38BDF8" opacity="0.6"/><rect x="40" y="382" width="200" height="13" rx="6" fill="#E2E8F0"/><rect x="308" y="382" width="92" height="13" rx="6" fill="#38BDF8" opacity="0.6"/><rect x="40" y="436" width="200" height="13" rx="6" fill="#E2E8F0"/><rect x="308" y="436" width="92" height="13" rx="6" fill="#38BDF8" opacity="0.6"/><rect x="40" y="500" width="140" height="18" rx="9" fill="#334155"/><rect x="270" y="496" width="130" height="26" rx="13" fill="url(#cuivre)"/></g><g transform="translate(900 520) rotate(-18) scale(0.9)"><circle cx="0" cy="0" r="26" fill="none" stroke="url(#cuivre)" stroke-width="13"/><rect x="24" y="-6" width="112" height="12" rx="5" fill="url(#cuivre)"/><rect x="104" y="-22" width="12" height="17" rx="3" fill="url(#cuivre)"/><rect x="124" y="-26" width="12" height="21" rx="3" fill="url(#cuivre)"/></g><g transform="translate(80 80)"><rect x="0" y="0" width="221" height="46" rx="23" fill="#0F172A" fill-opacity="0.72" stroke="#38BDF8" stroke-opacity="0.5" stroke-width="2"/><text x="110" y="31" text-anchor="middle" fill="#38BDF8" font-family="system-ui,sans-serif" font-size="22" font-weight="700" letter-spacing="1">AVANT TRAVAUX</text></g>
+  <rect width="1200" height="750" fill="url(#halo)"/><g transform="translate(340 110) rotate(-3)"><rect width="440" height="560" rx="16" fill="#FFFFFF"/><rect width="440" height="70" rx="16" fill="#0F766E"/><rect x="40" y="120" width="240" height="16" rx="8" fill="#C3D3D0"/><rect x="40" y="158" width="360" height="12" rx="6" fill="#DEEAE7"/><rect x="40" y="220" width="200" height="13" rx="6" fill="#DEEAE7"/><rect x="308" y="220" width="92" height="13" rx="6" fill="#0D9488" opacity="0.6"/><rect x="40" y="274" width="200" height="13" rx="6" fill="#DEEAE7"/><rect x="308" y="274" width="92" height="13" rx="6" fill="#0D9488" opacity="0.6"/><rect x="40" y="328" width="200" height="13" rx="6" fill="#DEEAE7"/><rect x="308" y="328" width="92" height="13" rx="6" fill="#0D9488" opacity="0.6"/><rect x="40" y="382" width="200" height="13" rx="6" fill="#DEEAE7"/><rect x="308" y="382" width="92" height="13" rx="6" fill="#0D9488" opacity="0.6"/><rect x="40" y="436" width="200" height="13" rx="6" fill="#DEEAE7"/><rect x="308" y="436" width="92" height="13" rx="6" fill="#0D9488" opacity="0.6"/><rect x="40" y="500" width="140" height="18" rx="9" fill="#94A3B8"/><rect x="270" y="496" width="130" height="26" rx="13" fill="url(#cuivre)"/></g><g transform="translate(900 520) rotate(-18) scale(0.9)"><circle cx="0" cy="0" r="26" fill="none" stroke="url(#cuivre)" stroke-width="13"/><rect x="24" y="-6" width="112" height="12" rx="5" fill="url(#cuivre)"/><rect x="104" y="-22" width="12" height="17" rx="3" fill="url(#cuivre)"/><rect x="124" y="-26" width="12" height="21" rx="3" fill="url(#cuivre)"/></g><g transform="translate(80 80)"><rect x="0" y="0" width="221" height="46" rx="23" fill="#FFFFFF" fill-opacity="0.92" stroke="#0D9488" stroke-opacity="0.55" stroke-width="2"/><text x="110" y="31" text-anchor="middle" fill="#0D9488" font-family="system-ui,sans-serif" font-size="22" font-weight="700" letter-spacing="1">AVANT TRAVAUX</text></g>
 </svg>

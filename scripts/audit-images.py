@@ -59,6 +59,29 @@ def analyser_balises(html: str):
         yield balise, attributs
 
 
+def replis_du_catalogue() -> set:
+    """Chemins web des visuels déclarés dans src/images.conf."""
+    chemins = set()
+    fichier = RACINE / "src" / "images.conf"
+    if not fichier.is_file():
+        return chemins
+    for ligne in fichier.read_text(encoding="utf-8").splitlines():
+        if not ligne[:1].isupper():
+            continue
+        champs = ligne.split("|")
+        if len(champs) < 7:
+            continue
+        for base in (champs[1], champs[2]):
+            if not base:
+                continue
+            for ext in ("avif", "webp", "jpg", "jpeg", "png", "svg"):
+                chemins.add(f"/assets/images/{base}.{ext}")
+    return chemins
+
+
+REPLIS = replis_du_catalogue()
+
+
 def main() -> int:
     if not PUBLIC.is_dir():
         sys.exit("public/ absent — lancez d'abord : bash scripts/build.sh")
@@ -91,6 +114,17 @@ def main() -> int:
                 # Une image chargée depuis un autre domaine échappe à notre
                 # contrôle : disponibilité, licence, performance.
                 a.avertit(f"{rel} : image externe, à rapatrier — {src}")
+
+            # Les variantes responsives sont référencées par srcset, jamais par
+            # src : sans cette lecture, elles seraient signalées comme
+            # inutilisées alors qu'elles servent sur la moitié des écrans.
+            for candidat in attr.get("srcset", "").split(","):
+                url = candidat.strip().split(" ")[0]
+                if not url.startswith("/"):
+                    continue
+                utilisees.add(url)
+                if not (PUBLIC / url.lstrip("/")).is_file():
+                    a.erreur(f"{rel} : variante srcset absente du disque — {url}")
 
             if "alt" not in attr:
                 a.erreur(f"{rel} : image sans attribut alt — {src}")
@@ -146,6 +180,12 @@ def main() -> int:
             for p in ("/img/favicon", "/img/icone-", "/img/apple-touch",
                       "/images/og/", "/img/og-", "/vendor/")
         )
+        # Une illustration de repli déclarée dans le catalogue n'apparaît dans
+        # aucune page tant que la photographie correspondante est en place —
+        # et c'est précisément son rôle. La supprimer ferait échouer le build
+        # le jour où la photo est retirée.
+        if rel_web in REPLIS:
+            exempt = True
         if rel_web not in utilisees and not exempt:
             a.note(f"{rel_web} : présent mais utilisé dans aucune page")
 
