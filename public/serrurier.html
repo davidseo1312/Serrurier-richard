@@ -30,10 +30,6 @@
 <link rel="icon" href="/assets/img/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<!-- Les deux graisses présentes dès le premier écran sont préchargées : sans
-     cela le navigateur ne les découvre qu'après avoir analysé la feuille de
-     style, et le texte permute visiblement. Les autres se chargent à la
-     demande. crossorigin est requis même en même origine pour les polices. -->
 <link rel="preload" href="/assets/fonts/outfit-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/worksans-400.woff2" as="font" type="font/woff2" crossorigin>
 
@@ -45,6 +41,13 @@
   "name": "Nos prestations",
   "description": "Dépannage, ouverture de porte, changement de serrure, blindage, serrures multipoints : le détail de chaque prestation et le problème qu'elle résout.",
   "serviceType": "Nos prestations",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://serrurier-richard.fr/assets/images/og/serrurier-richard-serrurier-au-travail-couloir.jpg",
+    "width": 1200,
+    "height": 630,
+    "caption": "Serrurier professionnel — toutes nos prestations"
+  },
   "url": "https://serrurier-richard.fr/serrurier",
   "provider": {
     "@type": "Locksmith",
@@ -95,26 +98,27 @@
 
     <nav id="nav-principal" class="nav" aria-label="Navigation principale">
       <ul>
+        <li><a href="/">Accueil</a></li>
         <li><a href="/serrurier">Prestations</a></li>
-        <li><a href="/serrurier-urgence">Dépannage</a></li>
-        <li><a href="/changement-serrure">Serrures</a></li>
-        <li><a href="/blindage-porte">Sécurité</a></li>
+        <li><a href="/serrurier-urgence">Urgence</a></li>
         <li><a href="/zones-d-intervention">Zones</a></li>
+        <li><a href="/tarifs">Tarifs</a></li>
         <li><a href="/blog/">Conseils</a></li>
         <li><a href="/contact">Contact</a></li>
-        <li><a href="/devis-serrurerie" class="nav-devis">Devis gratuit</a></li>
       </ul>
     </nav>
 
-    <a class="header-tel" href="tel:+33220060075" data-track="appel" data-track-zone="entete-numero">
-      <span>24h/24 et 7j/7</span>
-      <strong>02 20 06 00 75</strong>
-    </a>
+    <div class="header-actions">
+      <a class="btn btn-ghost header-devis" href="/devis-serrurerie" data-track="clic_devis" data-track-zone="entete">
+        Demander un devis
+      </a>
 
-    <a class="btn btn-call header-call" href="tel:+33220060075" data-track="appel" data-track-zone="entete">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.6 1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
-      <span>Intervention urgente</span>
-    </a>
+      <a class="btn btn-call header-call" href="tel:+33220060075" data-track="appel" data-track-zone="entete">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.6 1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
+        <span class="header-call-libelle">Appeler</span>
+        <strong class="header-call-numero">02 20 06 00 75</strong>
+      </a>
+    </div>
   </div>
 </header>
 
@@ -319,6 +323,63 @@
         exigent un relevé sur place et un chiffrage écrit.
       </p>
     </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-titre">
+      <h2 id="toutes">Toutes nos prestations, par famille</h2>
+      <p>
+        L'index complet de ce que nous faisons. Certaines entrées renvoient à la même page :
+        « porte claquée » et « porte verrouillée » relèvent l'une et l'autre de l'ouverture de
+        porte. Nous préférons une page solide à deux pages creuses créées pour occuper une requête.
+      </p>
+    </div>
+
+    <div class="prestations-groupes">
+  <div class="prestation-groupe">
+    <h3>Dépannage et ouverture</h3>
+    <ul>
+      <li><a href="/ouverture-porte"><strong>Ouverture de porte</strong>Claquée ou verrouillée, sans casse dans la grande majorité des cas</a></li>
+      <li><a href="/ouverture-porte"><strong>Porte claquée</strong>Ouverture par radiographie, serrure conservée</a></li>
+      <li><a href="/ouverture-porte"><strong>Porte verrouillée</strong>Crochetage ou impression, perçage en dernier recours</a></li>
+      <li><a href="/porte-bloquee"><strong>Serrure bloquée</strong>Clé qui tourne dans le vide ou point dur</a></li>
+      <li><a href="/cle-cassee"><strong>Clé cassée</strong>Extraction du fragment resté dans le cylindre</a></li>
+      <li><a href="/cle-cassee"><strong>Clé bloquée</strong>Clé qui n'entre plus ou ne ressort plus</a></li>
+      <li><a href="/cle-perdue"><strong>Clé perdue ou volée</strong>Remplacement du cylindre, anciennes clés inopérantes</a></li>
+      <li><a href="/serrurier-urgence"><strong>Dépannage et urgence serrurerie</strong>Comment se passe une intervention en urgence</a></li>
+    </ul>
+  </div>
+
+  <div class="prestation-groupe">
+    <h3>Serrures et cylindres</h3>
+    <ul>
+      <li><a href="/changement-serrure"><strong>Changement de serrure</strong>Cylindre seul quand le coffre est sain</a></li>
+      <li><a href="/changement-serrure"><strong>Cylindre et barillet</strong>Remplacement à cotes identiques, niveau de sécurité conservé</a></li>
+      <li><a href="/remplacement-serrure"><strong>Remplacement de serrure</strong>Quand le coffre ou la tringlerie sont en cause</a></li>
+      <li><a href="/changement-serrure"><strong>Réparation de serrure</strong>Réglage, dégrippage, reprise de gâche avant remplacement</a></li>
+      <li><a href="/installation-serrure"><strong>Installation de serrure</strong>Relevé des cotes avant toute commande</a></li>
+      <li><a href="/installation-serrure"><strong>Verrou et poignée</strong>Pose de fermetures complémentaires</a></li>
+      <li><a href="/serrure-3-points"><strong>Serrure 3 points</strong>Condamnation répartie sur la hauteur</a></li>
+      <li><a href="/serrure-5-points"><strong>Serrure 5 points</strong>Pour les portes de grande dimension</a></li>
+    </ul>
+  </div>
+
+  <div class="prestation-groupe">
+    <h3>Sécurité et professionnels</h3>
+    <ul>
+      <li><a href="/blindage-porte"><strong>Blindage de porte</strong>Plaque d'acier, cornière anti-pince, gâches renforcées</a></li>
+      <li><a href="/porte-blindee"><strong>Porte blindée</strong>Bloc-porte complet et serrure certifiée A2P</a></li>
+      <li><a href="/effraction"><strong>Après effraction</strong>Mise en sécurité et descriptif écrit pour l'assurance</a></li>
+      <li><a href="/effraction"><strong>Sécurisation</strong>Mise à niveau d'une fermeture jugée insuffisante</a></li>
+      <li><a href="/rideau-metallique"><strong>Rideau métallique</strong>Déblocage du tablier et reprise de l'axe</a></li>
+      <li><a href="/coffre-fort"><strong>Coffre-fort</strong>Ouverture par auscultation et remise en service</a></li>
+      <li><a href="/devis-serrurerie"><strong>Devis gratuit</strong>Écrit, détaillé, remis avant tout démarrage</a></li>
+      <li><a href="/tarifs"><strong>Tarifs</strong>Bases de facturation affichées poste par poste</a></li>
+    </ul>
+  </div>
+</div>
   </div>
 </section>
 

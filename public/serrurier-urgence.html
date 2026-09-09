@@ -30,10 +30,6 @@
 <link rel="icon" href="/assets/img/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<!-- Les deux graisses présentes dès le premier écran sont préchargées : sans
-     cela le navigateur ne les découvre qu'après avoir analysé la feuille de
-     style, et le texte permute visiblement. Les autres se chargent à la
-     demande. crossorigin est requis même en même origine pour les polices. -->
 <link rel="preload" href="/assets/fonts/outfit-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/worksans-400.woff2" as="font" type="font/woff2" crossorigin>
 
@@ -45,6 +41,13 @@
   "name": "Serrurier urgence",
   "description": "Porte claquée, serrure bloquée, clé cassée, effraction : serrurier d'urgence joignable 24h/24 et 7j/7. Estimation annoncée au téléphone, devis avant travaux.",
   "serviceType": "Serrurier urgence",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://serrurier-richard.fr/assets/images/og/serrurier-richard-serrurier-au-travail-couloir.jpg",
+    "width": 1200,
+    "height": 630,
+    "caption": "Serrurier urgence — intervention immédiate 24h/24 et 7j/7"
+  },
   "url": "https://serrurier-richard.fr/serrurier-urgence",
   "provider": {
     "@type": "Locksmith",
@@ -129,26 +132,27 @@
 
     <nav id="nav-principal" class="nav" aria-label="Navigation principale">
       <ul>
+        <li><a href="/">Accueil</a></li>
         <li><a href="/serrurier">Prestations</a></li>
-        <li><a href="/serrurier-urgence">Dépannage</a></li>
-        <li><a href="/changement-serrure">Serrures</a></li>
-        <li><a href="/blindage-porte">Sécurité</a></li>
+        <li><a href="/serrurier-urgence">Urgence</a></li>
         <li><a href="/zones-d-intervention">Zones</a></li>
+        <li><a href="/tarifs">Tarifs</a></li>
         <li><a href="/blog/">Conseils</a></li>
         <li><a href="/contact">Contact</a></li>
-        <li><a href="/devis-serrurerie" class="nav-devis">Devis gratuit</a></li>
       </ul>
     </nav>
 
-    <a class="header-tel" href="tel:+33220060075" data-track="appel" data-track-zone="entete-numero">
-      <span>24h/24 et 7j/7</span>
-      <strong>02 20 06 00 75</strong>
-    </a>
+    <div class="header-actions">
+      <a class="btn btn-ghost header-devis" href="/devis-serrurerie" data-track="clic_devis" data-track-zone="entete">
+        Demander un devis
+      </a>
 
-    <a class="btn btn-call header-call" href="tel:+33220060075" data-track="appel" data-track-zone="entete">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.6 1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
-      <span>Intervention urgente</span>
-    </a>
+      <a class="btn btn-call header-call" href="tel:+33220060075" data-track="appel" data-track-zone="entete">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.6 1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
+        <span class="header-call-libelle">Appeler</span>
+        <strong class="header-call-numero">02 20 06 00 75</strong>
+      </a>
+    </div>
   </div>
 </header>
 
@@ -305,6 +309,18 @@
       <li><strong>Toute urgence particulière</strong> : enfant ou animal enfermé, personne vulnérable, logement resté ouvert.</li>
     </ol>
 
+    <div class="cta-bande">
+      <div class="cta-bande-texte">
+        <h2>Une urgence maintenant ?</h2>
+        <p>Un technicien décroche et vous annonce le prix et le délai réel avant tout déplacement.</p>
+      </div>
+      <div class="cta-bande-actions">
+        <a class="btn btn-call" href="tel:+33220060075" data-track="appel" data-track-zone="bande-serrurier-urgence">02 20 06 00 75</a>
+        <a class="btn btn-ghost" href="/devis-serrurerie" data-track="clic_devis" data-track-zone="bande-serrurier-urgence">Demander un devis</a>
+      </div>
+    </div>
+
+
     <div class="faq">
       <h2>Questions fréquentes sur l'urgence</h2>
       <details>
@@ -342,6 +358,21 @@
   </div>
 </section>
 
+
+<section class="alt services-associes">
+  <div class="wrap">
+    <h2>Prestations associées</h2>
+    <p>Les pages qui traitent les situations voisines de celle-ci.</p>
+    <ul class="liens-connexes">
+      <li><a href="/ouverture-porte">Ouverture de porte</a></li>
+      <li><a href="/porte-bloquee">Serrure bloquée</a></li>
+      <li><a href="/cle-cassee">Clé cassée</a></li>
+      <li><a href="/effraction">Après effraction</a></li>
+      <li><a href="/tarifs">Nos tarifs</a></li>
+      <li><a href="/zones-d-intervention">Zones d'intervention</a></li>
+    </ul>
+  </div>
+</section>
 
 <section class="cta-final">
   <div class="wrap">

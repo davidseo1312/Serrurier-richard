@@ -30,10 +30,6 @@
 <link rel="icon" href="/assets/img/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<!-- Les deux graisses présentes dès le premier écran sont préchargées : sans
-     cela le navigateur ne les découvre qu'après avoir analysé la feuille de
-     style, et le texte permute visiblement. Les autres se chargent à la
-     demande. crossorigin est requis même en même origine pour les polices. -->
 <link rel="preload" href="/assets/fonts/outfit-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/worksans-400.woff2" as="font" type="font/woff2" crossorigin>
 
@@ -45,6 +41,13 @@
   "name": "Zones d'intervention",
   "description": "Serrurier d'urgence en Ille-et-Vilaine, Morbihan, Finistère, Côtes-d'Armor, Loire-Atlantique et Maine-et-Loire. Délais annoncés honnêtement.",
   "serviceType": "Zones d'intervention",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://serrurier-richard.fr/assets/images/og/serrurier-richard-serrurier-au-travail-couloir.jpg",
+    "width": 1200,
+    "height": 630,
+    "caption": "Zones d'intervention : 6 départements du Grand Ouest"
+  },
   "url": "https://serrurier-richard.fr/zones-d-intervention",
   "provider": {
     "@type": "Locksmith",
@@ -95,26 +98,27 @@
 
     <nav id="nav-principal" class="nav" aria-label="Navigation principale">
       <ul>
+        <li><a href="/">Accueil</a></li>
         <li><a href="/serrurier">Prestations</a></li>
-        <li><a href="/serrurier-urgence">Dépannage</a></li>
-        <li><a href="/changement-serrure">Serrures</a></li>
-        <li><a href="/blindage-porte">Sécurité</a></li>
+        <li><a href="/serrurier-urgence">Urgence</a></li>
         <li><a href="/zones-d-intervention">Zones</a></li>
+        <li><a href="/tarifs">Tarifs</a></li>
         <li><a href="/blog/">Conseils</a></li>
         <li><a href="/contact">Contact</a></li>
-        <li><a href="/devis-serrurerie" class="nav-devis">Devis gratuit</a></li>
       </ul>
     </nav>
 
-    <a class="header-tel" href="tel:+33220060075" data-track="appel" data-track-zone="entete-numero">
-      <span>24h/24 et 7j/7</span>
-      <strong>02 20 06 00 75</strong>
-    </a>
+    <div class="header-actions">
+      <a class="btn btn-ghost header-devis" href="/devis-serrurerie" data-track="clic_devis" data-track-zone="entete">
+        Demander un devis
+      </a>
 
-    <a class="btn btn-call header-call" href="tel:+33220060075" data-track="appel" data-track-zone="entete">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.6 1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
-      <span>Intervention urgente</span>
-    </a>
+      <a class="btn btn-call header-call" href="tel:+33220060075" data-track="appel" data-track-zone="entete">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.6 1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
+        <span class="header-call-libelle">Appeler</span>
+        <strong class="header-call-numero">02 20 06 00 75</strong>
+      </a>
+    </div>
   </div>
 </header>
 
@@ -141,20 +145,7 @@
       </p>
     </div>
 
-    <!-- ---------------------------------------------------------------------
-     Carte des zones d'intervention.
-
-     Injectée par le build via . Le tracé lui-même est
-     src/partials/carte-zones.svg, produit par scripts/generer-carte.py à
-     partir de src/zones.conf : pour modifier les zones, on modifie la
-     configuration, jamais ce fichier.
-
-     Sans JavaScript, la carte SVG et la liste des départements restent
-     entièrement utilisables. La carte détaillée à tuiles, elle, n'est
-     chargée que si le visiteur la demande : elle contacte un serveur
-     extérieur, ce qui ne doit pas se produire à son insu.
-     --------------------------------------------------------------------- -->
-<div class="carte-zones">
+    <div class="carte-zones">
   <figure class="carte-figure">
     <svg class="carte-svg" viewBox="0 0 900 567"
      xmlns="http://www.w3.org/2000/svg" role="img"
@@ -302,42 +293,40 @@
       <article class="carte">
         <h2>Ille-et-Vilaine (35)</h2>
         <p>Notre département de rattachement. Rennes, Saint-Malo, Fougères, Vitré, Redon, Dinard, Cesson-Sévigné, Bruz, Betton.</p>
-        <p><strong>Délai courant :</strong> 30 à 60 minutes sur Rennes Métropole.</p>
+        <p><strong>Notre département de rattachement</strong>, le plus proche de notre base.</p>
         <a class="lien-fleche" href="/zones/ille-et-vilaine-35">Serrurier en Ille-et-Vilaine</a>
       </article>
 
       <article class="carte">
         <h2>Morbihan (56)</h2>
         <p>Vannes, Lorient, Lanester, Pontivy, Auray, Ploërmel, Hennebont, Quiberon, Carnac.</p>
-        <p><strong>Délai courant :</strong> 1h à 2h selon la commune.</p>
+        
         <a class="lien-fleche" href="/zones/morbihan-56">Serrurier dans le Morbihan</a>
       </article>
 
       <article class="carte">
         <h2>Côtes-d'Armor (22)</h2>
         <p>Saint-Brieuc, Lannion, Dinan, Guingamp, Lamballe, Paimpol, Perros-Guirec.</p>
-        <p><strong>Délai courant :</strong> 1h à 2h selon la commune.</p>
+        
         <a class="lien-fleche" href="/zones/cotes-d-armor-22">Serrurier dans les Côtes-d'Armor</a>
       </article>
 
       <article class="carte">
         <h2>Loire-Atlantique (44)</h2>
         <p>Nantes, Saint-Nazaire, Rezé, Saint-Herblain, Vertou, La Baule, Pornic, Guérande.</p>
-        <p><strong>Délai courant :</strong> 1h à 2h, plus rapide sur Nantes intra-périphérique.</p>
         <a class="lien-fleche" href="/zones/loire-atlantique-44">Serrurier en Loire-Atlantique</a>
       </article>
 
       <article class="carte">
         <h2>Finistère (29)</h2>
         <p>Brest, Quimper, Concarneau, Morlaix, Douarnenez, Landerneau, Quimperlé.</p>
-        <p><strong>Délai courant :</strong> 2h à 3h — c'est notre département le plus éloigné.</p>
         <a class="lien-fleche" href="/zones/finistere-29">Serrurier dans le Finistère</a>
       </article>
 
       <article class="carte">
         <h2>Maine-et-Loire (49)</h2>
         <p>Angers, Cholet, Saumur, Trélazé, Avrillé, Les Ponts-de-Cé, Beaucouzé.</p>
-        <p><strong>Délai courant :</strong> 1h30 à 2h30 selon la commune.</p>
+        
         <a class="lien-fleche" href="/zones/maine-et-loire-49">Serrurier en Maine-et-Loire</a>
       </article>
     </div>

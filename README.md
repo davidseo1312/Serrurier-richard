@@ -29,6 +29,8 @@ Conçu pour un hébergement mutualisé Hostinger : on dépose le contenu de
   - [La galerie « Nos interventions »](#la-galerie--nos-interventions-)
   - [La carte des zones d'intervention](#la-carte-des-zones-dintervention)
   - [Les avis clients](#les-avis-clients)
+  - [Les landing pages de zones](#les-landing-pages-de-zones)
+  - [Les CTA](#les-cta)
 - [Le formulaire de devis](#le-formulaire-de-devis)
 - [Google Analytics, Tag Manager, Search Console](#google-analytics-tag-manager-search-console)
 - [Contrôles avant mise en ligne](#contrôles-avant-mise-en-ligne)
@@ -336,6 +338,57 @@ l'ordre de première apparition. Ajouter une famille ne demande donc ni CSS ni
 JavaScript. Sans JavaScript, les boutons restent inertes et la galerie affiche
 l'ensemble des vignettes — le comportement utile par défaut.
 
+### Les landing pages de zones
+
+Les six pages de `src/pages/zones/` ne sont pas des pages SEO : ce sont des
+**pages commerciales complètes**, d'environ 2 200 mots chacune, conçues pour
+qu'un visiteur arrivé de Google y trouve tout sans avoir à naviguer ailleurs.
+
+Chacune suit la même architecture :
+
+| Section | Rôle |
+|---|---|
+| Héros local | H1, promesse, deux CTA, photo, communes couvertes en pastilles |
+| Besoin d'un serrurier ? | Grille des neuf situations, chacune liée à sa page service |
+| Prestations locales | Six cartes avec photo, contexte local et lien |
+| Le terrain | Description longue, réellement propre au département |
+| Nos interventions | Trois cas types : problème, diagnostic, intervention, résultat |
+| Avis | Composant piloté par la configuration, sans témoignage fabriqué |
+| Déroulé | Les quatre étapes, en frise |
+| Tarifs | Chiffres réels de `src/config.sh` et facteurs de variation |
+| Les réponses en une phrase | Six réponses courtes, lisibles par un moteur comme par un humain |
+| FAQ locale | Six questions **spécifiques au département** |
+| Communes | Grille des villes et maillage interne |
+| CTA final | Appel et devis |
+
+**Ce qui est mutualisé, et pourquoi.** Trois blocs sont des partiels communs —
+la grille des problèmes (`{{GRILLE_PROBLEMES}}`), le déroulé (`{{DEROULE}}`) et
+les facteurs de prix (`{{FACTEURS_PRIX}}`). Ce sont des règles de
+fonctionnement identiques partout : les recopier dans six pages les ferait
+diverger à la première correction. Tout le reste est écrit page par page.
+
+**Mesure de duplication.** Similarité maximale entre deux pages de zone :
+**13 %** — soit exactement les trois blocs mutualisés. Les 87 % restants sont
+propres à chaque département. Aucune page n'est clonée.
+
+> **Pour ajouter un département**, ajoutez-le à `src/zones.conf`, lancez
+> `python3 scripts/telecharger-contours.py` puis `python3 scripts/generer-carte.py`,
+> et écrivez la page en reprenant la structure d'une page existante. **N'en
+> faites pas une copie avec les noms de communes remplacés** : une page de zone
+> sans contenu propre ne sert ni le visiteur ni le référencement.
+
+### Les CTA
+
+Chaque landing page de zone porte **huit liens d'appel et neuf liens de devis**,
+répartis aux endroits où la décision se prend : héros, après les prestations,
+après les interventions, après la FAQ, et en pied de page. Les pages services
+en portent au moins trois, dont une bande intermédiaire posée juste avant la
+FAQ.
+
+Tous les liens d'appel portent `data-track="appel"` et un `data-track-zone`
+identifiant l'emplacement : c'est ce qui permettra de savoir quel CTA convertit
+réellement une fois la mesure d'audience activée.
+
 ### La carte des zones d'intervention
 
 Elle vit dans **`src/zones.conf`**, source unique des départements et des
@@ -419,30 +472,39 @@ valeur y repeint le site entier.
 
 | Jeton | Rôle | Valeur |
 |---|---|---|
-| `--color-primary` | vert d'eau, couleur dominante — texte et liens | `#0F766E` |
-| `--color-primary-dark` | fonds de bouton, contours affirmés | `#115E59` |
-| `--color-primary-soft` / `-tint` | aplats de section, badges | `#CCFBF1` / `#F0FDFA` |
+| `--color-primary` | bleu, traits, icônes et bordures — **jamais du texte** (2,63:1) | `#0EA5E9` |
+| `--color-primary-dark` | gros titres et contours de composant (3,92:1) | `#0284C7` |
+| `--color-primary-deep` | **texte, liens, fonds de bouton** (5,60:1) | `#0369A1` |
+| `--color-primary-sur-clair` | texte posé sur un aplat bleu clair (5,35:1) | `#075985` |
+| `--color-primary-soft` / `-tint` | aplats de section, badges | `#E0F2FE` / `#F0F9FF` |
 | `--color-secondary` | orange, **urgence uniquement** | `#F97316` |
-| `--color-dark` | encre du texte — jamais un fond | `#14231F` |
-| `--color-background` / `-2` | surfaces claires | `#F5FAF9` / `#EAF3F1` |
+| `--color-dark` | encre des titres — jamais un fond | `#0F172A` |
+| `--color-text` | texte courant (10,4:1) | `#334155` |
+| `--color-background` / `-2` | surfaces claires | `#F8FAFC` / `#F1F5F9` |
+| `--color-muted` | texte discret — **valable sur blanc pur seulement** (4,76:1) | `#64748B` |
 | `--font-title` / `--font-body` | Outfit / Work Sans | — |
 
 **Le site est clair de bout en bout** : en-tête, héros, sections, bandeau
 d'urgence, appel à l'action final et pied de page. Il n'y a plus aucune
 surface sombre, et donc plus aucune règle d'inversion de couleur à maintenir.
 La classe `section.sombre` a gardé son nom — elle est employée dans les pages —
-mais désigne désormais un aplat vert d'eau très clair entre deux sections
-blanches.
+mais désigne désormais un aplat bleu très clair entre deux sections blanches.
 
 **L'orange est réservé à l'urgence.** Bouton d'appel, badge du héros, barre
 d'appel fixe sur mobile. L'employer ailleurs userait le seul signal du site.
 
-> **Deux règles de contraste à ne pas enfreindre**, vérifiées par le script de
-> contraste des tests :
-> - le texte du bouton d'appel est **brun très sombre**, pas blanc : blanc sur
->   `#F97316` ne donne que 2,80 de contraste là où WCAG AA en exige 4,5 ;
-> - l'astérisque de champ obligatoire utilise `--color-secondary-dark`, pas
->   `--color-secondary`, pour la même raison.
+> **Quatre règles de contraste à ne pas enfreindre.** Elles sont vérifiées
+> élément par élément sur 22 pages ; tout écart est signalé.
+> - Le bleu a **quatre niveaux** et le contraste décide de l'usage de chacun.
+>   `--color-primary` ne doit jamais porter de texte : 2,63:1 sur blanc.
+> - Sur un aplat bleu clair (badge, filtre, choix coché), il faut descendre
+>   jusqu'à `--color-primary-sur-clair` : `--color-primary-deep` n'y donne que
+>   4,15:1.
+> - `--color-muted` n'est valable que sur **blanc pur**. Sur le gris du pied de
+>   page il tombe à 4,34:1 : employez `--color-dark-3`.
+> - Le texte du bouton d'appel est **brun très sombre**, pas blanc : blanc sur
+>   `#F97316` ne donne que 2,80:1. Même raison pour l'astérisque de champ
+>   obligatoire, qui utilise `--color-secondary-dark`.
 
 Après un changement de charte, régénérez les visuels qui la reprennent :
 

@@ -40,6 +40,22 @@ substituer() {
     | perl -pe 's/\{\{(\w+)\}\}/exists $ENV{$1} ? $ENV{$1} : "{{$1}}"/ge'
 }
 
+# Retire les commentaires HTML de la page produite.
+#
+# Ils servent aux personnes qui maintiennent les sources ; ils n'ont rien à
+# faire chez le visiteur. Ils pèsent une vingtaine de kilo-octets sur
+# l'ensemble du site, et publier ses notes internes n'est jamais souhaitable.
+#
+# Ils causaient de surcroît un défaut réel : un partiel qui documentait le
+# jeton par lequel il est injecté — « injecté par {{X}} » — voyait ce jeton
+# substitué à son tour, puisqu'il fait partie de la valeur exportée.
+#
+# Le motif est non gourmand et traverse les sauts de ligne. Aucun « <!-- »
+# n'apparaît ailleurs que dans un commentaire : vérifié sur les 43 pages.
+nettoyer_html() {
+  perl -0pe 's/<!--.*?-->\n?//gs'
+}
+
 # Échappe une valeur destinée à un littéral JSON (données structurées).
 json_escape() {
   printf '%s' "$1" | perl -pe 's/\\/\\\\/g; s/"/\\"/g; s/\n/ /g'
@@ -230,7 +246,7 @@ if [ -f src/partials/carte-zones.svg ]; then
   # Le partiel contient lui-même {{CARTE_SVG}} et {{CARTE_LISTE}} : une passe
   # de substitution suffit, elle est faite ici pour que le jeton
   # {{CARTE_ZONES}} livre un bloc déjà complet aux pages.
-  CARTE_ZONES="$(substituer < src/partials/carte-zones.html)"
+  CARTE_ZONES="$(nettoyer_html < src/partials/carte-zones.html | substituer)"
   export CARTE_ZONES
 else
   echo "  ! src/partials/carte-zones.svg absent : lancez python3 scripts/generer-carte.py"
@@ -288,16 +304,27 @@ if [ -f src/galerie.conf ]; then
   export GALERIE GALERIE_FILTRES
 fi
 
+# --- Blocs réutilisés par les landing pages locales ------------------------
+# Ces trois blocs décrivent des règles de fonctionnement identiques partout :
+# les mêmes problèmes traités, le même déroulé, les mêmes facteurs de prix.
+# Les recopier dans chaque page les ferait diverger à la première correction.
+# Le contenu proprement local, lui, est écrit page par page — il n'y a aucune
+# page de zone clonée.
+export GRILLE_PROBLEMES="$(nettoyer_html < src/partials/grille-problemes.html | substituer)"
+export DEROULE="$(nettoyer_html < src/partials/deroule-intervention.html | substituer)"
+export FACTEURS_PRIX="$(nettoyer_html < src/partials/facteurs-prix.html | substituer)"
+export PRESTATIONS="$(nettoyer_html < src/partials/prestations-completes.html | substituer)"
+
 # --- Avis clients -----------------------------------------------------------
 # Aucun avis n'est écrit dans le code du site : le bloc affiché dépend
 # uniquement de l'existence d'une fiche Google Business Profile renseignée
 # dans src/config.sh. Tant qu'il n'y en a pas, le site le dit, et n'invente
 # ni note, ni étoile, ni témoignage.
 if [ -n "${URL_GOOGLE_BUSINESS:-}" ]; then
-  export AVIS_GOOGLE="$(substituer < src/partials/avis-fiche.html)"
+  export AVIS_GOOGLE="$(nettoyer_html < src/partials/avis-fiche.html | substituer)"
   export AVIS_CHAPEAU="Ils sont hébergés par Google, pas par nous : nous ne pouvons ni les choisir, ni les réécrire."
 else
-  export AVIS_GOOGLE="$(substituer < src/partials/avis-vide.html)"
+  export AVIS_GOOGLE="$(nettoyer_html < src/partials/avis-vide.html | substituer)"
   export AVIS_CHAPEAU="Nous préférons ne rien afficher plutôt que d'afficher des avis que nous n'aurions pas reçus."
 fi
 
@@ -337,7 +364,7 @@ precharger_visuel_principal() {
 # Le formulaire n'existe qu'en un seul exemplaire, dans src/partials/. Les
 # pages qui l'affichent écrivent simplement {{FORMULAIRE_DEVIS}} : une
 # correction sur le partiel se répercute partout au build suivant.
-export FORMULAIRE_DEVIS="$(cat src/partials/formulaire-devis.html)"
+export FORMULAIRE_DEVIS="$(nettoyer_html < src/partials/formulaire-devis.html)"
 
 # --- Génération d'un fil d'Ariane BreadcrumbList ---------------------------
 # Google exige que le fil d'Ariane balisé corresponde à celui affiché.
@@ -469,7 +496,7 @@ while IFS= read -r src_file; do
     cat src/partials/header.html
     printf '%s\n' "$CORPS"
     cat src/partials/footer.html
-  } | substituer > "$dest"
+  } | substituer | nettoyer_html > "$dest"
 
   # Les pages marquées "sitemap: non" restent hors du sitemap.
   if [ "$PAGE_SITEMAP" != "non" ]; then

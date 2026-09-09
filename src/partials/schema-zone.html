@@ -6,6 +6,13 @@
   "description": "{{PAGE_DESC}}",
   "url": "{{PAGE_URL}}",
   "telephone": "{{TELEPHONE_E164}}",
+  "image": {
+    "@type": "ImageObject",
+    "url": "{{BASE_URL}}{{PAGE_IMAGE}}",
+    "width": 1200,
+    "height": 630,
+    "caption": "{{PAGE_TITLE}}"
+  },
   "parentOrganization": { "@id": "{{BASE_URL}}/#entreprise" },
   "address": {
     "@type": "PostalAddress",
@@ -15,6 +22,12 @@
     "addressCountry": "FR"
   },
   "areaServed": { "@type": "AdministrativeArea", "name": "{{PAGE_BREADCRUMB}}" },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+    "opens": "00:00",
+    "closes": "23:59"
+  },
   "priceRange": "€€"
 }
 </script>
