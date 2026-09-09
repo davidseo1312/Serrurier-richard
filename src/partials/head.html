@@ -7,7 +7,7 @@
 <meta name="description" content="{{PAGE_DESC}}">
 <link rel="canonical" href="{{PAGE_URL}}">
 <meta name="robots" content="{{ROBOTS_POLICY}}, follow, max-image-preview:large">
-<meta name="theme-color" content="#0b2a4a">
+<meta name="theme-color" content="#0F172A">
 <meta name="format-detection" content="telephone=yes">
 {{BLOC_VERIFICATION}}
 
@@ -30,4 +30,10 @@
 <link rel="icon" href="/assets/img/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
+<!-- Les deux graisses présentes dès le premier écran sont préchargées : sans
+     cela le navigateur ne les découvre qu'après avoir analysé la feuille de
+     style, et le texte permute visiblement. Les autres se chargent à la
+     demande. crossorigin est requis même en même origine pour les polices. -->
+<link rel="preload" href="/assets/fonts/outfit-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/worksans-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/style.css">

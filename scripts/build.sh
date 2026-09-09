@@ -68,6 +68,74 @@ if [ -n "${GTM_ID:-}" ]; then
   BLOC_GTM="<!-- Conteneur GTM ${GTM_ID} : chargé après consentement, voir assets/js/site.js -->"
 fi
 
+# --- Catalogue d'images ----------------------------------------------------
+# Chaque entrée de src/images.conf produit deux variables :
+#   {{IMG_ID}}     le <img> complet, prêt à poser dans une page
+#   {{IMGSRC_ID}}  l'URL seule, pour og:image et les données structurées
+#
+# Le fichier réellement servi est choisi ici, à la construction : une vraie
+# photo déposée dans static/assets/images/ prend automatiquement la place de
+# l'illustration vectorielle, sans qu'aucune page n'ait à être modifiée.
+
+IMAGES_SITEMAP=""   # alimente le sitemap images
+
+# Renvoie le chemin web de la meilleure image disponible pour un identifiant.
+# L'ordre reflète la qualité perçue : une photographie prime sur une
+# illustration, un format moderne prime sur un format ancien.
+resoudre_image() {
+  local base="$1" ext
+  for ext in avif webp jpg jpeg png svg; do
+    if [ -f "static/assets/images/${base}.${ext}" ]; then
+      printf '/assets/images/%s.%s' "$base" "$ext"
+      return 0
+    fi
+  done
+  return 1
+}
+
+# Construit un srcset si des variantes -800 / -1200 / -1600 existent.
+construire_srcset() {
+  local base="$1" ext="$2" srcset="" largeur
+  for largeur in 800 1200 1600; do
+    if [ -f "static/assets/images/${base}-${largeur}.${ext}" ]; then
+      [ -n "$srcset" ] && srcset="${srcset}, "
+      srcset="${srcset}/assets/images/${base}-${largeur}.${ext} ${largeur}w"
+    fi
+  done
+  printf '%s' "$srcset"
+}
+
+CATALOGUE_MANQUANT=0
+while IFS='|' read -r id base largeur hauteur alt; do
+  case "$id" in ''|\#*) continue ;; esac
+
+  chemin="$(resoudre_image "$base" || true)"
+  if [ -z "$chemin" ]; then
+    echo "  ! image introuvable pour $id : static/assets/images/${base}.*"
+    CATALOGUE_MANQUANT=$((CATALOGUE_MANQUANT + 1))
+    continue
+  fi
+
+  ext="${chemin##*.}"
+  srcset="$(construire_srcset "$base" "$ext")"
+  attr_srcset=""
+  [ -n "$srcset" ] && attr_srcset=" srcset=\"${srcset}\" sizes=\"(max-width: 900px) 100vw, 600px\""
+
+  # width et hauteur sont toujours écrits : c'est ce qui réserve la place et
+  # évite que la page ne saute pendant le chargement (décalage cumulé).
+  export "IMG_${id}=<img src=\"${chemin}\"${attr_srcset} width=\"${largeur}\" height=\"${hauteur}\" alt=\"${alt}\" loading=\"lazy\" decoding=\"async\">"
+  export "IMGSRC_${id}=${chemin}"
+
+  IMAGES_SITEMAP="${IMAGES_SITEMAP}${id}|${chemin}|${alt}"$'\n'
+done < src/images.conf
+export IMAGES_SITEMAP
+
+# Le visuel du héros est le plus grand élément affiché à l'ouverture : il ne
+# doit pas être différé, sans quoi il devient lui-même le frein au rendu.
+if [ -n "${IMG_HERO:-}" ]; then
+  export IMG_HERO="${IMG_HERO/ loading=\"lazy\" decoding=\"async\"/ fetchpriority=\"high\" decoding=\"async\"}"
+fi
+
 # --- Formulaire de devis ---------------------------------------------------
 # Le formulaire n'existe qu'en un seul exemplaire, dans src/partials/. Les
 # pages qui l'affichent écrivent simplement {{FORMULAIRE_DEVIS}} : une
@@ -273,7 +341,7 @@ while IFS= read -r ref; do
 done <<< "$RESSOURCES"
 
 # 5. Le sitemap doit contenir des URLs, pas seulement son enveloppe XML.
-NB_URLS=$(grep -c '<loc>' "$OUT/sitemap.xml" 2>/dev/null || echo 0)
+NB_URLS=$(grep -c '^    <loc>' "$OUT/sitemap.xml" 2>/dev/null || echo 0)
 if [ "${NB_URLS:-0}" -lt 1 ]; then
   manque "sitemap.xml ne contient aucune URL"
 fi

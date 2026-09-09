@@ -191,6 +191,86 @@
     suivre(document.body.getAttribute('data-conversion'), { page: location.pathname });
   }
 
+  /* --- 5. Apparition au défilement -----------------------------------------
+     Les éléments portant la classe « apparait » se révèlent quand ils entrent
+     dans le champ. Sans JavaScript ils restent simplement visibles : la
+     classe « visible » n'est jamais posée, mais la règle CSS correspondante
+     n'est pas non plus appliquée puisque le sélecteur exige les deux classes.
+     Un visiteur ayant demandé moins d'animations est servi directement.
+     ------------------------------------------------------------------------ */
+
+  var elements = document.querySelectorAll('.apparait');
+
+  if (elements.length) {
+    var moinsAnime = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (moinsAnime || !('IntersectionObserver' in window)) {
+      elements.forEach(function (el) { el.classList.add('visible'); });
+    } else {
+      var vigie = new IntersectionObserver(function (entrees) {
+        entrees.forEach(function (entree, i) {
+          if (!entree.isIntersecting) { return; }
+          // Léger décalage entre voisins : la grille se compose au lieu
+          // d'apparaître d'un bloc.
+          setTimeout(function () { entree.target.classList.add('visible'); }, i * 70);
+          vigie.unobserve(entree.target);
+        });
+      }, { rootMargin: '0px 0px -80px 0px', threshold: 0.08 });
+
+      elements.forEach(function (el) { vigie.observe(el); });
+    }
+  }
+
+  /* --- 6. Galerie : agrandissement au clic ---------------------------------
+     Une visionneuse minimale, sans dépendance. Fermeture au clic, à la touche
+     Échap, et retour du focus sur l'image d'origine.
+     ------------------------------------------------------------------------ */
+
+  var galerie = document.querySelector('.galerie');
+
+  if (galerie) {
+    galerie.querySelectorAll('figure').forEach(function (figure) {
+      var image = figure.querySelector('img');
+      if (!image) { return; }
+      figure.setAttribute('tabindex', '0');
+      figure.setAttribute('role', 'button');
+      figure.setAttribute('aria-label', 'Agrandir : ' + image.alt);
+      figure.style.cursor = 'zoom-in';
+
+      function ouvrir() { agrandir(image, figure); }
+      figure.addEventListener('click', ouvrir);
+      figure.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ouvrir(); }
+      });
+    });
+  }
+
+  function agrandir(image, origine) {
+    var voile = document.createElement('div');
+    voile.className = 'visionneuse';
+    voile.setAttribute('role', 'dialog');
+    voile.setAttribute('aria-modal', 'true');
+    voile.setAttribute('aria-label', image.alt);
+    voile.innerHTML =
+      '<button type="button" class="visionneuse-fermer" aria-label="Fermer">&times;</button>' +
+      '<img src="' + image.getAttribute('src') + '" alt="' + image.alt.replace(/"/g, '&quot;') + '">';
+
+    document.body.appendChild(voile);
+    document.body.style.overflow = 'hidden';
+    voile.querySelector('.visionneuse-fermer').focus();
+
+    function fermer() {
+      voile.remove();
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', surTouche);
+      if (origine) { origine.focus(); }
+    }
+    function surTouche(e) { if (e.key === 'Escape') { fermer(); } }
+
+    voile.addEventListener('click', fermer);
+    document.addEventListener('keydown', surTouche);
+  }
+
   /* --- 5. Formulaire de devis ---------------------------------------------
      Le formulaire est entièrement validé côté serveur : ce bloc n'ajoute que
      le confort d'un message immédiat et l'horodatage anti-robot. Le retirer

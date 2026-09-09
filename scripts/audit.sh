@@ -29,7 +29,7 @@ etape() {
 titre() { echo; echo "${GRAS}=== $1 ===${FIN}"; echo; }
 
 # --- 1. Construction --------------------------------------------------------
-titre "1/6  Construction"
+titre "1/7  Construction"
 if bash scripts/build.sh; then
   etape "BUILD" "OK"
 else
@@ -39,7 +39,7 @@ else
 fi
 
 # --- 2. SEO, liens, ressources ---------------------------------------------
-titre "2/6  Contrôle SEO, liens internes et ressources"
+titre "2/7  Contrôle SEO, liens internes et ressources"
 if bash scripts/check-seo.sh; then
   etape "SEO / LIENS" "OK"
 else
@@ -47,7 +47,7 @@ else
 fi
 
 # --- 3. Structure HTML ------------------------------------------------------
-titre "3/6  Structure HTML"
+titre "3/7  Structure HTML"
 if command -v python3 > /dev/null; then
   if python3 scripts/check-html.py; then
     etape "HTML" "OK"
@@ -60,7 +60,7 @@ else
 fi
 
 # --- 4. Données structurées -------------------------------------------------
-titre "4/6  Données structurées"
+titre "4/7  Données structurées"
 if command -v python3 > /dev/null; then
   if python3 - <<'PY'
 import json, re, glob, sys
@@ -89,7 +89,7 @@ else
 fi
 
 # --- 5. Parcours navigateur -------------------------------------------------
-titre "5/6  Parcours navigateur (mobile, tablette, ordinateur)"
+titre "5/7  Parcours navigateur (mobile, tablette, ordinateur)"
 if command -v node > /dev/null && command -v php > /dev/null \
    && node -e "require.resolve('playwright')" 2>/dev/null; then
   if bash tests/lancer.sh; then
@@ -107,7 +107,20 @@ fi
 # Une erreur 403 sur un mutualisé a presque toujours la même origine : le
 # dossier servi par Apache ne contient pas de page d'accueil. Cette étape
 # reconstitue ce qu'Apache verra et le vérifie, sans avoir besoin d'Apache.
-titre "6/6  Simulation du déploiement Hostinger"
+# --- 6. Images -------------------------------------------------------------
+titre "6/7  Images et SEO images"
+if command -v python3 > /dev/null; then
+  if python3 scripts/audit-images.py; then
+    etape "IMAGES" "OK"
+  else
+    etape "IMAGES" "ECHEC"; ECHEC=1
+  fi
+else
+  echo "Python 3 absent : audit ignoré."
+  etape "IMAGES" "IGNOREE"
+fi
+
+titre "7/7  Simulation du déploiement Hostinger"
 
 PB403=0
 signaler() { echo "  ${ROUGE}x${FIN} $1"; PB403=1; }

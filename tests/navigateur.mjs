@@ -116,9 +116,9 @@ await mobile.keyboard.press('Escape');
 verifier(!(await menu.isVisible()), 'la touche Échap referme le menu');
 
 await mobile.locator('.nav-toggle').click();
-await mobile.locator('#nav-principal a[href="/faq"]').click();
+await mobile.locator('#nav-principal a[href="/serrurier"]').click();
 await mobile.waitForLoadState('domcontentloaded');
-verifier(mobile.url().endsWith('/faq'), 'un lien du menu navigue bien');
+verifier(mobile.url().endsWith('/serrurier'), 'un lien du menu navigue bien');
 
 titre('3. Barre d’appel fixe');
 
@@ -150,6 +150,22 @@ const petites = await mobile.evaluate(() => {
   return trop;
 });
 verifier(petites.length === 0, `toutes les cibles font au moins 24 px${petites.length ? ' — ' + petites.slice(0, 4).join(', ') : ''}`);
+
+titre('5. Galerie');
+
+await mobile.goto(BASE + '/');
+const vignettes = mobile.locator('.galerie figure');
+verifier((await vignettes.count()) >= 6, `la galerie présente ${await vignettes.count()} visuels`);
+verifier(
+  (await mobile.locator('.galerie img[alt]').count()) === (await vignettes.count()),
+  'chaque visuel de la galerie porte un texte alternatif'
+);
+await vignettes.first().click();
+await mobile.waitForTimeout(300);
+verifier(await mobile.locator('.visionneuse').isVisible(), 'la visionneuse s’ouvre au clic');
+await mobile.keyboard.press('Escape');
+await mobile.waitForTimeout(250);
+verifier((await mobile.locator('.visionneuse').count()) === 0, 'la touche Échap la referme');
 
 titre('5. FAQ et sommaire');
 

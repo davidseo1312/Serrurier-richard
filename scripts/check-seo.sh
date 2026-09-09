@@ -230,7 +230,7 @@ else
   echo "        ROBOTS_POLICY n'est pas passe a \"index\" dans src/config.sh."
   echo "        Voir « Coherence geographique » dans le README avant de le faire."
 fi
-ok "sitemap.xml : $(grep -c '<loc>' public/sitemap.xml) URLs"
+ok "sitemap.xml : $(grep -c '^    <loc>' public/sitemap.xml) URLs"
 # Pages mises en noindex individuellement (404, remerciement). Le compte n'a
 # de sens que si le site est globalement indexable.
 if [ "$ROBOTS_POLICY" = "index" ]; then

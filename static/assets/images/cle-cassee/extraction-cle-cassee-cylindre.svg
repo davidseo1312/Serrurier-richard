@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" role="img" aria-label="Fragment de clé cassée resté dans le cylindre, extraction à l'outil dédié">
+  <defs>
+    <linearGradient id="fond" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16233D"/><stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.72" cy="0.18" r="0.75">
+      <stop offset="0" stop-color="#0EA5E9" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#0EA5E9" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="acier" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#475569"/><stop offset="1" stop-color="#1E293B"/>
+    </linearGradient>
+    <linearGradient id="cuivre" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FDBA74"/><stop offset="1" stop-color="#EA580C"/>
+    </linearGradient>
+    <linearGradient id="porte" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1E3A5F"/><stop offset="1" stop-color="#12233C"/>
+    </linearGradient>
+    <pattern id="grille" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0H0V60" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="750" fill="url(#fond)"/>
+  <rect width="1200" height="750" fill="url(#grille)"/>
+  <rect width="1200" height="750" fill="url(#halo)"/><circle cx="600" cy="380" r="240" fill="#0284C7" opacity="0.07"/><circle cx="600" cy="380" r="137" fill="#1E293B"/><circle cx="600" cy="380" r="128" fill="url(#cuivre)"/><circle cx="600" cy="380" r="44" fill="#0F172A"/><rect x="597" y="380" width="6" height="102" rx="3" fill="#0F172A"/><rect x="594" y="380" width="13" height="104" rx="5" fill="#94A3B8"/><path d="M600 484 l-9 22 l18 0 z" fill="#64748B"/><g transform="translate(600 556) rotate(4)"><rect x="-6" y="-90" width="12" height="230" rx="5" fill="url(#cuivre)"/><path d="M-6 -90 l-10 -20 h32 l-10 20z" fill="#FDBA74"/></g><g transform="translate(160 600) rotate(-18) scale(0.85)"><circle cx="0" cy="0" r="26" fill="none" stroke="#94A3B8" stroke-width="13"/><rect x="24" y="-6" width="112" height="12" rx="5" fill="#94A3B8"/><rect x="104" y="-22" width="12" height="17" rx="3" fill="#94A3B8"/><rect x="124" y="-26" width="12" height="21" rx="3" fill="#94A3B8"/></g><path d="M240 566 l26 -22" stroke="#F97316" stroke-width="7" stroke-linecap="round"/><g transform="translate(80 80)"><rect x="0" y="0" width="176" height="46" rx="23" fill="#0F172A" fill-opacity="0.72" stroke="#FDBA74" stroke-opacity="0.5" stroke-width="2"/><text x="88" y="31" text-anchor="middle" fill="#FDBA74" font-family="system-ui,sans-serif" font-size="22" font-weight="700" letter-spacing="1">EXTRACTION</text></g>
+</svg>

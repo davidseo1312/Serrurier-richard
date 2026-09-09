@@ -250,11 +250,93 @@ priority: 0.7
 Ces trois éléments sont partagés par toutes les pages : une modification s'y
 répercute partout au build suivant.
 
-### Remplacer les illustrations par des photos
+### Ajouter une photo — sans écrire une ligne de code
 
-Voir `static/assets/img/README.md`, qui donne la correspondance page par page
-et les dimensions cibles. Sur ce métier, des photos réelles convertissent
-nettement mieux que des illustrations.
+C'est le point le plus important du système visuel. **Déposer un fichier
+suffit** : le build préfère automatiquement une vraie photo à l'illustration
+vectorielle livrée.
+
+```
+static/assets/images/
+├── serrurerie/        ouverture-porte/      porte-bloquee/
+├── cle-cassee/        cle-perdue/           serrure/
+├── serrure-3-points/  serrure-5-points/     porte-blindee/
+├── blindage/          effraction/           coffre-fort/
+├── rideau-metallique/ installation/         interventions/
+└── og/                vignettes de partage social, générées
+```
+
+**La marche à suivre**
+
+1. Ouvrez `src/images.conf` et repérez la ligne de l'image à remplacer. Elle
+   donne le dossier, le nom de fichier exact et les dimensions attendues.
+2. Préparez votre photo à ces dimensions, en **WEBP** de préférence
+   (<https://squoosh.app> suffit, rien à installer).
+3. Déposez-la dans le dossier indiqué, **sous le nom exact** de la ligne, avec
+   l'extension `.webp`.
+4. `bash scripts/build.sh`
+
+L'illustration est remplacée **partout** : dans la page, dans la galerie de
+l'accueil, dans le sitemap images et dans la vignette de partage social.
+
+**Ordre de préférence du build** : `.avif` → `.webp` → `.jpg` → `.jpeg` →
+`.png` → `.svg`. L'illustration vectorielle arrive en dernier : elle ne
+reprend la main que si aucune photo n'existe.
+
+**Variantes responsives** : déposez en plus `nom-800.webp`, `nom-1200.webp`
+ou `nom-1600.webp` et le `srcset` se construit tout seul.
+
+**Texte alternatif** : mettez-le à jour dans `src/images.conf` en même temps
+que la photo. Il doit décrire ce que montre réellement l'image — c'est ce que
+lisent les lecteurs d'écran et ce sur quoi Google Images s'appuie.
+
+> **Une règle à ne pas enfreindre.** Les visuels livrés sont des
+> **illustrations**, pas des photographies d'intervention. Ne les présentez
+> jamais comme des chantiers réels. Une vraie photo d'intervention, elle,
+> peut l'être — avec l'accord du client concerné.
+
+### Contrôler les images
+
+```bash
+python3 scripts/audit-images.py
+```
+
+Détecte : image référencée mais absente, texte alternatif manquant ou trop
+court, `width`/`height` absents, fichier trop lourd, nom de fichier sans
+signification, image livrée mais utilisée nulle part, et vignette de partage
+au format SVG — que les réseaux sociaux ignorent.
+
+### Régénérer les visuels
+
+```bash
+python3 scripts/generer-illustrations.py   # les 16 illustrations
+node    scripts/generer-og.mjs             # les vignettes de partage
+python3 scripts/generer-polices.py         # les polices, en WOFF2
+python3 scripts/generer-images.py          # favicons et icônes
+```
+
+Tous ces scripts sont **facultatifs** : leurs résultats sont versionnés. À
+relancer seulement après un changement de charte.
+
+### Modifier la charte graphique
+
+Tout est regroupé en variables CSS au début de `static/assets/css/style.css` :
+
+| Variable | Rôle |
+|---|---|
+| `--color-primary` | Bleu de marque, couleur dominante |
+| `--color-primary-dark` / `--color-primary-light` | Déclinaisons |
+| `--color-secondary` | Orange d'urgence — téléphone et appels à l'action |
+| `--color-dark` | Bleu nuit : en-tête, pied de page, sections premium |
+| `--color-text` / `--color-muted` | Textes |
+| `--font-title` / `--font-body` | Outfit et Work Sans |
+| `--space-*`, `--radius-*`, `--shadow-*` | Espacements, rayons, ombres |
+
+Changer `--color-primary` et `--color-secondary` suffit à repeindre le site
+entier. **Vérifiez le contraste** après un changement de couleur : le texte
+doit atteindre 4,5 pour 1 sur son fond (WCAG AA). Les couleurs actuelles ont
+toutes été vérifiées — notamment le bouton d'appel, dont le texte est brun
+très sombre et non blanc, parce que blanc sur cet orange ne donne que 2,80.
 
 ### Clés de métadonnées disponibles
 

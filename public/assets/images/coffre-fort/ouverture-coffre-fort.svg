@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" role="img" aria-label="Ouverture d'un coffre-fort dont le mécanisme est bloqué">
+  <defs>
+    <linearGradient id="fond" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16233D"/><stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.72" cy="0.18" r="0.75">
+      <stop offset="0" stop-color="#0EA5E9" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#0EA5E9" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="acier" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#475569"/><stop offset="1" stop-color="#1E293B"/>
+    </linearGradient>
+    <linearGradient id="cuivre" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FDBA74"/><stop offset="1" stop-color="#EA580C"/>
+    </linearGradient>
+    <linearGradient id="porte" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1E3A5F"/><stop offset="1" stop-color="#12233C"/>
+    </linearGradient>
+    <pattern id="grille" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0H0V60" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="750" fill="url(#fond)"/>
+  <rect width="1200" height="750" fill="url(#grille)"/>
+  <rect width="1200" height="750" fill="url(#halo)"/><rect x="300" y="120" width="480" height="460" rx="18" fill="url(#acier)"/><rect x="326" y="146" width="428" height="408" rx="10" fill="#0F2C47"/><rect x="340" y="160" width="360" height="380" rx="8" fill="url(#porte)"/><circle cx="470" cy="350" r="76" fill="#0F172A"/><circle cx="470" cy="350" r="58" fill="none" stroke="url(#cuivre)" stroke-width="9"/><g stroke="#38BDF8" stroke-width="5" stroke-linecap="round"><path d="M470 286v16M470 398v16M406 350h16M518 350h16"/></g><circle cx="470" cy="350" r="15" fill="url(#cuivre)"/><path d="M470 350 l42 -32" stroke="#F8FAFC" stroke-width="9" stroke-linecap="round"/><rect x="630" y="306" width="24" height="100" rx="12" fill="url(#cuivre)"/><circle cx="642" cy="356" r="26" fill="none" stroke="url(#cuivre)" stroke-width="11"/><rect x="700" y="217" width="56" height="26" rx="9" fill="url(#cuivre)"/><rect x="700" y="337" width="56" height="26" rx="9" fill="url(#cuivre)"/><rect x="700" y="457" width="56" height="26" rx="9" fill="url(#cuivre)"/><g transform="translate(850 300)" fill="none" stroke="#F8FAFC" stroke-width="9" stroke-linecap="round"><path d="M0 0 q46 66 4 122"/><circle cx="4" cy="140" r="23" fill="#0F172A" stroke="url(#cuivre)"/></g><g transform="translate(80 80)"><rect x="0" y="0" width="236" height="46" rx="23" fill="#0F172A" fill-opacity="0.72" stroke="#38BDF8" stroke-opacity="0.5" stroke-width="2"/><text x="118" y="31" text-anchor="middle" fill="#38BDF8" font-family="system-ui,sans-serif" font-size="22" font-weight="700" letter-spacing="1">OUVERTURE FINE</text></g><rect x="260" y="580" width="560" height="14" rx="4" fill="#0A1120"/>
+</svg>
