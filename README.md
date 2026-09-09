@@ -502,14 +502,17 @@ Pour les mises à jour, deux possibilités :
 
 ### Première mise en route
 
-1. **Fusionner le travail dans `main`.** Le workflow ne se déclenche que sur
-   `main` : tant que les correctifs vivent sur une autre branche, la branche
-   `deploy` n'existe pas.
-2. **Vérifier que le workflow a réussi** — onglet *Actions* du dépôt. Il doit
+1. **La branche `deploy` existe déjà** : elle a été créée et publiée
+   manuellement, avec les commandes exactes du workflow. Hostinger peut la
+   cloner dès maintenant, sans attendre quoi que ce soit.
+2. **Fusionner le travail dans `main` pour armer l'automatisation.** Le
+   workflow ne se déclenche que sur `main` : tant que les correctifs vivent
+   sur une branche de travail, `deploy` reste figée sur sa dernière
+   publication manuelle.
+3. **Vérifier que le workflow a réussi** — onglet *Actions* du dépôt. Il doit
    afficher « Build et publication vers Hostinger » au vert. En cas d'échec,
-   le journal indique l'étape fautive ; rien n'est publié.
-3. **Confirmer que la branche `deploy` existe** et que `index.html` est bien à
-   sa racine, directement sur GitHub.
+   le journal indique l'étape fautive et **rien n'est publié** : le site en
+   ligne conserve sa version précédente.
 4. **Activer le SSL** — *hPanel > Sécurité > SSL* — et attendre « Actif ».
    À faire **avant** le premier déploiement : le `.htaccess` force le HTTPS.
 5. **Créer la boîte d'expédition** `site@votre-domaine.fr` —

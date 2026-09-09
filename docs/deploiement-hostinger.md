@@ -88,9 +88,13 @@ Sur GitHub, ouvrez le sélecteur de branches du dépôt. `deploy` doit y figurer
 et son contenu doit commencer directement par `index.html`, `assets/`,
 `blog/`… — sans dossier intermédiaire.
 
-Si elle n'existe pas :
+Elle a été créée et publiée manuellement, avec les commandes exactes du
+workflow : elle est donc opérationnelle immédiatement. Le workflow prendra le
+relais dès que les correctifs seront fusionnés dans `main`.
 
-1. Les correctifs ne sont pas encore fusionnés dans `main`. Le workflow ne se
+Si elle venait à disparaître :
+
+1. Les correctifs ne sont pas fusionnés dans `main`. Le workflow ne se
    déclenche que sur `main`.
 2. Ou le workflow a échoué. Onglet *Actions* du dépôt : le journal indique
    l'étape fautive. Rien n'est publié tant qu'un contrôle échoue, ce qui est
