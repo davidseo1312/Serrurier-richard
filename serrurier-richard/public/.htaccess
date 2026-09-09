@@ -17,7 +17,13 @@ ErrorDocument 404 /404.html
 DirectoryIndex index.html index.php
 
 # MultiViews ferait deviner l'extension par Apache et entrerait en conflit
-# avec nos propres règles de réécriture.
+# avec nos propres règles de réécriture. -Indexes empêche l'affichage du
+# contenu d'un dossier dépourvu de page d'accueil.
+#
+# ⚠ SI LE SITE RENVOIE 500 SUR TOUTES LES PAGES : commentez la ligne
+# ci-dessous en la préfixant par un #. Quelques offres mutualisées interdisent
+# la directive Options en .htaccess, et Apache répond alors « Options not
+# allowed here » avec une erreur 500. Le site fonctionne sans elle.
 Options -MultiViews -Indexes
 
 <IfModule mod_rewrite.c>

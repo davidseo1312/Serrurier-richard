@@ -75,39 +75,91 @@ else
   echo "  ${VERT}v${FIN} Les fichiers sont dans $TROUVE, ce qui semble correct."
 fi
 
-# --- 5. Réponse HTTP réelle ------------------------------------------------
+# --- 5. Signature du 403 ---------------------------------------------------
+# Les trois causes possibles ne renvoient pas les mêmes codes selon l'URL.
+# Comparer la racine et une page interne suffit à les distinguer : cette
+# logique a été vérifiée sur un Apache 2.4 en reproduisant chaque cas.
 titre "5. Ce que répond le site"
-for url in "${BASE_URL}/" "${BASE_URL}/index.html" "${BASE_URL}/tarifs"; do
-  code=$(curl -s -o /tmp/reponse.html -w '%{http_code}' --max-time 20 -L "$url" 2>/dev/null)
-  printf '  %-3s  %s\n' "$code" "$url"
-  if [ "$code" = "403" ]; then
-    # Distinguer un 403 Apache d'un 403 Hostinger ou Cloudflare.
-    if grep -qi 'hostinger' /tmp/reponse.html 2>/dev/null; then
-      echo "        -> page 403 de Hostinger : domaine pas encore rattaché à l'hébergement"
-    elif grep -qi 'cloudflare' /tmp/reponse.html 2>/dev/null; then
-      echo "        -> 403 Cloudflare : protection en amont, pas votre .htaccess"
-    else
-      echo "        -> 403 Apache : dossier sans index.html, ou droits insuffisants"
-    fi
-  fi
-done
 
-titre "6. Si le 403 persiste malgré des fichiers bien placés"
-cat <<'FIN_AIDE'
-      a) Droits des fichiers. Dans hPanel > Gestionnaire de fichiers, les
-         fichiers doivent être en 644 et les dossiers en 755. Un envoi FTP
-         peut produire des droits trop restrictifs.
+lire_code() {
+  curl -s -o /tmp/reponse-diag.html -w '%{http_code}' --max-time 20 "$1" 2>/dev/null
+}
 
-      b) Testez sans .htaccess. Renommez-le en .htaccess.bak depuis hPanel
-         et rechargez la page. Si le 403 disparaît, le problème vient d'une
-         directive : sur certaines offres, Options +FollowSymLinks est
-         interdit et déclenche une erreur.
+CODE_RACINE=$(lire_code "${BASE_URL}/")
+CODE_PAGE=$(lire_code "${BASE_URL}/tarifs")
+CODE_CSS=$(lire_code "${BASE_URL}/assets/css/style.css")
 
-      c) Domaine non rattaché. Si le domaine vient d'être acheté, la
-         propagation DNS prend jusqu'à 24 h et Hostinger sert sa propre
-         page d'erreur en attendant.
+printf '  %-3s  %s\n' "$CODE_RACINE" "${BASE_URL}/"
+printf '  %-3s  %s\n' "$CODE_PAGE"   "${BASE_URL}/tarifs"
+printf '  %-3s  %s\n' "$CODE_CSS"    "${BASE_URL}/assets/css/style.css"
 
-      d) Domaine additionnel. Sa racine n'est pas /public_html mais
-         /domains/votre-domaine.fr/public_html — ajustez FTP_DIR.
-FIN_AIDE
+titre "6. Diagnostic"
+
+if [ "$CODE_RACINE" = "403" ] && grep -qi 'hostinger' /tmp/reponse-diag.html 2>/dev/null; then
+  echo "  ${ROUGE}x${FIN} Page 403 de Hostinger, pas d'Apache."
+  echo "      Le domaine n'est pas encore rattaché à l'hébergement, ou la"
+  echo "      propagation DNS est en cours (jusqu'à 24 h après un achat)."
+  echo "      hPanel > Domaines : vérifiez que le domaine pointe bien ici."
+
+elif [ "$CODE_RACINE" = "403" ] && grep -qi 'cloudflare' /tmp/reponse-diag.html 2>/dev/null; then
+  echo "  ${ROUGE}x${FIN} 403 émis par Cloudflare, en amont de votre hébergement."
+  echo "      Votre .htaccess n'est pas en cause. Vérifiez les règles de"
+  echo "      pare-feu et le mode « Under Attack » dans Cloudflare."
+
+elif [ "$CODE_RACINE" = "500" ] || [ "$CODE_PAGE" = "500" ]; then
+  echo "  ${ROUGE}x${FIN} Erreur 500 : une directive du .htaccess est refusée."
+  echo "      Cause quasi certaine : la ligne « Options -MultiViews -Indexes »."
+  echo "      Certaines offres interdisent la directive Options en .htaccess."
+  echo "      Correction : commentez cette ligne dans static/.htaccess en la"
+  echo "      préfixant par un #, relancez le build et redéployez."
+
+elif [ "$CODE_RACINE" = "403" ] && [ "$CODE_PAGE" = "404" ]; then
+  echo "  ${ROUGE}x${FIN} CAUSE : la racine web est vide."
+  echo "      Vos fichiers sont un niveau trop bas — typiquement dans"
+  echo "      public_html/public_html/ ou public_html/public/."
+  echo
+  echo "      Correction : mettez ${GRAS}FTP_DIR=/${FIN} dans .env, supprimez le"
+  echo "      dossier en trop depuis hPanel, puis redéployez."
+
+elif [ "$CODE_RACINE" = "403" ] && [ "$CODE_PAGE" = "200" ]; then
+  echo "  ${ROUGE}x${FIN} CAUSE : index.html manquant ou illisible à la racine."
+  echo "      Les autres pages répondent : les fichiers sont au bon endroit."
+  echo
+  echo "      Vérifiez dans hPanel > Gestionnaire de fichiers que index.html"
+  echo "      existe bien dans public_html/ et qu'il est en droits 644."
+
+elif [ "$CODE_RACINE" = "403" ] && [ "$CODE_CSS" = "403" ]; then
+  echo "  ${ROUGE}x${FIN} CAUSE probable : droits de fichiers trop restrictifs."
+  echo "      Tout est refusé, y compris la feuille de style."
+  echo "      Dans hPanel > Gestionnaire de fichiers : fichiers en 644,"
+  echo "      dossiers en 755."
+
+elif [ "$CODE_RACINE" = "200" ] && [ "$CODE_PAGE" = "404" ]; then
+  echo "  ${ROUGE}x${FIN} CAUSE : le .htaccess n'est pas lu."
+  echo "      L'accueil s'affiche mais les URLs sans extension échouent."
+  echo
+  echo "      a) Le fichier .htaccess n'a pas été copié — il commence par un"
+  echo "         point et reste invisible tant que l'affichage des fichiers"
+  echo "         cachés n'est pas activé. C'est la cause la plus fréquente."
+  echo "      b) mod_rewrite est désactivé : hPanel > Avancé > Configuration PHP."
+
+elif [ "$CODE_RACINE" = "200" ] && [ "$CODE_PAGE" = "200" ]; then
+  echo "  ${VERT}v${FIN} Le site répond correctement."
+  echo "      Si vous voyez encore une erreur dans votre navigateur, videz son"
+  echo "      cache (Ctrl+F5) : une réponse d'erreur a pu y être conservée."
+
+else
+  echo "  ${JAUNE}!${FIN} Combinaison inhabituelle : racine $CODE_RACINE, page $CODE_PAGE,"
+  echo "      feuille de style $CODE_CSS."
+  echo "      Testez sans .htaccess : renommez-le en .htaccess.bak depuis hPanel"
+  echo "      et rechargez. Si l'erreur disparaît, une directive est en cause."
+fi
+
+echo
+echo "  ${GRAS}Signatures de référence${FIN} (vérifiées sur Apache 2.4)"
+echo "      racine 403 + page 404  -> fichiers un niveau trop bas"
+echo "      racine 403 + page 200  -> index.html absent ou illisible"
+echo "      tout en 403            -> droits, ou domaine non rattaché"
+echo "      tout en 500            -> directive refusée dans le .htaccess"
+echo "      racine 200 + page 404  -> .htaccess absent ou mod_rewrite inactif"
 echo
