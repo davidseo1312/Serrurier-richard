@@ -1,37 +1,25 @@
 <!-- ---------------------------------------------------------------------
-     En-tête du site, en deux étages.
+     En-tête du site, sur UNE seule ligne.
 
-     Étage 1 — la barre de service : ce que l'entreprise fait, et comment la
-     joindre. Fine, discrète, elle disparaît dès que la page défile.
+     La barre de service qui coiffait la page a été supprimée. Elle répétait
+     le téléphone et le devis déjà présents ici, elle poussait le contenu vers
+     le bas, et c'était le premier bloc que le visiteur voyait — donc le
+     dernier endroit où se permettre du remplissage.
 
-     Étage 2 — le rail principal : NOM | NAVIGATION | APPELER. Trois blocs,
-     pas un de plus. Le devis vit dans la barre du dessus et dans le corps
-     des pages ; le répéter ici encombrait la seule ligne que le visiteur
-     regarde vraiment.
+     Ce qu'elle portait d'utile est remonté : le téléphone et le devis sont
+     dans la ligne principale, à droite. Les trois métiers sont devenus la
+     baseline sous le nom, où ils ne coûtent aucune hauteur.
 
-     La page courante est marquée par le build (aria-current="page") : le
-     visiteur voit où il se trouve sans avoir à le deviner.
+     Rail à trois colonnes — NOM | NAVIGATION | ACTIONS — dont la colonne
+     centrale est réellement centrée. La page courante est marquée par le
+     build (aria-current="page").
      --------------------------------------------------------------------- -->
-<div class="barre-haute">
-  <div class="wrap barre-haute-inner">
-    <ul class="barre-haute-metier">
-      <li>Dépannage</li>
-      <li>Installation</li>
-      <li>Sécurisation</li>
-    </ul>
-    <p class="barre-haute-contact">
-      <a href="tel:{{TELEPHONE_E164}}" data-track="appel" data-track-zone="barre-haute">{{TELEPHONE}}</a>
-      <a href="/devis-serrurerie" data-track="clic_devis" data-track-zone="barre-haute">Devis gratuit</a>
-    </p>
-  </div>
-</div>
-
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="/" aria-label="{{NOM_COMMERCIAL}} — retour à l'accueil">
       <span class="brand-text">
         <strong>{{NOM_COMMERCIAL}}</strong>
-        <small>{{BASELINE}}</small>
+        <small>Dépannage · Installation · Sécurisation</small>
       </span>
     </a>
 
@@ -48,6 +36,8 @@
     </nav>
 
     <div class="header-actions">
+      <a class="header-devis" href="/devis-serrurerie" data-track="clic_devis" data-track-zone="entete">Devis gratuit</a>
+
       <a class="btn btn-call header-call" href="tel:{{TELEPHONE_E164}}" data-track="appel" data-track-zone="entete">
         <span class="header-call-libelle">Appeler</span>
         <strong class="header-call-numero">{{TELEPHONE}}</strong>

@@ -156,9 +156,21 @@ grep -qE '02 99 00 00 00' src/config.sh \
 
 # --- 9. Fichiers requis ----------------------------------------------------
 titre "9. Fichiers requis"
+# La CSS et le JS portent l'empreinte de leur contenu dans leur nom : leur
+# adresse change à chaque modification, sans quoi le cache d'un an fixé par le
+# .htaccess servirait indéfiniment l'ancienne version. On vérifie donc qu'il
+# existe exactement un fichier de chaque, pas un nom précis.
+for motif in "public/assets/css/style.*.css" "public/assets/js/site.*.js"; do
+  n=$(ls $motif 2>/dev/null | wc -l)
+  case "$n" in
+    1) ok "$(ls $motif | sed 's|public/||')" ;;
+    0) erreur "${motif#public/} : aucun fichier" ;;
+    *) erreur "${motif#public/} : $n fichiers, il ne doit en rester qu'un" ;;
+  esac
+done
+
 for f in public/robots.txt public/sitemap.xml public/.htaccess public/404.html \
          public/manifest.webmanifest public/envoi-devis.php \
-         public/assets/css/style.css public/assets/js/site.js \
          public/assets/img/favicon.svg public/assets/img/favicon.ico \
          public/assets/img/apple-touch-icon.png public/assets/img/og-default.jpg \
          public/assets/img/icone-192.png public/assets/img/icone-512.png \
@@ -248,7 +260,7 @@ while IFS= read -r g; do
   [ -n "$g" ] && { avert "${g#public/} depasse 250 Ko"; PB=1; }
 done <<< "$(find public/assets -type f -size +250k 2>/dev/null)"
 [ "$PB" -eq 0 ] && ok "Aucun fichier trop lourd"
-ok "CSS $(du -k public/assets/css/style.css | cut -f1) Ko, JS $(du -k public/assets/js/site.js | cut -f1) Ko, total site $(du -sk public | cut -f1) Ko"
+ok "CSS $(du -k public/assets/css/style.*.css | cut -f1) Ko, JS $(du -k public/assets/js/site.*.js | cut -f1) Ko, total site $(du -sk public | cut -f1) Ko"
 
 # --- Bilan -----------------------------------------------------------------
 NB_ERR=$(grep -c '^E$' "$COMPTEURS" 2>/dev/null || true)

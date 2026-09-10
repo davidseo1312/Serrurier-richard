@@ -578,17 +578,20 @@ bash scripts/build.sh
 
 ### L'en-tête
 
-`src/partials/header.html` en décrit les deux étages :
+`src/partials/header.html` décrit **une seule ligne** : un rail à trois
+colonnes — nom, navigation, actions — dont la colonne centrale est réellement
+centrée (`1fr auto 1fr`). Il reste collé en haut et se resserre au défilement.
 
-- **la barre de service** (`.barre-haute`, fond `--color-dark`) : à gauche
-  trois métiers, à droite le téléphone et le devis, séparés par des filets
-  d'un pixel plutôt que par des points médians — un filet se lit comme une
-  séparation, un caractère se lit comme du texte. Elle disparaît dès que la
-  page défile ;
-- **le rail principal** (`.site-header`) : une grille à trois colonnes —
-  nom, navigation, **appeler**. Trois blocs, pas un de plus : le bouton de
-  devis a quitté cette ligne, il vit dans la barre du dessus et dans le corps
-  des pages. Le rail reste collé en haut et se resserre au défilement.
+La barre de service sombre qui coiffait la page a été supprimée : elle
+répétait le téléphone et le devis déjà présents dans le rail, elle poussait le
+contenu vers le bas, et c'était le premier bloc que voyait le visiteur. Ce
+qu'elle portait d'utile est remonté — le téléphone et le devis à droite du
+rail, les trois métiers en baseline sous le nom, où ils ne coûtent aucune
+hauteur.
+
+Dans la colonne d'actions, **le devis est un lien, pas un bouton** : deux
+boutons côte à côte se concurrencent, et c'est l'appel qui doit gagner. Sous
+1 080 px la ligne se réduit à *nom · appeler · menu*.
 
 La **page courante est marquée** : le build pose `aria-current="page"` sur
 l'entrée de menu dont l'adresse correspond à celle de la page, et la CSS la
@@ -598,6 +601,31 @@ la fonction `marquer_page_courante()` de `scripts/build.sh`.
 Le fond du rail est **blanc plein, pas translucide** : un en-tête collant qui
 laisse transparaître la page qui défile dessous est joli une seconde et
 illisible ensuite.
+
+### Les adresses de la CSS et du JS portent une empreinte
+
+Le `.htaccess` sert la feuille de style et le script avec
+`Cache-Control: public, max-age=31536000, immutable` — un an, sans
+revalidation. C'est le bon réglage, à une condition qui n'était pas remplie :
+**que l'adresse change quand le fichier change.**
+
+Sans cela, un visiteur déjà venu gardait l'ancienne feuille pendant un an. Le
+site lui apparaissait avec le HTML du jour et la charte de l'an dernier, et ni
+un rechargement ni une republication n'y changeaient rien — `immutable`
+interdit au navigateur de redemander le fichier. C'est exactement ce qui s'est
+produit après le passage à la charte ardoise.
+
+Le build calcule donc une empreinte du contenu et la place dans le nom :
+
+```
+/assets/css/style.6726b49fb1.css
+/assets/js/site.7ef1ebde59.js
+```
+
+Les pages y renvoient par les jetons `CSS_URL` et `JS_URL`. Une couleur
+modifiée produit une nouvelle adresse, que le cache n'a jamais vue : la mise
+à jour est immédiate pour tout le monde, et le cache d'un an reste acquis
+pour les visiteurs qui n'ont rien à retélécharger. Rien à purger, jamais.
 
 Toute l'animation est en CSS. Le JavaScript ne fait qu'une chose : poser la
 classe `defile` sur `<body>` au-delà de 60 px de défilement, dans un

@@ -87,11 +87,18 @@ lire_code() {
 
 CODE_RACINE=$(lire_code "${BASE_URL}/")
 CODE_PAGE=$(lire_code "${BASE_URL}/tarifs")
-CODE_CSS=$(lire_code "${BASE_URL}/assets/css/style.css")
+# Le nom de la feuille de style porte l'empreinte de son contenu : on le lit
+# dans la page d'accueil en ligne plutôt que de le deviner. C'est aussi le
+# meilleur contrôle qui soit — si l'adresse servie n'est pas celle que le
+# build vient de produire, c'est que le serveur publie une version périmée.
+URL_CSS=$(grep -o 'href="/assets/css/style[^"]*\.css"' /tmp/reponse-diag.html 2>/dev/null \
+          | head -1 | sed 's/.*href="//; s/"$//')
+URL_CSS="${URL_CSS:-/assets/css/style.css}"
+CODE_CSS=$(lire_code "${BASE_URL}${URL_CSS}")
 
 printf '  %-3s  %s\n' "$CODE_RACINE" "${BASE_URL}/"
 printf '  %-3s  %s\n' "$CODE_PAGE"   "${BASE_URL}/tarifs"
-printf '  %-3s  %s\n' "$CODE_CSS"    "${BASE_URL}/assets/css/style.css"
+printf '  %-3s  %s\n' "$CODE_CSS"    "${BASE_URL}${URL_CSS}"
 
 titre "6. Diagnostic"
 

@@ -32,6 +32,33 @@ mkdir -p "$OUT"
 cp -r static/. "$OUT"/
 find "$OUT" -name '*.md' -delete
 
+# --- Empreinte des ressources ----------------------------------------------
+# Le .htaccess sert la CSS et le JS avec « max-age=31536000, immutable » : un
+# an, et sans revalidation. C'est le bon réglage — à une condition, qui n'était
+# pas remplie : que l'ADRESSE change quand le fichier change. Sans cela un
+# visiteur déjà venu garde l'ancienne feuille de style pendant un an, quelles
+# que soient les mises en ligne. Le site lui apparaît avec le HTML du jour et
+# la charte de l'an dernier ; ni un rechargement ni une republication n'y
+# changent rien, puisque « immutable » interdit au navigateur de redemander.
+#
+# Le nom de fichier porte donc l'empreinte de son contenu. Une couleur
+# modifiée produit une nouvelle adresse, que le cache n'a jamais vue.
+empreinte() {
+  # 10 caractères suffisent : la collision est théorique, le nom reste lisible.
+  if command -v sha256sum > /dev/null; then
+    sha256sum "$1" | cut -c1-10
+  else
+    shasum -a 256 "$1" | cut -c1-10
+  fi
+}
+
+CSS_HASH="$(empreinte "$OUT/assets/css/style.css")"
+JS_HASH="$(empreinte "$OUT/assets/js/site.js")"
+mv "$OUT/assets/css/style.css" "$OUT/assets/css/style.${CSS_HASH}.css"
+mv "$OUT/assets/js/site.js"    "$OUT/assets/js/site.${JS_HASH}.js"
+export CSS_URL="/assets/css/style.${CSS_HASH}.css"
+export JS_URL="/assets/js/site.${JS_HASH}.js"
+
 # Remplace {{VARIABLE}} par la valeur de l'environnement.
 # Deux passes : un titre de page peut lui-même contenir {{NOM_COMMERCIAL}}.
 # Un token inconnu est laissé intact pour être repéré par scripts/check-seo.sh.
@@ -688,8 +715,8 @@ for requis in \
   "$OUT/robots.txt" \
   "$OUT/sitemap.xml" \
   "$OUT/manifest.webmanifest" \
-  "$OUT/assets/css/style.css" \
-  "$OUT/assets/js/site.js" \
+  "$OUT${CSS_URL}" \
+  "$OUT${JS_URL}" \
   "$OUT/assets/img/favicon.svg" \
   "$OUT/assets/img/og-default.jpg"; do
   [ -f "$requis" ] || manque "fichier requis absent : ${requis#$OUT/}"
