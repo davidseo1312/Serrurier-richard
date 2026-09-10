@@ -154,42 +154,51 @@ verifier(petites.length === 0, `toutes les cibles font au moins 24 px${petites.l
 const ctxCarte = await navigateur.newContext({ viewport: { width: 1280, height: 900 }, locale: 'fr-FR' });
 const bureauCarte = await ctxCarte.newPage();
 
-titre('5. Galerie');
+titre('5. Une image, un seul emplacement');
 
-await mobile.goto(BASE + '/');
-const vignettes = mobile.locator('.galerie figure');
-verifier((await vignettes.count()) >= 6, `la galerie présente ${await vignettes.count()} visuels`);
-verifier(
-  (await mobile.locator('.galerie img[alt]').count()) === (await vignettes.count()),
-  'chaque visuel de la galerie porte un texte alternatif'
-);
-await vignettes.first().click();
-await mobile.waitForTimeout(300);
-verifier(await mobile.locator('.visionneuse').isVisible(), 'la visionneuse s’ouvre au clic');
-await mobile.keyboard.press('Escape');
-await mobile.waitForTimeout(250);
-verifier((await mobile.locator('.visionneuse').count()) === 0, 'la touche Échap la referme');
+/* La galerie a été retirée de l'accueil : elle montrait, réunies, les mêmes
+   photographies que les pages de service. La règle qui la remplace est
+   vérifiable, elle : sur tout le site, un fichier image ne peut être affiché
+   qu'à UN seul endroit, et une page n'en affiche jamais deux fois le même.
+   C'est ce que ce bloc contrôle, page après page. */
+const cheminsSitemap = (await (await fetch(BASE + '/sitemap.xml')).text())
+  .match(/<loc>([^<]+)<\/loc>/g).map(m => m.replace(/<\/?loc>/g, ''))
+  .map(u => new URL(u).pathname);
 
-titre('5 bis. Filtres de la galerie');
+const emplacements = new Map();          // fichier -> [pages]
+let pagesAvecDoublonInterne = [];
+for (const chemin of cheminsSitemap) {
+  await mobile.goto(BASE + chemin);
+  const srcs = await mobile.evaluate(() =>
+    [...document.querySelectorAll('img')]
+      .map(i => i.getAttribute('src'))
+      .filter(s => s && s.includes('/assets/images/')));
+  if (new Set(srcs).size !== srcs.length) pagesAvecDoublonInterne.push(chemin);
+  for (const src of new Set(srcs)) {
+    if (!emplacements.has(src)) emplacements.set(src, []);
+    emplacements.get(src).push(chemin);
+  }
+}
+const repetes = [...emplacements].filter(([, pages]) => pages.length > 1);
+verifier(
+  pagesAvecDoublonInterne.length === 0,
+  `aucune page n'affiche deux fois le même visuel${pagesAvecDoublonInterne.length ? ' — ' + pagesAvecDoublonInterne.slice(0, 3).join(', ') : ''}`
+);
+verifier(
+  repetes.length === 0,
+  `aucun visuel n'est repris d'une page à l'autre${repetes.length ? ' — ' + repetes.slice(0, 3).map(([s, p]) => s.split('/').pop() + ' sur ' + p.join(' et ')).join(' | ') : ''}`
+);
+verifier(
+  emplacements.size >= 15,
+  `${emplacements.size} visuels distincts affichés sur le site`
+);
 
-await mobile.goto(BASE + '/');
-const boutonsFiltre = mobile.locator('.galerie-filtres .filtre');
-verifier((await boutonsFiltre.count()) >= 2, `${await boutonsFiltre.count()} familles proposées`);
-const avantFiltre = await mobile.locator('.galerie figure:visible').count();
-await mobile.locator('.galerie-filtres .filtre').nth(1).click();
-await mobile.waitForTimeout(250);
-const apresFiltre = await mobile.locator('.galerie figure:visible').count();
-verifier(apresFiltre > 0 && apresFiltre < avantFiltre, 'un filtre réduit la galerie sans la vider');
-verifier(
-  (await mobile.locator('.galerie-filtres .filtre[aria-pressed="true"]').count()) === 1,
-  'un seul bouton est marqué actif pour les lecteurs d’écran'
-);
-await mobile.locator('.galerie-filtres .filtre[data-filtre="tout"]').click();
-await mobile.waitForTimeout(250);
-verifier(
-  (await mobile.locator('.galerie figure:visible').count()) === avantFiltre,
-  '« Tout voir » restaure la galerie complète'
-);
+titre('5 bis. Repère de la page courante');
+
+await mobile.goto(BASE + '/tarifs');
+const courante = mobile.locator('.nav a[aria-current="page"]');
+verifier((await courante.count()) === 1, 'une seule entrée de menu est marquée « page courante »');
+verifier((await courante.getAttribute('href')) === '/tarifs', 'et c\'est bien celle de la page affichée');
 
 titre('5 ter. Carte des zones d’intervention');
 

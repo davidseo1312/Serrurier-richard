@@ -386,6 +386,50 @@ fi
 # La même passe désigne l'image principale de la page — la première d'un
 # grand conteneur — et lui retire le chargement différé : c'est elle que le
 # navigateur doit demander en premier, pas en dernier.
+# --- Intégrité de la feuille de style --------------------------------------
+# Une accolade orpheline dans un fichier CSS n'est pas une erreur bruyante :
+# le navigateur abandonne silencieusement TOUTES les règles qui suivent. Une
+# moitié de site perd sa mise en forme sans qu'aucun outil ne proteste, et le
+# défaut ne se voit qu'à l'œil, page par page.
+#
+# Ce contrôle compte les accolades hors commentaires. Il ne remplace pas un
+# analyseur CSS, mais il attrape la faute qui coûte le plus cher.
+verifier_css() {
+  local fichier="$1"
+  local bilan
+  bilan="$(perl -0777 -ne '
+    s{/\*.*?\*/}{}gs;
+    my $o = () = /\{/g;
+    my $f = () = /\}/g;
+    print "$o $f";
+  ' "$fichier")"
+  set -- $bilan
+  if [ "$1" != "$2" ]; then
+    echo "  ! $fichier : $1 accolade(s) ouvrante(s) pour $2 fermante(s)."
+    echo "    Le navigateur ignorerait toutes les règles après le déséquilibre."
+    return 1
+  fi
+  return 0
+}
+
+# --- Page courante dans la navigation --------------------------------------
+# Un menu de sept entrées sans repère visuel oblige le visiteur à relire le
+# titre de la page pour savoir où il est. La marque est posée ici, sur le
+# lien dont l'adresse correspond exactement à celle de la page : le HTML
+# porte aria-current="page", la CSS s'en sert pour le souligner. Aucune page
+# n'a donc à connaître sa propre entrée de menu.
+marquer_page_courante() {
+  printf '%s' "$1" | PAGE_PATH="$2" perl -0777 -pe '
+    my $ici = $ENV{PAGE_PATH};
+    # « /blog/ » et « / » se terminent par une barre ; les autres non.
+    s{(<nav id="nav-principal".*?</nav>)}{
+      my $nav = $1;
+      $nav =~ s/<a href="\Q$ici\E"/<a href="$ici" aria-current="page"/;
+      $nav;
+    }gse;
+  '
+}
+
 ajuster_visuels() {
   printf '%s' "$1" | perl -0777 -pe '
     my %profil = (
@@ -578,7 +622,7 @@ while IFS= read -r src_file; do
     fi
     [ -n "$FAQ_LD" ] && printf '%s\n' "$FAQ_LD"
     cat src/partials/head-close.html
-    cat src/partials/header.html
+    marquer_page_courante "$(cat src/partials/header.html)" "$PAGE_PATH"
     printf '%s\n' "$CORPS"
     cat src/partials/footer.html
   } | substituer | nettoyer_html > "$dest"
@@ -680,6 +724,12 @@ echo
 
 if [ "$MANQUES" -gt 0 ]; then
   echo "BUILD FAILED — $MANQUES problème(s). Le dossier $OUT/ n'est pas déployable."
+  exit 1
+fi
+
+if ! verifier_css static/assets/css/style.css; then
+  echo
+  echo "BUILD ÉCHEC : feuille de style invalide."
   exit 1
 fi
 

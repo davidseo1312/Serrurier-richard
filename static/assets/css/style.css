@@ -63,47 +63,42 @@
    ------------------------------------------------------------------------ */
 
 :root {
-  /* Bleu — couleur dominante. Le site est clair de bout en bout : ces bleus
-     servent d'accents et de surfaces, jamais de fond général.
-
-     ⚠ TROIS NIVEAUX, ET CE N'EST PAS DÉCORATIF. Le contraste sur blanc
-     décide de l'usage de chacun :
-       --color-primary       #0EA5E9  2,63:1  → traits, icônes, bordures
-       --color-primary-dark  #0284C7  3,92:1  → gros titres, contours de
-                                                composant (seuil 3:1)
-       --color-primary-deep  #0369A1  5,60:1  → TEXTE, liens, fonds de bouton
-     Employer #0284C7 pour du texte de 16 px descend sous les 4,5:1 exigés
-     par WCAG AA : le script de contraste des tests le refuse. */
-  --color-primary:        #0EA5E9;
-  --color-primary-light:  #38BDF8;
-  --color-primary-lighter:#7DD3FC;
-  --color-primary-dark:   #0284C7;
-  --color-primary-deep:   #0369A1;
-  /* Sur un aplat bleu clair (badges, filtres, encadrés), même #0369A1 ne donne
-     que 4,15:1 : il faut descendre encore d'un cran. */
-  --color-primary-sur-clair: #075985;
-  --color-primary-soft:   #E0F2FE;
-  --color-primary-tint:   #F0F9FF;
+  /* ARDOISE — la couleur dominante du site.
+     Cinq niveaux, et c'est le contraste qui décide de l'usage de chacun.
+     Les deux plus clairs ne portent JAMAIS de texte : ils tracent, ils
+     soulignent, ils encadrent. */
+  --color-primary:        #475569;   /* texte secondaire, icônes  (7,07:1) */
+  --color-primary-light:  #64748B;   /* traits marqués            (4,76:1) */
+  --color-primary-lighter:#94A3B8;   /* traits fins — jamais de texte      */
+  --color-primary-dark:   #334155;   /* titres, contours         (10,41:1) */
+  --color-primary-deep:   #1E293B;   /* TEXTE, liens, fonds de bouton (14,6:1) */
+  /* Sur un aplat ardoise très clair, on reste sur l'encre la plus dense :
+     elle y tient 12,4:1, il n'y a donc aucune raison de descendre. */
+  --color-primary-sur-clair: #1E293B;
+  --color-primary-soft:   #E9EDF2;   /* aplat de section, pastilles */
+  --color-primary-tint:   #F5F7F9;   /* voile le plus léger */
 
   /* Encre — la couleur du texte. Elle ne sert pas de fond. */
   --color-dark:           #0F172A;
   --color-dark-2:         #1E293B;
   --color-dark-3:         #334155;
 
-  /* Orange — urgence uniquement, employé avec parcimonie */
+  /* Orange — urgence uniquement, employé avec parcimonie.
+     C'est la SEULE couleur du site : elle ne vaut que parce que rien
+     d'autre ne vient la concurrencer. */
   --color-secondary:      #F97316;
   --color-secondary-dark: #C2410C;
   --color-secondary-soft: #FFF7ED;
 
-  /* Neutres */
+  /* Neutres — blanc cassé, jamais de gris froid en aplat */
   --color-white:          #FFFFFF;
-  --color-background:     #F8FAFC;
-  --color-background-2:   #F1F5F9;
-  --color-text:           #334155;   /* 10,4:1 sur blanc */
-  --color-muted:          #64748B;   /* 4,76:1 sur blanc */
+  --color-background:     #FAFAF9;   /* blanc cassé, surfaces alternées */
+  --color-background-2:   #F4F4F2;
+  --color-text:           #334155;   /* 10,41:1 sur blanc */
+  --color-muted:          #64748B;   /* 4,76:1 sur blanc — blanc PUR seulement */
   --color-muted-light:    #94A3B8;
-  --color-border:         #E2E8F0;
-  --color-border-strong:  #CBD5E1;
+  --color-border:         #E4E4E1;
+  --color-border-strong:  #CBCBC6;
 
   /* Sémantique */
   --color-success:        #059669;
@@ -147,7 +142,7 @@
   --shadow:    0 4px 16px rgba(15,23,42,.07), 0 1px 3px rgba(15,23,42,.05);
   --shadow-lg: 0 12px 32px rgba(15,23,42,.10), 0 4px 8px rgba(15,23,42,.04);
   --shadow-xl: 0 24px 56px rgba(15,23,42,.14), 0 8px 16px rgba(15,23,42,.05);
-  --shadow-primary: 0 8px 24px rgba(2,132,199,.28);
+  --shadow-primary: 0 8px 24px rgba(30,41,59,.22);
   --shadow-secondary: 0 8px 24px rgba(249,115,22,.30);
 
   --transition: 180ms cubic-bezier(.4,0,.2,1);
@@ -286,7 +281,7 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
   background: var(--color-primary-deep); color: #fff;
   box-shadow: var(--shadow-primary);
 }
-.btn-devis:hover { background: #075985; color: #fff; }
+.btn-devis:hover { background: var(--color-dark); color: #fff; }
 
 .btn-urgence { background: var(--color-danger); color: #fff; }
 .btn-urgence:hover { background: #B91C1C; color: #fff; }
@@ -326,30 +321,21 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 }
 .badge-urgence { background: var(--color-secondary-soft); color: var(--color-secondary-dark); }
 
-/* Badge du héros. L'orange est réservé à l'urgence : ici il annonce une
-   ligne ouverte, pas une décoration. */
+/* Badge du héros : une étiquette de contexte, pas un bouton. Elle est donc
+   neutre — l'orange du site ne sert qu'à une chose, appeler. Le point orange
+   clignotant qui l'ouvrait a été retiré : il suggérait un état « en ligne »
+   que rien ne mesure. */
 .urgence-badge {
   display: inline-flex; align-items: center; gap: var(--space-2);
-  background: var(--color-secondary-soft);
-  color: #9A3412;                       /* 6,44:1 sur #FFF7ED */
-  border: 1px solid #FDBA74;
+  background: var(--color-white);
+  color: var(--color-dark);             /* 16,1:1 sur blanc */
+  border: 1px solid var(--color-border-strong);
   padding: 0.4375rem 1rem;
   border-radius: var(--radius-full);
   font-family: var(--font-title);
   font-size: var(--text-xs); font-weight: 700;
   text-transform: uppercase; letter-spacing: .08em;
   margin-bottom: var(--space-5);
-}
-.pastille {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--color-secondary);
-  box-shadow: 0 0 0 0 rgba(249,115,22,.6);
-  animation: pulsation 2.4s infinite;
-}
-@keyframes pulsation {
-  0%   { box-shadow: 0 0 0 0 rgba(249,115,22,.55); }
-  70%  { box-shadow: 0 0 0 9px rgba(249,115,22,0); }
-  100% { box-shadow: 0 0 0 0 rgba(249,115,22,0); }
 }
 
 /* --- 6. En-tête et navigation ---------------------------------------------
@@ -364,69 +350,75 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
    ou l'appel ne disparaissent jamais.
    ------------------------------------------------------------------------ */
 
+/* --- Étage 1 : la barre de service ---------------------------------------
+   Trois mots à gauche, deux liens à droite, séparés par des filets d'un
+   pixel plutôt que par des caractères de ponctuation : un filet se lit
+   comme une séparation, un point médian se lit comme du texte.
+   ------------------------------------------------------------------------ */
 .barre-haute {
   background: var(--color-dark);
   color: #CBD5E1;
   font-size: var(--text-xs);
   /* La bascule se fait sur la hauteur, pas sur display : une transition sur
      « display » ne s'anime pas. */
-  max-height: 44px;
+  max-height: 42px;
   overflow: hidden;
   transition: max-height 260ms ease, opacity 200ms ease;
 }
 .barre-haute-inner {
   display: flex; align-items: center; justify-content: space-between;
   gap: var(--space-5);
-  min-height: 44px;
+  min-height: 42px;
 }
 .barre-haute-metier {
-  display: flex; flex-wrap: wrap; gap: var(--space-4);
+  display: flex; flex-wrap: wrap;
   list-style: none; margin: 0; padding: 0;
+  letter-spacing: .06em; text-transform: uppercase;
+  font-size: 0.6875rem; font-weight: 600;
+  color: #CBD5E1;
 }
-.barre-haute-metier li {
-  margin: 0; position: relative;
-  letter-spacing: .04em;
-}
-/* Les séparateurs sont posés SUR le fond sombre : --color-dark-3 y tombait à
-   1,7:1, c'est-à-dire invisible. #94A3B8 tient 5,5:1 tout en restant discret. */
-.barre-haute-metier li + li::before {
-  content: "·"; position: absolute; left: calc(var(--space-4) / -2 - 2px);
-  color: #94A3B8;
-}
+.barre-haute-metier li { margin: 0; padding-inline: var(--space-4); }
+.barre-haute-metier li:first-child { padding-left: 0; }
+.barre-haute-metier li + li { border-left: 1px solid rgba(203, 213, 225, .28); }
+
 .barre-haute-contact {
-  margin: 0; display: flex; align-items: center; gap: var(--space-2);
+  margin: 0; display: flex; align-items: center;
   white-space: nowrap;
 }
 .barre-haute-contact a {
-  color: #E2E8F0; text-decoration: none;
-  display: inline-block; padding: var(--space-2) 0; min-height: 24px;
+  color: #E8EAED; text-decoration: none;
+  display: inline-flex; align-items: center;
+  min-height: 26px; padding-inline: var(--space-4);
 }
+.barre-haute-contact a:first-child { font-weight: 700; }
+.barre-haute-contact a:last-child { padding-right: 0; }
+.barre-haute-contact a + a { border-left: 1px solid rgba(203, 213, 225, .28); }
 .barre-haute-contact a:hover { color: var(--color-white); text-decoration: underline; }
-.barre-haute-contact span { color: #94A3B8; }
 
 /* Repliée au défilement. La classe est posée par static/assets/js/site.js. */
 body.defile .barre-haute { max-height: 0; opacity: 0; }
 
 @media (max-width: 900px) {
   /* Sur mobile la barre supérieure ferait doublon avec la barre d'appel
-     fixe du bas : elle ne garde que le métier, sur une seule ligne. */
+     fixe du bas : elle ne garde que les métiers, sur une seule ligne. */
   .barre-haute-contact { display: none; }
-  .barre-haute-metier { gap: var(--space-3); font-size: 0.75rem; }
-  .barre-haute-metier li + li::before { left: calc(var(--space-3) / -2 - 2px); }
-}
-@media (max-width: 560px) {
-  .barre-haute-metier li:nth-child(n + 4) { display: none; }
+  .barre-haute-metier { padding-block: var(--space-2); }
+  .barre-haute-metier li { padding-inline: var(--space-3); }
 }
 
+/* --- Étage 2 : le rail principal -----------------------------------------
+   Fond blanc plein, et non translucide : un en-tête collant qui laisse
+   transparaître la page qui défile dessous est joli une seconde et illisible
+   ensuite. La lisibilité prime sur l'effet.
+   ------------------------------------------------------------------------ */
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(255, 255, 255, .92);
-  backdrop-filter: saturate(180%) blur(14px);
+  background: var(--color-white);
   border-bottom: 1px solid var(--color-border);
   color: var(--color-dark);
   transition: box-shadow 220ms ease;
 }
-body.defile .site-header { box-shadow: 0 6px 28px rgba(15, 23, 42, .08); }
+body.defile .site-header { box-shadow: 0 4px 20px rgba(15, 23, 42, .07); }
 
 .header-inner {
   display: grid;
@@ -443,45 +435,60 @@ body.defile .header-inner { padding-block: var(--space-3); }
   color: var(--color-dark); text-decoration: none;
   min-height: 44px; justify-self: start;
 }
-.brand-text { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+.brand-text { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
 .brand-text strong {
-  font-family: var(--font-title); font-size: 1.1875rem; font-weight: 700;
-  color: var(--color-dark); letter-spacing: -0.025em; white-space: nowrap;
+  font-family: var(--font-title); font-size: 1.25rem; font-weight: 700;
+  color: var(--color-dark); letter-spacing: -0.03em; white-space: nowrap;
 }
 .brand-text small {
-  font-size: var(--text-xs); color: var(--color-muted);
-  white-space: nowrap; margin-top: 1px;
+  font-size: 0.75rem; color: var(--color-muted);
+  white-space: nowrap; margin-top: 2px;
   transition: max-height 200ms ease, opacity 200ms ease;
   max-height: 1.4em;
 }
 body.defile .brand-text small { max-height: 0; opacity: 0; overflow: hidden; }
 
-/* --- Navigation, colonne centrale --------------------------------------- */
+/* --- Navigation, colonne centrale ---------------------------------------
+   Le repère de la page courante et celui du survol sont le MÊME trait, sous
+   le mot. Un aplat de couleur derrière sept entrées faisait sept blocs ;
+   un trait sous une seule en fait une.
+   ------------------------------------------------------------------------ */
 
 .nav { min-width: 0; justify-self: center; }
-.nav ul { display: flex; gap: var(--space-1); list-style: none; margin: 0; padding: 0; }
+.nav ul { display: flex; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
 .nav li { margin: 0; }
 .nav a {
   display: flex; align-items: center;
+  position: relative;
   min-height: 40px;
   padding: 0 var(--space-3);
   color: var(--color-dark-3); text-decoration: none;
   font-family: var(--font-title);
   font-size: var(--text-sm); font-weight: 600;
-  border-radius: var(--radius-sm); white-space: nowrap;
-  transition: color var(--transition), background-color var(--transition);
+  white-space: nowrap;
+  transition: color var(--transition);
 }
-.nav a:hover { color: var(--color-primary-deep); background: var(--color-primary-tint); }
+.nav a::after {
+  content: ""; position: absolute;
+  left: var(--space-3); right: var(--space-3); bottom: 4px;
+  height: 2px; border-radius: 2px;
+  background: var(--color-dark);
+  transform: scaleX(0); transform-origin: center;
+  transition: transform var(--transition);
+}
+.nav a:hover { color: var(--color-dark); }
+.nav a:hover::after { transform: scaleX(1); }
+.nav a[aria-current="page"] { color: var(--color-dark); }
+.nav a[aria-current="page"]::after {
+  transform: scaleX(1);
+  background: var(--color-secondary);
+}
 
 /* --- Actions, colonne de droite ----------------------------------------- */
 
 .header-actions {
   display: flex; align-items: center; gap: var(--space-3);
   justify-self: end;
-}
-.header-devis {
-  padding: 0 var(--space-4); min-height: 46px;
-  font-size: var(--text-sm); white-space: nowrap;
 }
 .header-call {
   flex-direction: column; gap: 0; line-height: 1.15;
@@ -494,7 +501,7 @@ body.defile .brand-text small { max-height: 0; opacity: 0; overflow: hidden; }
 .nav-toggle {
   display: none; align-items: center; justify-content: center;
   min-width: 46px; min-height: 46px;
-  background: var(--color-background-2); border: 1px solid var(--color-border-strong);
+  background: var(--color-white); border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-sm); padding: 0; cursor: pointer;
 }
 .nav-toggle-bars, .nav-toggle-bars::before, .nav-toggle-bars::after {
@@ -517,7 +524,6 @@ body.defile .brand-text small { max-height: 0; opacity: 0; overflow: hidden; }
 @media (max-width: 1080px) {
   .header-inner { grid-template-columns: auto 1fr; gap: var(--space-4); }
   .nav-toggle { display: flex; }
-  .header-devis { display: none; }
 
   .nav {
     position: absolute; left: 0; right: 0; top: 100%;
@@ -537,17 +543,21 @@ body.defile .brand-text small { max-height: 0; opacity: 0; overflow: hidden; }
   .nav li + li { border-top: 1px solid var(--color-border); }
   .nav a {
     min-height: 54px; padding: 0 var(--space-2);
-    font-size: var(--text-lg); border-radius: 0;
+    font-size: var(--text-lg);
   }
-  /* Le devis rejoint le panneau, puisqu'il quitte la barre d'actions. */
-  .nav ul::after {
-    content: ""; display: block;
+  /* Dans le panneau, le trait passe à gauche du mot : sous le mot, il se
+     confondrait avec la séparation entre deux entrées. */
+  .nav a::after {
+    left: calc(var(--space-2) * -1); right: auto; top: 12px; bottom: 12px;
+    width: 3px; height: auto;
+    transform: scaleY(0);
   }
+  .nav a:hover::after, .nav a[aria-current="page"]::after { transform: scaleY(1); }
 }
 
 @media (max-width: 560px) {
   .header-inner { padding-block: var(--space-3); gap: var(--space-3); }
-  .brand-text strong { font-size: 1.0625rem; }
+  .brand-text strong { font-size: 1.125rem; }
   .brand-text small { display: none; }
   .header-call { padding: 0 var(--space-4); }
 }
@@ -555,7 +565,7 @@ body.defile .brand-text small { max-height: 0; opacity: 0; overflow: hidden; }
   .header-call { flex-direction: row; gap: var(--space-2); padding: 0 var(--space-3); }
   .header-call-numero { display: none; }
   .header-call-libelle { font-size: var(--text-sm); opacity: 1; }
-  .brand-text strong { font-size: 1rem; }
+  .brand-text strong { font-size: 1.0625rem; }
   .nav-toggle { min-width: 42px; min-height: 42px; }
 }
 @media (max-width: 340px) {
@@ -566,10 +576,12 @@ body.defile .brand-text small { max-height: 0; opacity: 0; overflow: hidden; }
 
 .hero {
   position: relative;
+  /* Un seul dégradé, très léger : le fond doit se remarquer par sa clarté,
+     pas par sa couleur. Le voile orange qui était ici n'existait que pour
+     équilibrer le bleu ; sans bleu, il ne restait qu'une tache. */
   background:
-    radial-gradient(1100px 520px at 78% 10%, var(--color-primary-soft), transparent 64%),
-    radial-gradient(760px 420px at 6% 92%, rgba(249,115,22,.10), transparent 60%),
-    linear-gradient(168deg, var(--color-primary-tint) 0%, #FFFFFF 55%, var(--color-background) 100%);
+    radial-gradient(1100px 520px at 78% 6%, var(--color-primary-soft), transparent 62%),
+    linear-gradient(168deg, var(--color-primary-tint) 0%, var(--color-white) 52%, var(--color-background) 100%);
   color: var(--color-text);
   padding: var(--space-9) 0 var(--space-10);
   overflow: hidden;
@@ -578,8 +590,8 @@ body.defile .brand-text small { max-height: 0; opacity: 0; overflow: hidden; }
 .hero::before {
   content: ""; position: absolute; inset: 0;
   background-image:
-    linear-gradient(rgba(2,132,199,.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(2,132,199,.06) 1px, transparent 1px);
+    linear-gradient(rgba(30,41,59,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30,41,59,.05) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(circle at 50% 0%, #000 30%, transparent 72%);
   pointer-events: none;
@@ -761,6 +773,10 @@ section.sombre {
   display: flex; flex-direction: column;
   padding: 0; overflow: hidden;
 }
+/* Sans image, la carte redevient une carte de texte : c'est le corps qui
+   porte les marges, et la pastille remplace le bandeau posé sur la photo. */
+.carte-service .carte-corps { padding: var(--space-6); }
+.carte-service .badge { align-self: flex-start; margin-bottom: var(--space-4); }
 .carte-service:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
@@ -798,6 +814,20 @@ section.sombre {
   display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center;
 }
 .carte-service .carte-pied .btn { padding: 0.5rem 1rem; min-height: 40px; font-size: var(--text-sm); }
+/* Le bouton d'appel des cartes passe en contour. Six pastilles orange pleines
+   dans un même écran ne se lisent plus comme un accent mais comme un motif :
+   l'aplat reste réservé aux appels principaux — en-tête, héros, bandeau
+   d'urgence, barre fixe du mobile. Le geste, lui, est identique. */
+.carte-service .carte-pied .btn-call {
+  background: var(--color-white);
+  color: var(--color-secondary-dark);      /* 5,15:1 sur blanc */
+  border: 1.5px solid var(--color-secondary);
+  box-shadow: none;
+}
+.carte-service .carte-pied .btn-call:hover {
+  background: var(--color-secondary);
+  color: var(--color-dark);
+}
 
 /* --- 10. Réassurance, chiffres, étapes ------------------------------------ */
 
@@ -894,6 +924,17 @@ section.sombre .etapes li::before { background: var(--color-primary-soft); color
 
 /* --- 11. Galerie et médias ------------------------------------------------ */
 
+/* --- Galerie — en sommeil ------------------------------------------------
+   La section « Nos interventions » a quitté l'accueil : elle réunissait, sur
+   un même écran, les photographies déjà présentes sur les pages de service.
+   C'était exactement la répétition à supprimer.
+
+   Le mécanisme reste entier — src/galerie.conf, les deux jetons GALERIE et
+   GALERIE_FILTRES, les filtres, la visionneuse. Il suffit de remettre la
+   section dans src/pages/index.html pour la rallumer. À faire le jour où des
+   photographies existeront qui n'ont pas déjà leur place ailleurs : sans
+   quoi la galerie recréerait le doublon qu'on vient de retirer.
+   ------------------------------------------------------------------------ */
 .galerie {
   display: grid; gap: var(--space-4);
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
@@ -1126,7 +1167,7 @@ td.prix { font-family: var(--font-title); font-weight: 700; color: var(--color-p
 .champ textarea { min-height: 150px; resize: vertical; line-height: 1.65; }
 .champ input:focus, .champ select:focus, .champ textarea:focus {
   outline: none; border-color: var(--color-primary);
-  box-shadow: 0 0 0 4px rgba(2,132,199,.14);
+  box-shadow: 0 0 0 4px rgba(30,41,59,.13);
 }
 .champ input[aria-invalid="true"], .champ select[aria-invalid="true"], .champ textarea[aria-invalid="true"] {
   border-color: var(--color-danger); background: var(--color-danger-soft);
@@ -1444,12 +1485,12 @@ label:has(> input[type="checkbox"]) {
    se confondre, et l'ensemble reste une seule couleur, pas un arc-en-ciel.
    Le numéro de teinte est posé par scripts/generer-carte.py ; la CSS ne
    connaît donc aucun département en particulier. */
-.carte-svg .zone[data-teinte="1"] path { fill: #BAE6FD; }
-.carte-svg .zone[data-teinte="2"] path { fill: #E0F2FE; }
-.carte-svg .zone[data-teinte="3"] path { fill: #A5DBF7; }
-.carte-svg .zone[data-teinte="4"] path { fill: #CFE9FB; }
-.carte-svg .zone[data-teinte="5"] path { fill: #93CFF2; }
-.carte-svg .zone[data-teinte="6"] path { fill: #F0F9FF; }
+.carte-svg .zone[data-teinte="1"] path { fill: #B6BFCC; }
+.carte-svg .zone[data-teinte="2"] path { fill: #E4E9EF; }
+.carte-svg .zone[data-teinte="3"] path { fill: #A0ABBB; }
+.carte-svg .zone[data-teinte="4"] path { fill: #D2D9E2; }
+.carte-svg .zone[data-teinte="5"] path { fill: #8B98AA; }
+.carte-svg .zone[data-teinte="6"] path { fill: #F1F3F6; }
 
 .carte-svg .zone path {
   stroke: var(--color-white);
@@ -1657,7 +1698,7 @@ label:has(> input[type="checkbox"]) {
   font-size: var(--text-lg);
 }
 section.sombre .etapes.frise li::after {
-  background: linear-gradient(90deg, #BAE6FD, transparent);
+  background: linear-gradient(90deg, #CBD5E1, transparent);
 }
 
 @media (max-width: 760px) {
@@ -1673,7 +1714,7 @@ section.sombre .etapes.frise li::after {
   .etapes.frise li { padding-left: calc(44px + var(--space-4)); padding-top: 0; min-height: 44px; }
   .etapes.frise li::before { top: 0; }
   section.sombre .etapes.frise li::after {
-    background: linear-gradient(180deg, #BAE6FD, transparent);
+    background: linear-gradient(180deg, #CBD5E1, transparent);
   }
 }
 
@@ -1777,11 +1818,33 @@ section.sombre .etapes.frise li::after {
   padding: var(--space-8) 0 var(--space-9);
   overflow: hidden;
 }
+/* La photo a quitté ce héros : elle vivait déjà sur sa page de service, et la
+   répéter ici était précisément le défaut à corriger. Sa colonne accueille
+   maintenant la liste des communes — une information que le visiteur cherche
+   vraiment, et qui répond à la seule question qu'il se pose en arrivant :
+   « est-ce qu'ils viennent chez moi ? ». */
 .hero-local-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: var(--space-8);
-  align-items: center;
+  align-items: start;
+}
+.hero-local-communes {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+.communes-titre {
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-title);
+  font-size: var(--text-xs); font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--color-dark-3);
+}
+@media (max-width: 900px) {
+  .hero-local-grid { grid-template-columns: 1fr; gap: var(--space-6); }
 }
 .hero-local h1 { margin-bottom: var(--space-4); }
 .hero-local .chapeau {
@@ -1869,10 +1932,7 @@ section.sombre .etapes.frise li::after {
 
 .interventions { display: grid; gap: var(--space-6); }
 .intervention {
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: var(--space-6);
-  align-items: center;
+  display: block;
   background: var(--color-white);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);

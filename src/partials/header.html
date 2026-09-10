@@ -1,27 +1,27 @@
 <!-- ---------------------------------------------------------------------
      En-tête du site, en deux étages.
 
-     La barre supérieure porte ce que l'entreprise fait et comment la
-     joindre : elle est fine, discrète, et disparaît au défilement pour
-     laisser toute la hauteur au header principal.
+     Étage 1 — la barre de service : ce que l'entreprise fait, et comment la
+     joindre. Fine, discrète, elle disparaît dès que la page défile.
 
-     Le header principal est un rail à trois colonnes — marque, navigation,
-     action — dont la colonne centrale est réellement centrée, quelle que
-     soit la largeur de la marque ou du bouton. C'est ce qui donne
-     l'impression d'équilibre.
+     Étage 2 — le rail principal : NOM | NAVIGATION | APPELER. Trois blocs,
+     pas un de plus. Le devis vit dans la barre du dessus et dans le corps
+     des pages ; le répéter ici encombrait la seule ligne que le visiteur
+     regarde vraiment.
+
+     La page courante est marquée par le build (aria-current="page") : le
+     visiteur voit où il se trouve sans avoir à le deviner.
      --------------------------------------------------------------------- -->
 <div class="barre-haute">
   <div class="wrap barre-haute-inner">
     <ul class="barre-haute-metier">
-      <li>Intervention</li>
       <li>Dépannage</li>
       <li>Installation</li>
       <li>Sécurisation</li>
     </ul>
     <p class="barre-haute-contact">
       <a href="tel:{{TELEPHONE_E164}}" data-track="appel" data-track-zone="barre-haute">{{TELEPHONE}}</a>
-      <span aria-hidden="true">·</span>
-      <a href="/devis-serrurerie" data-track="clic_devis" data-track-zone="barre-haute">Demander un devis</a>
+      <a href="/devis-serrurerie" data-track="clic_devis" data-track-zone="barre-haute">Devis gratuit</a>
     </p>
   </div>
 </div>
@@ -48,10 +48,6 @@
     </nav>
 
     <div class="header-actions">
-      <a class="btn btn-ghost header-devis" href="/devis-serrurerie" data-track="clic_devis" data-track-zone="entete">
-        Devis gratuit
-      </a>
-
       <a class="btn btn-call header-call" href="tel:{{TELEPHONE_E164}}" data-track="appel" data-track-zone="entete">
         <span class="header-call-libelle">Appeler</span>
         <strong class="header-call-numero">{{TELEPHONE}}</strong>

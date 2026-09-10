@@ -274,28 +274,36 @@ quelque chose de vrai.
 
 ---
 
-## 11 bis. Une photo, un emplacement principal
+## 11 bis. Une image, un seul emplacement
 
 Le défaut le plus visible d'un site de dépannage est la même photographie
-répétée de page en page. Trois règles l'évitent, et deux d'entre elles sont
-vérifiées automatiquement.
+répétée de page en page. La règle qui l'élimine est absolue :
 
-1. **Aucune page n'affiche deux fois le même fichier.**
-   `scripts/audit-images.py` échoue si elle le fait — c'est une erreur
-   bloquante, pas un avertissement. L'audit compte les `src` réellement
-   présents dans le HTML produit, pas les intentions du code source.
+> **Un fichier image n'est affiché qu'à un seul endroit du site.**
+> Une page affiche au plus une image, celle de son sujet.
 
-2. **Chaque photo a un emplacement principal.** Une page de service montre la
-   photo de son service ; une landing page de zone reçoit une photo qui lui est
-   propre, jamais les trois mêmes que l'accueil. Les six pages de zone ont donc
-   six photos d'ouverture différentes, et les pages de ville n'ont pas la même
-   que la page de département correspondante.
+17 visuels, 17 emplacements, un par page. Elle est vérifiée à deux niveaux, et
+un manquement fait échouer les tests :
 
-3. **Quand il n'y a pas assez de photos, on écrit du texte.** Les cartes de
-   prestations des landing pages locales sont volontairement sans image
-   (`.carte-locale`) : mieux vaut un bloc de texte utile que la quatrième
-   apparition de la même serrure. Ajouter une photo vraiment nouvelle est
-   toujours préférable à en recycler une.
+1. `scripts/audit-images.py` refuse qu'une page affiche deux fois le même
+   fichier — erreur bloquante, pas avertissement. Il compte les `src`
+   réellement présents dans le HTML produit, pas les intentions du code source.
+
+2. `tests/navigateur.mjs` parcourt les 41 pages du sitemap et refuse qu'un
+   même fichier apparaisse sur deux pages différentes.
+
+**Conséquence : les pages sans photo pertinente n'en ont pas.** Cartes de
+prestations, landing pages de zones, articles de blog, pages de ville : elles
+portent du texte. Sur les pages de zone, la colonne qu'occupait la photo
+accueille la liste des communes couvertes — une information que le visiteur
+cherche vraiment.
+
+**La galerie a quitté l'accueil** pour la même raison : elle réunissait sur un
+écran les photographies déjà présentes sur les pages de service. Son mécanisme
+est intact et documenté « en sommeil » dans la feuille de style ; il se
+rallume en remettant la section dans `src/pages/index.html`, le jour où des
+photographies existeront qui n'ont pas déjà leur place ailleurs. La rallumer
+avant ce jour-là recréerait exactement le doublon qu'on vient de retirer.
 
 Pour voir la répartition réelle :
 
@@ -305,9 +313,9 @@ grep -ro 'src="/assets/images/[^"]*"' public --include='*.html' \
   | cut -d/ -f5- | sort | uniq -c | sort -rn | head -20
 ```
 
-Aucun fichier ne devrait dominer la liste. Si l'un d'eux apparaît deux fois
-plus que les suivants, c'est qu'il a été utilisé par défaut faute de mieux :
-c'est le signal qu'il faut une photo de plus, pas une répétition de plus.
+Chaque ligne doit afficher `1`. Une ligne à `2` signifie qu'un fichier a été
+employé par défaut faute de mieux : c'est le signal qu'il faut une photo de
+plus, pas une répétition de plus.
 
 ---
 
@@ -321,11 +329,12 @@ Aucune image n'est étirée — `object-fit: cover` recadre, il ne déforme pas.
 |---|---|---|
 | Héros, une colonne (≤ 1150 px) | 16/9 | le fichier maître est déjà en 16/9 : aucun recadrage |
 | Héros, deux colonnes (≥ 1151 px) | 3/2 | environ 16 % de largeur retirés sur les bords |
-| `.media-large` | 3/2 | pleine largeur du conteneur de texte |
-| Cartes de service | 3/2 | hauteur identique sur toute une grille |
-| Vignettes de galerie | 3/2 | |
-| Interventions locales | 4/3 | |
+| `.media-large` | 3/2 | pleine largeur du conteneur de texte — le seul emplacement des pages de service |
 | Planches explicatives (`.schema`) | rapport natif | jamais recadrées : les annotations doivent rester lisibles |
+
+Les formats des cartes, de la galerie et des interventions locales restent
+définis dans la feuille de style, mais aucun emplacement ne les emploie plus :
+ces blocs sont passés au texte.
 
 Le cadrage horizontal (`object-position`) est réglé à 42 % sur le héros : le
 technicien est à gauche du cadre et la serrure au centre, ce réglage garde les

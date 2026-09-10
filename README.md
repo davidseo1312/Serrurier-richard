@@ -476,16 +476,22 @@ signification, image livrée mais utilisée nulle part, vignette de partage
 au format SVG — que les réseaux sociaux ignorent — et **le même visuel affiché
 deux fois sur une même page**, qui est une erreur bloquante.
 
-### Une photo, un emplacement principal
+### Une image, un seul emplacement
 
-Avec huit photographies pour une quarantaine de pages, la tentation est de
-mettre la même partout. Trois règles l'évitent :
+La règle est absolue et vérifiée par les tests : **un fichier image n'est
+affiché qu'à un seul endroit du site.** 17 visuels, 17 emplacements. Elle a
+trois conséquences assumées :
 
-- aucune page n'affiche deux fois le même fichier (vérifié par l'audit) ;
-- chaque page a sa photo dominante, et les six landing pages de zones ont six
-  photos d'ouverture différentes ;
-- quand il n'y a pas de photo pertinente, on écrit du texte — les cartes de
-  prestations des pages locales sont volontairement sans image.
+- une page affiche **au plus une image**, celle de son sujet ;
+- les pages sans image pertinente n'en ont pas : cartes de prestations,
+  landing pages de zones, articles de blog, pages de ville. Elles portent du
+  texte, ce qui vaut mieux que la quatrième apparition de la même serrure ;
+- **la galerie « Nos interventions » a quitté l'accueil.** Elle réunissait sur
+  un écran les photographies déjà présentes sur les pages de service : c'était
+  la répétition à supprimer. Son mécanisme est intact (`src/galerie.conf`, les
+  filtres, la visionneuse, la CSS marquée « en sommeil ») ; il suffit de
+  remettre la section dans `src/pages/index.html` pour la rallumer, le jour où
+  des photographies existeront qui n'ont pas déjà leur place ailleurs.
 
 Pour voir la répartition réelle après un build :
 
@@ -517,39 +523,50 @@ valeur y repeint le site entier.
 
 | Jeton | Rôle | Valeur |
 |---|---|---|
-| `--color-primary` | bleu, traits, icônes et bordures — **jamais du texte** (2,63:1) | `#0EA5E9` |
-| `--color-primary-dark` | gros titres et contours de composant (3,92:1) | `#0284C7` |
-| `--color-primary-deep` | **texte, liens, fonds de bouton** (5,60:1) | `#0369A1` |
-| `--color-primary-sur-clair` | texte posé sur un aplat bleu clair (5,35:1) | `#075985` |
-| `--color-primary-soft` / `-tint` | aplats de section, badges | `#E0F2FE` / `#F0F9FF` |
-| `--color-secondary` | orange, **urgence uniquement** | `#F97316` |
-| `--color-dark` | encre des titres — jamais un fond | `#0F172A` |
-| `--color-text` | texte courant (10,4:1) | `#334155` |
-| `--color-background` / `-2` | surfaces claires | `#F8FAFC` / `#F1F5F9` |
+| `--color-primary` | ardoise, texte secondaire et icônes (7,07:1) | `#475569` |
+| `--color-primary-light` | traits marqués (4,76:1) | `#64748B` |
+| `--color-primary-lighter` | traits fins — **jamais du texte** | `#94A3B8` |
+| `--color-primary-dark` | titres et contours de composant (10,41:1) | `#334155` |
+| `--color-primary-deep` | **texte, liens, fonds de bouton** (14,6:1) | `#1E293B` |
+| `--color-primary-soft` / `-tint` | aplats de section, pastilles | `#E9EDF2` / `#F5F7F9` |
+| `--color-secondary` | orange, **appeler uniquement** | `#F97316` |
+| `--color-dark` | encre des titres et de la barre de service | `#0F172A` |
+| `--color-text` | texte courant (10,41:1) | `#334155` |
+| `--color-background` / `-2` | blanc cassé, surfaces alternées | `#FAFAF9` / `#F4F4F2` |
 | `--color-muted` | texte discret — **valable sur blanc pur seulement** (4,76:1) | `#64748B` |
 | `--font-title` / `--font-body` | Outfit / Work Sans | — |
 
-**Le site est clair de bout en bout** : en-tête, héros, sections, bandeau
-d'urgence, appel à l'action final et pied de page. Il n'y a plus aucune
-surface sombre, et donc plus aucune règle d'inversion de couleur à maintenir.
-La classe `section.sombre` a gardé son nom — elle est employée dans les pages —
-mais désigne désormais un aplat bleu très clair entre deux sections blanches.
+**Le site est ardoise sur blanc cassé.** Pas de bleu, pas de dégradé coloré :
+la couleur ne sert plus à décorer, seulement à hiérarchiser. La seule surface
+sombre est la barre de service en haut de page ; la classe `section.sombre` a
+gardé son nom — elle est employée dans les pages — mais désigne un aplat
+ardoise très clair entre deux sections blanches.
 
-**L'orange est réservé à l'urgence.** Bouton d'appel, badge du héros, barre
-d'appel fixe sur mobile. L'employer ailleurs userait le seul signal du site.
+**L'orange ne veut dire qu'une chose : appeler.** Bouton d'appel de l'en-tête,
+du héros, du bandeau d'urgence, et barre fixe du mobile. Partout ailleurs il
+est interdit : le badge du héros est neutre, et le bouton d'appel des cartes
+de service est en contour, parce que six aplats orange dans un même écran ne
+se lisent plus comme un signal mais comme un motif.
 
 > **Quatre règles de contraste à ne pas enfreindre.** Elles sont vérifiées
-> élément par élément sur 22 pages ; tout écart est signalé.
-> - Le bleu a **quatre niveaux** et le contraste décide de l'usage de chacun.
->   `--color-primary` ne doit jamais porter de texte : 2,63:1 sur blanc.
-> - Sur un aplat bleu clair (badge, filtre, choix coché), il faut descendre
->   jusqu'à `--color-primary-sur-clair` : `--color-primary-deep` n'y donne que
->   4,15:1.
-> - `--color-muted` n'est valable que sur **blanc pur**. Sur le gris du pied de
->   page il tombe à 4,34:1 : employez `--color-dark-3`.
+> nœud par nœud sur les 41 pages du sitemap par `tests/visuels.mjs` ; tout
+> écart fait échouer les tests.
+> - L'ardoise a **cinq niveaux** et le contraste décide de l'usage de chacun.
+>   `--color-primary-lighter` ne doit jamais porter de texte : 2,6:1 sur blanc.
+> - `--color-muted` n'est valable que sur **blanc pur**. Sur un aplat il tombe
+>   sous le seuil : employez `--color-dark-3`.
+> - Sur la barre de service, fond `--color-dark`, le texte doit être clair —
+>   `#CBD5E1` ou `#94A3B8` pour les filets. `--color-dark-3` y donne 1,7:1,
+>   c'est-à-dire rien du tout.
 > - Le texte du bouton d'appel est **brun très sombre**, pas blanc : blanc sur
 >   `#F97316` ne donne que 2,80:1. Même raison pour l'astérisque de champ
 >   obligatoire, qui utilise `--color-secondary-dark`.
+
+> **Une accolade orpheline dans la CSS n'est pas une erreur bruyante.** Le
+> navigateur abandonne silencieusement toutes les règles qui suivent : la
+> moitié du site perd sa mise en forme sans qu'aucun outil ne proteste. Le
+> build compte donc les accolades hors commentaires et refuse de publier une
+> feuille déséquilibrée.
 
 Après un changement de charte, régénérez les visuels qui la reprennent :
 
@@ -563,12 +580,24 @@ bash scripts/build.sh
 
 `src/partials/header.html` en décrit les deux étages :
 
-- **la barre supérieure** (`.barre-haute`, fond `--color-dark`) : à gauche les
-  quatre métiers, à droite le téléphone et le devis. Elle disparaît dès que la
+- **la barre de service** (`.barre-haute`, fond `--color-dark`) : à gauche
+  trois métiers, à droite le téléphone et le devis, séparés par des filets
+  d'un pixel plutôt que par des points médians — un filet se lit comme une
+  séparation, un caractère se lit comme du texte. Elle disparaît dès que la
   page défile ;
-- **l'en-tête principal** (`.site-header`) : une grille à trois colonnes —
-  nom, navigation, actions — qui reste collée en haut et se resserre au
-  défilement.
+- **le rail principal** (`.site-header`) : une grille à trois colonnes —
+  nom, navigation, **appeler**. Trois blocs, pas un de plus : le bouton de
+  devis a quitté cette ligne, il vit dans la barre du dessus et dans le corps
+  des pages. Le rail reste collé en haut et se resserre au défilement.
+
+La **page courante est marquée** : le build pose `aria-current="page"` sur
+l'entrée de menu dont l'adresse correspond à celle de la page, et la CSS la
+souligne en orange. Aucune page n'a donc à connaître sa propre entrée. C'est
+la fonction `marquer_page_courante()` de `scripts/build.sh`.
+
+Le fond du rail est **blanc plein, pas translucide** : un en-tête collant qui
+laisse transparaître la page qui défile dessous est joli une seconde et
+illisible ensuite.
 
 Toute l'animation est en CSS. Le JavaScript ne fait qu'une chose : poser la
 classe `defile` sur `<body>` au-delà de 60 px de défilement, dans un
