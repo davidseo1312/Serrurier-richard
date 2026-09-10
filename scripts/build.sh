@@ -304,6 +304,37 @@ if [ -f src/galerie.conf ]; then
   export GALERIE GALERIE_FILTRES
 fi
 
+# --- Schémas explicatifs ---------------------------------------------------
+# Voir src/schemas.conf. Un schéma est affiché à ses proportions natives, dans
+# une figure autonome, avec une légende qui dit ce qu'il est. Il ne passe ni
+# par le catalogue d'images ni par la galerie : ce n'est pas une photographie
+# d'intervention et il ne doit jamais être présenté comme telle.
+if [ -f src/schemas.conf ]; then
+  while IFS='|' read -r id base largeur hauteur alt legende; do
+    case "$id" in ''|\#*) continue ;; esac
+
+    chemin="$(resoudre_image "$base" || true)"
+    if [ -z "$chemin" ]; then
+      echo "  ! schéma introuvable : static/assets/images/${base}.*"
+      CATALOGUE_MANQUANT=$((CATALOGUE_MANQUANT + 1))
+      continue
+    fi
+
+    ext="${chemin##*.}"
+    srcset=""
+    for l in 600 900; do
+      if [ "$l" -lt "$largeur" ] && [ -f "static/assets/images/${base}-${l}.${ext}" ]; then
+        srcset="${srcset}${srcset:+, }/assets/images/${base}-${l}.${ext} ${l}w"
+      fi
+    done
+    [ -n "$srcset" ] && srcset="${srcset}, ${chemin} ${largeur}w"
+    attr_srcset=""
+    [ -n "$srcset" ] && attr_srcset=" srcset=\"${srcset}\" sizes=\"(max-width: 780px) 100vw, 720px\""
+
+    export "SCHEMA_${id}=<figure class=\"schema\"><img src=\"${chemin}\"${attr_srcset} width=\"${largeur}\" height=\"${hauteur}\" alt=\"${alt}\" loading=\"lazy\" decoding=\"async\"><figcaption>${legende}</figcaption></figure>"
+  done < src/schemas.conf
+fi
+
 # --- Blocs réutilisés par les landing pages locales ------------------------
 # Ces trois blocs décrivent des règles de fonctionnement identiques partout :
 # les mêmes problèmes traités, le même déroulé, les mêmes facteurs de prix.

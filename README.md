@@ -324,6 +324,28 @@ ou `nom-1600.webp` et le `srcset` se construit tout seul.
 
 **Marche à suivre complète, cas particuliers compris :** [`docs/photos.md`](docs/photos.md).
 
+### Schémas explicatifs
+
+Une planche pédagogique — texte, repères, vue éclatée — passe par
+**`src/schemas.conf`**, pas par `src/images.conf`. Elle est affichée à ses
+proportions natives, avec sa légende, via le jeton `{{SCHEMA_ID}}`. La
+recadrer au format d'une carte couperait ses légendes.
+
+> **Une planche « avant / après » ne documente pas un chantier**, elle illustre
+> une prestation. La légende affichée le dit explicitement.
+
+### Aucun pictogramme inventé
+
+Le site n'embarque **aucune icône vectorielle décorative** : ni logo de marque,
+ni combiné téléphonique, ni bouclier, ni horloge. Chacun a été remplacé par ce
+qu'il prétendait représenter — le numéro en toutes lettres sur les boutons
+d'appel, quatre photographies sur la réassurance, de la typographie ailleurs.
+L'icône d'onglet porte les initiales composées.
+
+Le seul SVG restant est le tracé réel des six départements : une donnée, pas
+une décoration. **N'y remettez pas d'icône de banque** en ajoutant un
+composant.
+
 ### La galerie « Nos interventions »
 
 Elle est pilotée par **`src/galerie.conf`**. Une ligne = une vignette :

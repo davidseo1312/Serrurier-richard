@@ -197,10 +197,62 @@ Les métadonnées EXIF, position GPS comprise, ne sont pas recopiées.
 
 ---
 
-## 10. Les visuels actuels
+## 10. Schémas explicatifs
 
-Six emplacements affichent aujourd'hui de **vraies photographies
-d'intervention**. Les autres sont encore illustrés.
+Une planche pédagogique — texte, repères, vue éclatée — n'est pas une
+photographie d'intervention. La recadrer au format d'une carte couperait ses
+légendes. Elle passe donc par `src/schemas.conf`, pas par `src/images.conf` :
+
+```
+ID | chemin sans extension | largeur | hauteur | alt | légende
+```
+
+Le jeton `{{SCHEMA_ID}}` pose la figure complète, à ses proportions natives,
+légende comprise. Un schéma ne rejoint ni les cartes ni la galerie.
+
+**Le texte alternatif d'un schéma est long, et c'est voulu.** Le contenu de la
+planche *est* du texte : un lecteur d'écran n'y a accès que par l'`alt`. Le
+raccourcir supprimerait l'information au lieu de la clarifier —
+`scripts/audit-images.py` accepte donc jusqu'à 400 caractères pour ces
+fichiers, contre 160 ailleurs.
+
+> **Une planche « avant / après » ne documente pas un chantier.** Elle illustre
+> en quoi consiste une prestation. La légende affichée doit le dire, et elle le
+> dit. Ne présentez jamais un schéma comme l'intervention réelle d'un client :
+> ce serait exactement la fausse preuve que le reste du site s'interdit.
+
+---
+
+## 11. Aucun pictogramme inventé
+
+Le site n'embarque **aucune icône vectorielle décorative** : ni logo de marque,
+ni combiné téléphonique sur les boutons d'appel, ni bouclier, ni horloge, ni
+maison. Ils ont été remplacés par ce qu'ils prétendaient représenter :
+
+| Ancien pictogramme | Ce qui l'a remplacé |
+|---|---|
+| Clé stylisée de l'en-tête | Le nom composé, sans dessin |
+| Combiné sur les boutons d'appel | Le numéro en toutes lettres |
+| Icônes de la réassurance | Quatre photographies d'intervention |
+| Icônes de la grille des problèmes | Typographie et barre d'accent |
+| Coche et « + » en SVG embarqué | Des caractères (`✓`, `+`) |
+| Clé de l'icône d'onglet | Les initiales composées |
+
+Le seul SVG restant est `src/partials/carte-zones.svg` : le tracé réel des six
+départements, produit à partir de données IGN. C'est une donnée, pas une
+décoration.
+
+**Si vous ajoutez un composant, n'y remettez pas d'icône de banque.** Une
+photographie de l'acte, un chiffre réel ou un mot suffisent — et disent
+quelque chose de vrai.
+
+---
+
+## 12. Les visuels actuels
+
+Neuf emplacements affichent aujourd'hui de **vraies photographies
+d'intervention**, et deux pages portent un schéma explicatif. Les autres
+emplacements sont encore illustrés.
 
 Les illustrations sont produites par `scripts/generer-illustrations.py` : ce
 sont des dessins vectoriels créés pour ce projet, sans photographie source. Elles expliquent un geste technique ;

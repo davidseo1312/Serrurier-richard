@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#0b2a4a"/>
-  <circle cx="16" cy="12.5" r="6" fill="none" stroke="#f5a524" stroke-width="3"/>
-  <path d="M16 19v9M16 25h5" fill="none" stroke="#f5a524" stroke-width="3" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Serrurier Richard">
+  <rect width="32" height="32" rx="6" fill="#0F172A"/>
+  <text x="16" y="22" text-anchor="middle"
+        font-family="Outfit, ui-sans-serif, system-ui, sans-serif"
+        font-size="17" font-weight="700" letter-spacing="-0.5" fill="#F97316">SR</text>
 </svg>

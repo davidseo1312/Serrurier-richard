@@ -133,7 +133,12 @@ def main() -> int:
                 a.note(f"{rel} : alt vide, image traitée comme décorative — {src}")
             elif len(attr["alt"]) < 12:
                 a.avertit(f'{rel} : alt très court ("{attr["alt"]}") — {src}')
-            elif len(attr["alt"]) > 160:
+            # Un schéma explicatif fait exception : le contenu de la planche
+            # EST du texte, et l'alt est le seul accès qu'en ont les lecteurs
+            # d'écran. WCAG demande une description longue pour une image
+            # complexe ; la tronquer supprimerait l'information au lieu de la
+            # clarifier.
+            elif len(attr["alt"]) > (400 if "/schemas/" in src else 160):
                 a.avertit(f"{rel} : alt de {len(attr['alt'])} caractères, trop long — {src}")
 
             if "width" not in attr or "height" not in attr:
