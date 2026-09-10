@@ -32,7 +32,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preload" href="/assets/fonts/outfit-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/worksans-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage.webp" as="image" imagesrcset="/assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage-800.webp 800w, /assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage.webp 1100w" imagesizes="(max-width: 900px) 100vw, 600px" fetchpriority="high">
+<link rel="preload" href="/assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage.webp" as="image" imagesrcset="/assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage-600.webp 600w, /assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage-1000.webp 1000w, /assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage-1200.webp 1200w, /assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage.webp 1600w" imagesizes="(max-width: 1150px) 96vw, 600px" fetchpriority="high">
 <link rel="stylesheet" href="/assets/css/style.css">
 <script type="application/ld+json">
 {
@@ -142,6 +142,22 @@
 </head>
 <body>
 <a class="skip-link" href="#contenu">Aller au contenu principal</a>
+<div class="barre-haute">
+  <div class="wrap barre-haute-inner">
+    <ul class="barre-haute-metier">
+      <li>Intervention</li>
+      <li>Dépannage</li>
+      <li>Installation</li>
+      <li>Sécurisation</li>
+    </ul>
+    <p class="barre-haute-contact">
+      <a href="tel:+33220060075" data-track="appel" data-track-zone="barre-haute">02 20 06 00 75</a>
+      <span aria-hidden="true">·</span>
+      <a href="/devis-serrurerie" data-track="clic_devis" data-track-zone="barre-haute">Demander un devis</a>
+    </p>
+  </div>
+</div>
+
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="/" aria-label="Serrurier Richard — retour à l'accueil">
@@ -150,11 +166,6 @@
         <small>Dépannage serrurerie 24h/24 dans le Grand Ouest</small>
       </span>
     </a>
-
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-principal">
-      <span class="nav-toggle-bars" aria-hidden="true"></span>
-      <span class="visually-hidden">Ouvrir le menu</span>
-    </button>
 
     <nav id="nav-principal" class="nav" aria-label="Navigation principale">
       <ul>
@@ -170,13 +181,18 @@
 
     <div class="header-actions">
       <a class="btn btn-ghost header-devis" href="/devis-serrurerie" data-track="clic_devis" data-track-zone="entete">
-        Demander un devis
+        Devis gratuit
       </a>
 
       <a class="btn btn-call header-call" href="tel:+33220060075" data-track="appel" data-track-zone="entete">
         <span class="header-call-libelle">Appeler</span>
         <strong class="header-call-numero">02 20 06 00 75</strong>
       </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-principal">
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+        <span class="visually-hidden">Ouvrir le menu</span>
+      </button>
     </div>
   </div>
 </header>
@@ -204,16 +220,10 @@
         </a>
       </div>
 
-      <ul class="hero-preuves">
-        <li class="preuve"><span><strong>Diagnostic avant intervention</strong>La panne est identifiée avant tout démarrage</span></li>
-        <li class="preuve"><span><strong>Prix annoncé, devis écrit</strong>Signé sur place, même la nuit</span></li>
-        <li class="preuve"><span><strong>Ouverture non destructive en priorité</strong>Le perçage reste l'exception</span></li>
-        <li class="preuve"><span><strong>Particuliers et professionnels</strong>Logements, commerces, copropriétés</span></li>
-      </ul>
     </div>
 
     <div class="hero-media">
-      <img src="/assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage.webp" srcset="/assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage-800.webp 800w, /assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage.webp 1100w" sizes="(max-width: 900px) 100vw, 600px" width="1100" height="850" alt="Serrurier de Serrurier Richard accroupi devant une porte d'entrée en aluminium, crochetant le cylindre, sa caisse à outils ouverte au sol" fetchpriority="high" decoding="async" data-visuel="photo">
+      <img src="/assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage.webp" srcset="/assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage-600.webp 600w, /assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage-1000.webp 1000w, /assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage-1200.webp 1200w, /assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage.webp 1600w" sizes="(max-width: 1150px) 96vw, 600px" width="1600" height="900" alt="Serrurier de Serrurier Richard accroupi devant une porte d'entrée en aluminium, crochetant le cylindre, sa caisse à outils ouverte au sol" fetchpriority="high" decoding="async" data-visuel="photo">
       <div class="hero-vignette">
         <span>
           <strong>02 20 06 00 75</strong>
@@ -221,6 +231,13 @@
         </span>
       </div>
     </div>
+
+    <ul class="hero-preuves">
+      <li class="preuve"><span><strong>Diagnostic avant intervention</strong>La panne est identifiée avant tout démarrage</span></li>
+      <li class="preuve"><span><strong>Prix annoncé, devis écrit</strong>Signé sur place, même la nuit</span></li>
+      <li class="preuve"><span><strong>Ouverture non destructive en priorité</strong>Le perçage reste l'exception</span></li>
+      <li class="preuve"><span><strong>Particuliers et professionnels</strong>Logements, commerces, copropriétés</span></li>
+    </ul>
   </div>
 </section>
 
@@ -228,20 +245,20 @@
   <div class="wrap">
     <ul class="reassurance">
       <li>
-        <figure><img src="/assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce.webp" srcset="/assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce-800.webp 800w, /assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier de Serrurier Richard démontant la serrure en pied d'un rideau métallique de commerce, véhicule d'intervention et caisse à outils ouverte derrière lui" loading="lazy" decoding="async" data-visuel="photo"></figure>
-        <span><strong>Intervention rapide</strong>Selon la disponibilité du technicien et votre localisation. Le délai réel vous est annoncé au téléphone, pas promis à l'avance.</span>
+        <strong>Intervention rapide</strong>
+        <span>Selon la disponibilité du technicien et votre localisation. Le délai réel vous est annoncé au téléphone, pas promis à l'avance.</span>
       </li>
       <li>
-        <figure><img src="/assets/images/porte-bloquee/serrurier-richard-diagnostic-cylindre-porte-bloquee.webp" srcset="/assets/images/porte-bloquee/serrurier-richard-diagnostic-cylindre-porte-bloquee-800.webp 800w, /assets/images/porte-bloquee/serrurier-richard-diagnostic-cylindre-porte-bloquee.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier inspectant à la lampe torche le cylindre d'une porte bloquée avant de choisir sa méthode d'ouverture" loading="lazy" decoding="async" data-visuel="photo"></figure>
-        <span><strong>Diagnostic</strong>Identification du problème avant toute intervention : type de porte, type de serrure, nature du blocage. C'est ce qui décide de la méthode.</span>
+        <strong>Diagnostic</strong>
+        <span>Identification du problème avant toute intervention : type de porte, type de serrure, nature du blocage. C'est ce qui décide de la méthode.</span>
       </li>
       <li>
-        <figure><img src="/assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois.webp" srcset="/assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois-800.webp 800w, /assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier vissant au tournevis la têtière d'une serrure multipoints sur le chant d'une porte en bois" loading="lazy" decoding="async" data-visuel="photo"></figure>
-        <span><strong>Prix annoncé</strong>Déplacement 35 €, main-d'œuvre 65 € de l'heure, ouverture de porte claquée à partir de 129 €. Devis écrit signé avant démarrage.</span>
+        <strong>Prix annoncé</strong>
+        <span>Déplacement 35 €, main-d'œuvre 65 € de l'heure, ouverture de porte claquée à partir de 129 €. Devis écrit signé avant démarrage.</span>
       </li>
       <li>
-        <figure><img src="/assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau.webp" srcset="/assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau-800.webp 800w, /assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier ouvrant la serrure à clé d'un coffre-fort de bureau à double commande, clavier électronique et pêne de blocage visibles" loading="lazy" decoding="async" data-visuel="photo"></figure>
-        <span><strong>Professionnels et particuliers</strong>Logements, commerces, bureaux et copropriétés. Rideaux métalliques, coffres-forts et locaux techniques compris.</span>
+        <strong>Particuliers et professionnels</strong>
+        <span>Logements, commerces, bureaux et copropriétés. Rideaux métalliques, coffres-forts et locaux techniques compris.</span>
       </li>
     </ul>
   </div>
@@ -260,7 +277,7 @@
 
     <div class="grille grille-3">
       <article class="carte carte-service apparait">
-        <div class="carte-media"><img src="/assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage.webp" srcset="/assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage-800.webp 800w, /assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier ouvrant la serrure d'une porte blindée au crochet et à l'entraîneur, sans percer le cylindre" loading="lazy" decoding="async" data-visuel="photo"><span class="badge">Dépannage</span></div>
+        <div class="carte-media"><img src="/assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage.webp" srcset="/assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage-600.webp 600w, /assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage-1000.webp 1000w, /assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage-1200.webp 1200w, /assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage.webp 1500w" sizes="(max-width: 560px) 92vw, 400px" width="1500" height="1000" alt="Serrurier ouvrant la serrure d'une porte blindée au crochet et à l'entraîneur, sans percer le cylindre" loading="lazy" decoding="async" data-visuel="photo"><span class="badge">Dépannage</span></div>
         <div class="carte-corps">
           <h3>Ouverture de porte claquée</h3>
           <p class="probleme"><strong>Le problème :</strong> vous êtes dehors, sans clé sur vous.</p>
@@ -273,7 +290,7 @@
       </article>
 
       <article class="carte carte-service apparait">
-        <div class="carte-media"><img src="/assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois.webp" srcset="/assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois-800.webp 800w, /assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier vissant au tournevis la têtière d'une serrure multipoints sur le chant d'une porte en bois" loading="lazy" decoding="async" data-visuel="photo"><span class="badge">Serrures</span></div>
+        <div class="carte-media"><img src="/assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois.webp" srcset="/assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois-600.webp 600w, /assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois-1000.webp 1000w, /assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois-1200.webp 1200w, /assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois.webp 1500w" sizes="(max-width: 560px) 92vw, 400px" width="1500" height="1000" alt="Serrurier vissant au tournevis la têtière d'une serrure multipoints sur le chant d'une porte en bois" loading="lazy" decoding="async" data-visuel="photo"><span class="badge">Serrures</span></div>
         <div class="carte-corps">
           <h3>Changement de serrure</h3>
           <p class="probleme"><strong>Le problème :</strong> la serrure en place ne protège plus.</p>
@@ -286,7 +303,7 @@
       </article>
 
       <article class="carte carte-service apparait">
-        <div class="carte-media"><img src="/assets/images/porte-blindee/porte-blindee-serrure-multipoints.svg" width="1200" height="750" alt="Porte blindée équipée d'une serrure multipoints et de pênes latéraux" loading="lazy" decoding="async" data-visuel="illustration"><span class="badge">Sécurité</span></div>
+        <div class="carte-media"><img src="/assets/images/porte-bloquee/serrurier-richard-diagnostic-cylindre-porte-bloquee.webp" srcset="/assets/images/porte-bloquee/serrurier-richard-diagnostic-cylindre-porte-bloquee-600.webp 600w, /assets/images/porte-bloquee/serrurier-richard-diagnostic-cylindre-porte-bloquee-1000.webp 1000w, /assets/images/porte-bloquee/serrurier-richard-diagnostic-cylindre-porte-bloquee-1200.webp 1200w, /assets/images/porte-bloquee/serrurier-richard-diagnostic-cylindre-porte-bloquee.webp 1500w" sizes="(max-width: 560px) 92vw, 400px" width="1500" height="1000" alt="Serrurier inspectant à la lampe torche le cylindre d'une porte bloquée avant de choisir sa méthode d'ouverture" loading="lazy" decoding="async" data-visuel="photo"><span class="badge">Sécurité</span></div>
         <div class="carte-corps">
           <h3>Porte blindée et multipoints</h3>
           <p class="probleme"><strong>Le problème :</strong> une porte blindée refuse de s'ouvrir.</p>
@@ -299,7 +316,7 @@
       </article>
 
       <article class="carte carte-service apparait">
-        <div class="carte-media"><img src="/assets/images/effraction/securisation-porte-apres-effraction.svg" width="1200" height="750" alt="Porte forcée après effraction et remise en sécurité du logement" loading="lazy" decoding="async" data-visuel="illustration"><span class="badge">Urgence</span></div>
+        <div class="carte-media"><img src="/assets/images/effraction/securisation-porte-apres-effraction.svg" width="1500" height="1000" alt="Porte forcée après effraction et remise en sécurité du logement" loading="lazy" decoding="async" data-visuel="illustration"><span class="badge">Urgence</span></div>
         <div class="carte-corps">
           <h3>Sécurisation après effraction</h3>
           <p class="probleme"><strong>Le problème :</strong> votre porte a été forcée, le logement est ouvert.</p>
@@ -312,7 +329,7 @@
       </article>
 
       <article class="carte carte-service apparait">
-        <div class="carte-media"><img src="/assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce.webp" srcset="/assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce-800.webp 800w, /assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier de Serrurier Richard démontant la serrure en pied d'un rideau métallique de commerce, véhicule d'intervention et caisse à outils ouverte derrière lui" loading="lazy" decoding="async" data-visuel="photo"><span class="badge">Professionnels</span></div>
+        <div class="carte-media"><img src="/assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce.webp" srcset="/assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce-600.webp 600w, /assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce-1000.webp 1000w, /assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce-1200.webp 1200w, /assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce.webp 1500w" sizes="(max-width: 560px) 92vw, 400px" width="1500" height="1000" alt="Serrurier de Serrurier Richard démontant la serrure en pied d'un rideau métallique de commerce, véhicule d'intervention et caisse à outils ouverte derrière lui" loading="lazy" decoding="async" data-visuel="photo"><span class="badge">Professionnels</span></div>
         <div class="carte-corps">
           <h3>Rideau métallique</h3>
           <p class="probleme"><strong>Le problème :</strong> le commerce ne peut pas ouvrir.</p>
@@ -325,7 +342,7 @@
       </article>
 
       <article class="carte carte-service apparait">
-        <div class="carte-media"><img src="/assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau.webp" srcset="/assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau-800.webp 800w, /assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier ouvrant la serrure à clé d'un coffre-fort de bureau à double commande, clavier électronique et pêne de blocage visibles" loading="lazy" decoding="async" data-visuel="photo"><span class="badge">Professionnels</span></div>
+        <div class="carte-media"><img src="/assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau.webp" srcset="/assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau-600.webp 600w, /assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau-1000.webp 1000w, /assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau-1200.webp 1200w, /assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau.webp 1500w" sizes="(max-width: 560px) 92vw, 400px" width="1500" height="1000" alt="Serrurier ouvrant la serrure à clé d'un coffre-fort de bureau à double commande, clavier électronique et pêne de blocage visibles" loading="lazy" decoding="async" data-visuel="photo"><span class="badge">Professionnels</span></div>
         <div class="carte-corps">
           <h3>Coffre-fort</h3>
           <p class="probleme"><strong>Le problème :</strong> combinaison oubliée ou mécanisme bloqué.</p>
@@ -409,7 +426,6 @@
       </ul>
     </div>
     <div class="urgence-media">
-      <figure class="urgence-photo"><img src="/assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche.webp" srcset="/assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche-800.webp 800w, /assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier éclairant à la lampe torche la serrure d'une porte d'entrée lors d'un dépannage en soirée, ceinture à outils à la taille" loading="lazy" decoding="async" data-visuel="photo"></figure>
       <a class="btn btn-call btn-large btn-bloc" href="tel:+33220060075" data-track="appel" data-track-zone="bandeau-urgence">Appeler 02 20 06 00 75</a>
       <p style="margin:.9rem 0 0;text-align:center;font-size:.9rem">
         <a href="/serrurier-urgence" data-track="clic_urgence" data-track-zone="bandeau-urgence">Comment se passe une urgence</a>
@@ -434,61 +450,40 @@
         <button type="button" class="filtre" data-filtre="depannage" aria-pressed="false">Dépannage</button>
         <button type="button" class="filtre" data-filtre="serrures" aria-pressed="false">Serrures</button>
         <button type="button" class="filtre" data-filtre="securite" aria-pressed="false">Sécurité</button>
-        <button type="button" class="filtre" data-filtre="professionnels" aria-pressed="false">Professionnels</button>
     </div>
 
     <div class="galerie">
       <figure class="apparait" data-famille="depannage">
-        <img src="/assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage.webp" srcset="/assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage-800.webp 800w, /assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier ouvrant la serrure d'une porte blindée au crochet et à l'entraîneur, sans percer le cylindre" loading="lazy" decoding="async" data-visuel="photo">
-        <figcaption><strong>Ouverture de porte</strong>Une porte claquée s'ouvre sans trace et sans remplacer la serrure.</figcaption>
-      </figure>
-      <figure class="apparait" data-famille="depannage">
-        <img src="/assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche.webp" srcset="/assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche-800.webp 800w, /assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier éclairant à la lampe torche la serrure d'une porte d'entrée lors d'un dépannage en soirée, ceinture à outils à la taille" loading="lazy" decoding="async" data-visuel="photo">
+        <img src="/assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche.webp" srcset="/assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche-600.webp 600w, /assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche-1000.webp 1000w, /assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche-1200.webp 1200w, /assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche.webp 1500w" sizes="(max-width: 560px) 92vw, 360px" width="1500" height="1000" alt="Serrurier éclairant à la lampe torche la serrure d'une porte d'entrée lors d'un dépannage en soirée, ceinture à outils à la taille" loading="lazy" decoding="async" data-visuel="photo">
         <figcaption><strong>Dépannage de nuit</strong>Le dépannage ne s'arrête pas le soir : l'éclairage change, la méthode non.</figcaption>
       </figure>
       <figure class="apparait" data-famille="depannage">
-        <img src="/assets/images/cle-cassee/extraction-cle-cassee-cylindre.svg" width="1200" height="750" alt="Fragment de clé cassée resté dans le cylindre et outil d'extraction" loading="lazy" decoding="async" data-visuel="illustration">
+        <img src="/assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir.webp" srcset="/assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir-600.webp 600w, /assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir-1000.webp 1000w, /assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir-1200.webp 1200w, /assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir.webp 1500w" sizes="(max-width: 560px) 92vw, 360px" width="1500" height="1000" alt="Serrurier en ceinture à outils intervenant sur la serrure d'une porte d'entrée, dans le couloir d'un immeuble" loading="lazy" decoding="async" data-visuel="photo">
+        <figcaption><strong>Sur place</strong>Diagnostic, devis signé, puis intervention. Jamais l'inverse.</figcaption>
+      </figure>
+      <figure class="apparait" data-famille="depannage">
+        <img src="/assets/images/cle-cassee/extraction-cle-cassee-cylindre.svg" width="1500" height="1000" alt="Fragment de clé cassée resté dans le cylindre et outil d'extraction" loading="lazy" decoding="async" data-visuel="illustration">
         <figcaption><strong>Clé cassée</strong>Le fragment s'extrait à l'outil dédié ; le cylindre survit le plus souvent.</figcaption>
       </figure>
       <figure class="apparait" data-famille="depannage">
-        <img src="/assets/images/porte-bloquee/serrurier-richard-diagnostic-cylindre-porte-bloquee.webp" srcset="/assets/images/porte-bloquee/serrurier-richard-diagnostic-cylindre-porte-bloquee-800.webp 800w, /assets/images/porte-bloquee/serrurier-richard-diagnostic-cylindre-porte-bloquee.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier inspectant à la lampe torche le cylindre d'une porte bloquée avant de choisir sa méthode d'ouverture" loading="lazy" decoding="async" data-visuel="photo">
-        <figcaption><strong>Porte bloquée</strong>Clé qui tourne dans le vide : le mécanisme est en cause, pas la clé.</figcaption>
+        <img src="/assets/images/cle-perdue/remplacement-cylindre-cles-perdues.svg" width="1500" height="1000" alt="Trousseau de clés perdu et remplacement du cylindre de la porte d'entrée" loading="lazy" decoding="async" data-visuel="illustration">
+        <figcaption><strong>Clé perdue</strong>Le cylindre change, les anciennes clés ne servent plus.</figcaption>
       </figure>
       <figure class="apparait" data-famille="serrures">
-        <img src="/assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois.webp" srcset="/assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois-800.webp 800w, /assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier vissant au tournevis la têtière d'une serrure multipoints sur le chant d'une porte en bois" loading="lazy" decoding="async" data-visuel="photo">
-        <figcaption><strong>Remplacement de serrure</strong>Le cylindre seul suffit quand le coffre n'est pas en cause.</figcaption>
-      </figure>
-      <figure class="apparait" data-famille="serrures">
-        <img src="/assets/images/serrure-3-points/serrure-trois-points-porte.svg" width="1200" height="750" alt="Serrure trois points avec condamnation en haut, au centre et en bas de la porte" loading="lazy" decoding="async" data-visuel="illustration">
-        <figcaption><strong>Serrure multipoints</strong>Trois points de condamnation répartis sur la hauteur de la porte.</figcaption>
-      </figure>
-      <figure class="apparait" data-famille="serrures">
-        <img src="/assets/images/installation/installation-serrure-porte.svg" width="1200" height="750" alt="Relevé des cotes avant l'installation d'une serrure sur une porte" loading="lazy" decoding="async" data-visuel="illustration">
+        <img src="/assets/images/installation/installation-serrure-porte.svg" width="1500" height="1000" alt="Relevé des cotes avant l'installation d'une serrure sur une porte" loading="lazy" decoding="async" data-visuel="illustration">
         <figcaption><strong>Installation</strong>Relevé des cotes avant pose : une serrure mal implantée force en permanence.</figcaption>
       </figure>
+      <figure class="apparait" data-famille="serrures">
+        <img src="/assets/images/serrure-3-points/serrure-trois-points-porte.svg" width="1500" height="1000" alt="Serrure trois points avec condamnation en haut, au centre et en bas de la porte" loading="lazy" decoding="async" data-visuel="illustration">
+        <figcaption><strong>Serrure multipoints</strong>Trois points de condamnation répartis sur la hauteur de la porte.</figcaption>
+      </figure>
       <figure class="apparait" data-famille="securite">
-        <img src="/assets/images/blindage/blindage-porte-corniere-anti-pince.svg" width="1200" height="750" alt="Blindage d'une porte existante avec plaque d'acier et cornière anti-pince" loading="lazy" decoding="async" data-visuel="illustration">
+        <img src="/assets/images/blindage/blindage-porte-corniere-anti-pince.svg" width="1500" height="1000" alt="Blindage d'une porte existante avec plaque d'acier et cornière anti-pince" loading="lazy" decoding="async" data-visuel="illustration">
         <figcaption><strong>Blindage de porte</strong>Plaque d'acier, cornière anti-pince et gâches renforcées.</figcaption>
       </figure>
       <figure class="apparait" data-famille="securite">
-        <img src="/assets/images/porte-blindee/porte-blindee-serrure-multipoints.svg" width="1200" height="750" alt="Porte blindée équipée d'une serrure multipoints et de pênes latéraux" loading="lazy" decoding="async" data-visuel="illustration">
+        <img src="/assets/images/porte-blindee/porte-blindee-serrure-multipoints.svg" width="1500" height="1000" alt="Porte blindée équipée d'une serrure multipoints et de pênes latéraux" loading="lazy" decoding="async" data-visuel="illustration">
         <figcaption><strong>Porte blindée</strong>Serrure A2P et pênes latéraux sur un bloc-porte complet.</figcaption>
-      </figure>
-      <figure class="apparait" data-famille="securite">
-        <img src="/assets/images/effraction/securisation-porte-apres-effraction.svg" width="1200" height="750" alt="Porte forcée après effraction et remise en sécurité du logement" loading="lazy" decoding="async" data-visuel="illustration">
-        <figcaption><strong>Après effraction</strong>Mise en sécurité le jour même, constat écrit pour l'assurance.</figcaption>
-      </figure>
-      <figure class="apparait" data-famille="professionnels">
-        <img src="/assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce.webp" srcset="/assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce-800.webp 800w, /assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier de Serrurier Richard démontant la serrure en pied d'un rideau métallique de commerce, véhicule d'intervention et caisse à outils ouverte derrière lui" loading="lazy" decoding="async" data-visuel="photo">
-        <figcaption><strong>Rideau métallique</strong>Déblocage avant l'ouverture du commerce, sur créneau convenu.</figcaption>
-      </figure>
-      <figure class="apparait" data-famille="professionnels">
-        <img src="/assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau.webp" srcset="/assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau-800.webp 800w, /assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier ouvrant la serrure à clé d'un coffre-fort de bureau à double commande, clavier électronique et pêne de blocage visibles" loading="lazy" decoding="async" data-visuel="photo">
-        <figcaption><strong>Coffre-fort</strong>Ouverture par auscultation, puis remise en service du mécanisme.</figcaption>
-      </figure>
-      <figure class="apparait" data-famille="professionnels">
-        <img src="/assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir.webp" srcset="/assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir-800.webp 800w, /assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier en ceinture à outils intervenant sur la serrure d'une porte d'entrée, dans le couloir d'un immeuble" loading="lazy" decoding="async" data-visuel="photo">
-        <figcaption><strong>Sur place</strong>Diagnostic, devis signé, puis intervention. Jamais l'inverse.</figcaption>
       </figure>
     </div>
 
@@ -497,7 +492,7 @@
 </section>
 
 <section class="alt">
-  <div class="wrap duo">
+  <div class="wrap">
     <div>
       <p class="badge">Pourquoi nous</p>
       <h2>Pourquoi nous confier votre dépannage</h2>
@@ -517,7 +512,6 @@
         </li>
       </ul>
     </div>
-    <div class="duo-media"><img src="/assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir.webp" srcset="/assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir-800.webp 800w, /assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier en ceinture à outils intervenant sur la serrure d'une porte d'entrée, dans le couloir d'un immeuble" loading="lazy" decoding="async" data-visuel="photo"></div>
   </div>
 </section>
 

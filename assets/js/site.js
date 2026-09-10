@@ -31,6 +31,12 @@
         ouvert ? 'Ouvrir le menu' : 'Fermer le menu';
     });
 
+    nav.addEventListener('click', function (e) {
+      if (e.target.closest('a') && nav.getAttribute('data-ouvert') === 'true') {
+        toggle.click();
+      }
+    });
+
     // Échap referme le menu : sans cela, le focus reste piégé au clavier.
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && nav.getAttribute('data-ouvert') === 'true') {
@@ -39,6 +45,38 @@
       }
     });
   }
+
+  /* --- 1 bis. En-tête au défilement ----------------------------------------
+     Passé une soixantaine de pixels, la barre supérieure se replie et
+     l'en-tête se resserre : le contenu gagne de la hauteur sans que la
+     navigation ni le bouton d'appel ne disparaissent jamais.
+
+     La classe est posée sur <body> et toute la bascule est faite en CSS —
+     le JavaScript ne fait que dire « on a défilé », il ne mesure ni ne
+     positionne rien. Un visiteur sans JavaScript garde simplement l'en-tête
+     dans son état déployé, qui est parfaitement utilisable.
+
+     La lecture de scrollY est différée dans un requestAnimationFrame :
+     interroger la position à chaque événement de défilement force le
+     navigateur à recalculer la mise en page des dizaines de fois par
+     seconde.
+     ------------------------------------------------------------------------ */
+
+  var seuilDefile = 60;
+  var attenteDefile = false;
+
+  function majDefile() {
+    document.body.classList.toggle('defile', window.scrollY > seuilDefile);
+    attenteDefile = false;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (attenteDefile) { return; }
+    attenteDefile = true;
+    window.requestAnimationFrame(majDefile);
+  }, { passive: true });
+
+  majDefile();
 
   /* --- 2. Année du copyright ---------------------------------------------- */
 

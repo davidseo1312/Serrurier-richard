@@ -32,7 +32,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preload" href="/assets/fonts/outfit-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/worksans-400.woff2" as="font" type="font/woff2" crossorigin>
-
+<link rel="preload" href="/assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche.webp" as="image" imagesrcset="/assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche-600.webp 600w, /assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche-1000.webp 1000w, /assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche-1200.webp 1200w, /assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche.webp 1500w" imagesizes="(max-width: 560px) 92vw, (max-width: 900px) 96vw, 560px" fetchpriority="high">
 <link rel="stylesheet" href="/assets/css/style.css">
 <script type="application/ld+json">
 {
@@ -119,6 +119,22 @@
 </head>
 <body>
 <a class="skip-link" href="#contenu">Aller au contenu principal</a>
+<div class="barre-haute">
+  <div class="wrap barre-haute-inner">
+    <ul class="barre-haute-metier">
+      <li>Intervention</li>
+      <li>Dépannage</li>
+      <li>Installation</li>
+      <li>Sécurisation</li>
+    </ul>
+    <p class="barre-haute-contact">
+      <a href="tel:+33220060075" data-track="appel" data-track-zone="barre-haute">02 20 06 00 75</a>
+      <span aria-hidden="true">·</span>
+      <a href="/devis-serrurerie" data-track="clic_devis" data-track-zone="barre-haute">Demander un devis</a>
+    </p>
+  </div>
+</div>
+
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="/" aria-label="Serrurier Richard — retour à l'accueil">
@@ -127,11 +143,6 @@
         <small>Dépannage serrurerie 24h/24 dans le Grand Ouest</small>
       </span>
     </a>
-
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-principal">
-      <span class="nav-toggle-bars" aria-hidden="true"></span>
-      <span class="visually-hidden">Ouvrir le menu</span>
-    </button>
 
     <nav id="nav-principal" class="nav" aria-label="Navigation principale">
       <ul>
@@ -147,13 +158,18 @@
 
     <div class="header-actions">
       <a class="btn btn-ghost header-devis" href="/devis-serrurerie" data-track="clic_devis" data-track-zone="entete">
-        Demander un devis
+        Devis gratuit
       </a>
 
       <a class="btn btn-call header-call" href="tel:+33220060075" data-track="appel" data-track-zone="entete">
         <span class="header-call-libelle">Appeler</span>
         <strong class="header-call-numero">02 20 06 00 75</strong>
       </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-principal">
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+        <span class="visually-hidden">Ouvrir le menu</span>
+      </button>
     </div>
   </div>
 </header>
@@ -198,7 +214,7 @@
       </ul>
     </div>
 
-    <div class="hero-local-media"><img src="/assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir.webp" srcset="/assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir-800.webp 800w, /assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier en ceinture à outils intervenant sur la serrure d'une porte d'entrée, dans le couloir d'un immeuble" loading="lazy" decoding="async" data-visuel="photo"></div>
+    <div class="hero-local-media"><img src="/assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche.webp" srcset="/assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche-600.webp 600w, /assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche-1000.webp 1000w, /assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche-1200.webp 1200w, /assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche.webp 1500w" sizes="(max-width: 560px) 92vw, (max-width: 900px) 96vw, 560px" width="1500" height="1000" alt="Serrurier éclairant à la lampe torche la serrure d'une porte d'entrée lors d'un dépannage en soirée, ceinture à outils à la taille" fetchpriority="high" decoding="async" data-visuel="photo"></div>
   </div>
 </section>
 
@@ -273,8 +289,8 @@
     </div>
 
     <div class="grille grille-3">
-      <article class="carte carte-service apparait">
-        <div class="carte-media"><img src="/assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage.webp" srcset="/assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage-800.webp 800w, /assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier ouvrant la serrure d'une porte blindée au crochet et à l'entraîneur, sans percer le cylindre" loading="lazy" decoding="async" data-visuel="photo"><span class="badge">Dépannage</span></div>
+      <article class="carte carte-locale apparait">
+        <p class="badge">Dépannage</p>
         <div class="carte-corps">
           <h3>Ouverture de porte</h3>
           <p>Porte claquée dans un studio étudiant angevin, porte verrouillée d'une maison de Cholet : l'ouverture se fait sans remplacer la serrure dans la grande majorité des cas.</p>
@@ -282,8 +298,8 @@
         </div>
       </article>
 
-      <article class="carte carte-service apparait">
-        <div class="carte-media"><img src="/assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois.webp" srcset="/assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois-800.webp 800w, /assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier vissant au tournevis la têtière d'une serrure multipoints sur le chant d'une porte en bois" loading="lazy" decoding="async" data-visuel="photo"><span class="badge">Serrures</span></div>
+      <article class="carte carte-locale apparait">
+        <p class="badge">Serrures</p>
         <div class="carte-corps">
           <h3>Remplacement de cylindre</h3>
           <p>Rotations locatives nombreuses sur Angers, clés perdues, changement d'occupant. Le remplacement du cylindre seul suffit dès lors que le coffre de serrure est sain.</p>
@@ -291,8 +307,8 @@
         </div>
       </article>
 
-      <article class="carte carte-service apparait">
-        <div class="carte-media"><img src="/assets/images/cle-cassee/extraction-cle-cassee-cylindre.svg" width="1200" height="750" alt="Fragment de clé cassée resté dans le cylindre et outil d'extraction" loading="lazy" decoding="async" data-visuel="illustration"><span class="badge">Dépannage</span></div>
+      <article class="carte carte-locale apparait">
+        <p class="badge">Dépannage</p>
         <div class="carte-corps">
           <h3>Clé cassée</h3>
           <p>Le fragment s'extrait à l'outil dédié. Sur les serrures anciennes des maisons de tuffeau, la casse sanctionne souvent un mécanisme qui force depuis longtemps.</p>
@@ -300,8 +316,8 @@
         </div>
       </article>
 
-      <article class="carte carte-service apparait">
-        <div class="carte-media"><img src="/assets/images/installation/installation-serrure-porte.svg" width="1200" height="750" alt="Relevé des cotes avant l'installation d'une serrure sur une porte" loading="lazy" decoding="async" data-visuel="illustration"><span class="badge">Serrures</span></div>
+      <article class="carte carte-locale apparait">
+        <p class="badge">Serrures</p>
         <div class="carte-corps">
           <h3>Installation et pose</h3>
           <p>Serrure multipoints, verrou de sécurité, fermeture de dépendance. Très demandé dans le pavillonnaire de Cholet, Avrillé et Beaucouzé.</p>
@@ -309,8 +325,8 @@
         </div>
       </article>
 
-      <article class="carte carte-service apparait">
-        <div class="carte-media"><img src="/assets/images/effraction/securisation-porte-apres-effraction.svg" width="1200" height="750" alt="Porte forcée après effraction et remise en sécurité du logement" loading="lazy" decoding="async" data-visuel="illustration"><span class="badge">Urgence</span></div>
+      <article class="carte carte-locale apparait">
+        <p class="badge">Urgence</p>
         <div class="carte-corps">
           <h3>Sécurisation après effraction</h3>
           <p>Mise en sécurité le jour même, remplacement des éléments forcés et descriptif écrit remis pour l'assurance et le dépôt de plainte.</p>
@@ -318,8 +334,8 @@
         </div>
       </article>
 
-      <article class="carte carte-service apparait">
-        <div class="carte-media"><img src="/assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau.webp" srcset="/assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau-800.webp 800w, /assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier ouvrant la serrure à clé d'un coffre-fort de bureau à double commande, clavier électronique et pêne de blocage visibles" loading="lazy" decoding="async" data-visuel="photo"><span class="badge">Professionnels</span></div>
+      <article class="carte carte-locale apparait">
+        <p class="badge">Professionnels</p>
         <div class="carte-corps">
           <h3>Coffre-fort</h3>
           <p>Combinaison oubliée, mécanisme grippé, coffre hérité dont personne n'a le code. Ouverture par auscultation et remise en service du mécanisme.</p>
@@ -348,7 +364,7 @@
       <h2>La serrurerie en Maine-et-Loire, concrètement</h2>
     </div>
 
-    <div class="duo">
+    <div>
       <div>
         <h3>Angers : ville étudiante et parc locatif dense</h3>
         <p>
@@ -402,8 +418,6 @@
           premier.
         </p>
       </div>
-
-      <div class="duo-media"><img src="/assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche.webp" srcset="/assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche-800.webp 800w, /assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier éclairant à la lampe torche la serrure d'une porte d'entrée lors d'un dépannage en soirée, ceinture à outils à la taille" loading="lazy" decoding="async" data-visuel="photo"></div>
     </div>
 
     <div class="encadre">
@@ -431,7 +445,7 @@
 
     <div class="interventions">
       <article class="intervention apparait">
-        <figure class="intervention-media"><img src="/assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage.webp" srcset="/assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage-800.webp 800w, /assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" width="1200" height="750" alt="Serrurier ouvrant la serrure d'une porte blindée au crochet et à l'entraîneur, sans percer le cylindre" loading="lazy" decoding="async" data-visuel="photo"></figure>
+        <figure class="intervention-media"><img src="/assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage.webp" srcset="/assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage-600.webp 600w, /assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage-1000.webp 1000w, /assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage-1200.webp 1200w, /assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage.webp 1500w" sizes="(max-width: 560px) 92vw, (max-width: 900px) 96vw, 680px" width="1500" height="1000" alt="Serrurier ouvrant la serrure d'une porte blindée au crochet et à l'entraîneur, sans percer le cylindre" loading="lazy" decoding="async" data-visuel="photo"></figure>
         <div class="intervention-corps">
           <h3>Porte claquée en studio étudiant, Angers</h3>
           <dl>
@@ -448,7 +462,7 @@
       </article>
 
       <article class="intervention apparait">
-        <figure class="intervention-media"><img src="/assets/images/installation/installation-serrure-porte.svg" width="1200" height="750" alt="Relevé des cotes avant l'installation d'une serrure sur une porte" loading="lazy" decoding="async" data-visuel="illustration"></figure>
+        <figure class="intervention-media"><img src="/assets/images/installation/installation-serrure-porte.svg" width="1500" height="1000" alt="Relevé des cotes avant l'installation d'une serrure sur une porte" loading="lazy" decoding="async" data-visuel="illustration"></figure>
         <div class="intervention-corps">
           <h3>Porte qui ferme mal dans une maison de tuffeau</h3>
           <dl>
@@ -465,7 +479,7 @@
       </article>
 
       <article class="intervention apparait">
-        <figure class="intervention-media"><img src="/assets/images/cle-cassee/extraction-cle-cassee-cylindre.svg" width="1200" height="750" alt="Fragment de clé cassée resté dans le cylindre et outil d'extraction" loading="lazy" decoding="async" data-visuel="illustration"></figure>
+        <figure class="intervention-media"><img src="/assets/images/cle-cassee/extraction-cle-cassee-cylindre.svg" width="1500" height="1000" alt="Fragment de clé cassée resté dans le cylindre et outil d'extraction" loading="lazy" decoding="async" data-visuel="illustration"></figure>
         <div class="intervention-corps">
           <h3>Clé cassée dans une serrure de cave, Saumurois</h3>
           <dl>

@@ -352,85 +352,144 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
   100% { box-shadow: 0 0 0 0 rgba(249,115,22,0); }
 }
 
-/* --- 6. En-tête et navigation --------------------------------------------- */
+/* --- 6. En-tête et navigation ---------------------------------------------
+   Deux étages. La barre supérieure, fine, dit le métier et donne les deux
+   moyens de contact. Le header principal est un rail à trois colonnes dont
+   la colonne centrale est réellement centrée : « 1fr auto 1fr » avec la
+   marque et les actions dans les colonnes latérales. C'est ce qui produit
+   l'équilibre, et non un ajustement de marges à l'œil.
+
+   Au défilement, la barre supérieure se replie et le header perd quelques
+   pixels de hauteur : le contenu gagne de la place sans que la navigation
+   ou l'appel ne disparaissent jamais.
+   ------------------------------------------------------------------------ */
+
+.barre-haute {
+  background: var(--color-dark);
+  color: #CBD5E1;
+  font-size: var(--text-xs);
+  /* La bascule se fait sur la hauteur, pas sur display : une transition sur
+     « display » ne s'anime pas. */
+  max-height: 44px;
+  overflow: hidden;
+  transition: max-height 260ms ease, opacity 200ms ease;
+}
+.barre-haute-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-5);
+  min-height: 44px;
+}
+.barre-haute-metier {
+  display: flex; flex-wrap: wrap; gap: var(--space-4);
+  list-style: none; margin: 0; padding: 0;
+}
+.barre-haute-metier li {
+  margin: 0; position: relative;
+  letter-spacing: .04em;
+}
+/* Les séparateurs sont posés SUR le fond sombre : --color-dark-3 y tombait à
+   1,7:1, c'est-à-dire invisible. #94A3B8 tient 5,5:1 tout en restant discret. */
+.barre-haute-metier li + li::before {
+  content: "·"; position: absolute; left: calc(var(--space-4) / -2 - 2px);
+  color: #94A3B8;
+}
+.barre-haute-contact {
+  margin: 0; display: flex; align-items: center; gap: var(--space-2);
+  white-space: nowrap;
+}
+.barre-haute-contact a {
+  color: #E2E8F0; text-decoration: none;
+  display: inline-block; padding: var(--space-2) 0; min-height: 24px;
+}
+.barre-haute-contact a:hover { color: var(--color-white); text-decoration: underline; }
+.barre-haute-contact span { color: #94A3B8; }
+
+/* Repliée au défilement. La classe est posée par static/assets/js/site.js. */
+body.defile .barre-haute { max-height: 0; opacity: 0; }
+
+@media (max-width: 900px) {
+  /* Sur mobile la barre supérieure ferait doublon avec la barre d'appel
+     fixe du bas : elle ne garde que le métier, sur une seule ligne. */
+  .barre-haute-contact { display: none; }
+  .barre-haute-metier { gap: var(--space-3); font-size: 0.75rem; }
+  .barre-haute-metier li + li::before { left: calc(var(--space-3) / -2 - 2px); }
+}
+@media (max-width: 560px) {
+  .barre-haute-metier li:nth-child(n + 4) { display: none; }
+}
 
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(255,255,255,.90);
-  backdrop-filter: saturate(180%) blur(12px);
+  background: rgba(255, 255, 255, .92);
+  backdrop-filter: saturate(180%) blur(14px);
   border-bottom: 1px solid var(--color-border);
   color: var(--color-dark);
+  transition: box-shadow 220ms ease;
 }
+body.defile .site-header { box-shadow: 0 6px 28px rgba(15, 23, 42, .08); }
+
 .header-inner {
-  display: flex; align-items: center; gap: var(--space-4);
-  padding: var(--space-3) 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-6);
+  padding-block: var(--space-4);
+  transition: padding-block 220ms ease;
 }
+body.defile .header-inner { padding-block: var(--space-3); }
 
-/* Le pictogramme de marque a disparu ; c'est lui qui donnait sa hauteur au
-   lien. Sans « min-height », le lien de retour à l'accueil tombe sous les
-   24 px demandés par WCAG 2.5.8 dès que la baseline est masquée. */
 .brand {
-  display: flex; align-items: center; gap: var(--space-3);
-  color: var(--color-dark); text-decoration: none; margin-right: auto;
-  flex-shrink: 0; min-height: 44px;
+  display: flex; align-items: center;
+  color: var(--color-dark); text-decoration: none;
+  min-height: 44px; justify-self: start;
 }
-/* Le téléphone est l'action principale du site : il porte le numéro en toutes
-   lettres dès qu'il y a la place, et se réduit à « Appeler » sur les écrans
-   étroits, où le libellé long ferait déborder l'en-tête. */
-.header-actions { display: flex; align-items: center; gap: var(--space-3); flex-shrink: 0; }
-.header-call { flex-shrink: 0; flex-direction: column; gap: 0; line-height: 1.15; padding: 0.5rem 1.125rem; }
-.header-call-libelle { font-size: var(--text-xs); font-weight: 600; opacity: .8; }
-.header-call-numero { font-family: var(--font-title); font-size: 1.0625rem; }
-.header-devis {
-  padding: 0.625rem 1.125rem; min-height: 44px; font-size: var(--text-sm);
-  white-space: nowrap;
-}
-@media (max-width: 1180px) { .header-devis { display: none; } }
-/* En dessous de 420 px, le numéro en toutes lettres ne tient plus à côté de
-   la marque et du menu : le bouton se réduit à une icône et « Appeler ».
-   Le numéro complet reste porté par la barre fixe du bas. */
-@media (max-width: 420px) {
-  .header-call { flex-direction: row; gap: var(--space-2); }
-  .header-call-numero { display: none; }
-  .header-call-libelle { font-size: var(--text-sm); opacity: 1; }
-}
-/* Aucun pictogramme de marque : le nom composé suffit et n'invente rien. */
-.brand-text { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; overflow: hidden; }
-/* Sans nowrap, la marque se replie sur quatre lignes dès que la navigation
-   réclame de la place, et l'en-tête double de hauteur. */
+.brand-text { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
 .brand-text strong {
-  font-family: var(--font-title); font-size: 1.0625rem;
-  color: var(--color-dark); letter-spacing: -0.02em; white-space: nowrap;
+  font-family: var(--font-title); font-size: 1.1875rem; font-weight: 700;
+  color: var(--color-dark); letter-spacing: -0.025em; white-space: nowrap;
 }
-/* La baseline n'est pas reprise dans l'en-tête : avec huit entrées de menu,
-   un numéro et un bouton, elle ne tient sur aucune largeur sans chevaucher la
-   navigation. Elle reste présente dans le pied de page, dans le titre de la
-   page et dans le premier paragraphe — là où elle est réellement lue. */
-.brand-text small { font-size: var(--text-xs); color: var(--color-muted); white-space: nowrap; }
+.brand-text small {
+  font-size: var(--text-xs); color: var(--color-muted);
+  white-space: nowrap; margin-top: 1px;
+  transition: max-height 200ms ease, opacity 200ms ease;
+  max-height: 1.4em;
+}
+body.defile .brand-text small { max-height: 0; opacity: 0; overflow: hidden; }
 
+/* --- Navigation, colonne centrale --------------------------------------- */
+
+.nav { min-width: 0; justify-self: center; }
 .nav ul { display: flex; gap: var(--space-1); list-style: none; margin: 0; padding: 0; }
 .nav li { margin: 0; }
-.nav { min-width: 0; }
 .nav a {
-  display: block; padding: 0.5rem 0.5rem;
+  display: flex; align-items: center;
+  min-height: 40px;
+  padding: 0 var(--space-3);
   color: var(--color-dark-3); text-decoration: none;
-  font-size: var(--text-xs); font-weight: 500;
+  font-family: var(--font-title);
+  font-size: var(--text-sm); font-weight: 600;
   border-radius: var(--radius-sm); white-space: nowrap;
   transition: color var(--transition), background-color var(--transition);
 }
 .nav a:hover { color: var(--color-primary-deep); background: var(--color-primary-tint); }
-.nav-devis { color: var(--color-primary-deep) !important; font-weight: 700 !important; }
 
-.header-call { min-height: 46px; white-space: nowrap; }
-.header-tel {
-  display: flex; flex-direction: column; align-items: flex-end;
-  text-decoration: none; line-height: 1.2;
+/* --- Actions, colonne de droite ----------------------------------------- */
+
+.header-actions {
+  display: flex; align-items: center; gap: var(--space-3);
+  justify-self: end;
 }
-.header-tel span { font-size: var(--text-xs); color: var(--color-muted); white-space: nowrap; }
-.header-tel strong { font-family: var(--font-title); font-size: 1.0625rem; color: var(--color-dark); white-space: nowrap; }
-/* Le numéro écrit en toutes lettres demande de la place. En dessous, le
-   bouton orange le porte déjà : on évite la redondance plutôt que de tasser. */
-@media (max-width: 1400px) { .header-tel { display: none; } }
+.header-devis {
+  padding: 0 var(--space-4); min-height: 46px;
+  font-size: var(--text-sm); white-space: nowrap;
+}
+.header-call {
+  flex-direction: column; gap: 0; line-height: 1.15;
+  padding: 0 var(--space-5); min-height: 46px;
+  white-space: nowrap;
+}
+.header-call-libelle { font-size: var(--text-xs); font-weight: 600; opacity: .85; }
+.header-call-numero { font-family: var(--font-title); font-size: 1.0625rem; }
 
 .nav-toggle {
   display: none; align-items: center; justify-content: center;
@@ -440,48 +499,67 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 }
 .nav-toggle-bars, .nav-toggle-bars::before, .nav-toggle-bars::after {
   display: block; width: 20px; height: 2px; background: var(--color-dark);
-  border-radius: 2px; content: ""; transition: transform var(--transition);
+  border-radius: 2px; content: ""; transition: transform var(--transition), opacity var(--transition);
 }
 .nav-toggle-bars::before { transform: translateY(-6px); }
 .nav-toggle-bars::after  { transform: translateY(4px); }
+/* Croix lorsque le panneau est ouvert : l'état du bouton doit être lisible. */
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars { background: transparent; }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars::before { transform: rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars::after  { transform: translateY(-2px) rotate(-45deg); }
+
+/* --- Bascule mobile ------------------------------------------------------
+   En dessous de 1080 px, la navigation ne tient plus au centre. Elle devient
+   un panneau qui glisse sous le header, avec des entrées assez hautes pour
+   être touchées sans viser.
+   ------------------------------------------------------------------------ */
 
 @media (max-width: 1080px) {
-  .nav-toggle { display: flex; order: 3; }
+  .header-inner { grid-template-columns: auto 1fr; gap: var(--space-4); }
+  .nav-toggle { display: flex; }
+  .header-devis { display: none; }
+
   .nav {
-    order: 4; flex-basis: 100%; display: none;
-    border-top: 1px solid var(--color-border);
-    margin-top: var(--space-3); padding-top: var(--space-2);
+    position: absolute; left: 0; right: 0; top: 100%;
+    justify-self: stretch;
+    background: var(--color-white);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, .12);
+    display: none;
   }
   .nav[data-ouvert="true"] { display: block; }
-  .nav ul { flex-direction: column; gap: 0; padding-bottom: var(--space-3); }
-  .nav a { padding: 0.875rem 0.5rem; font-size: var(--text-base); border-radius: 0; }
+  .nav ul {
+    flex-direction: column; gap: 0;
+    width: min(100% - var(--space-6), var(--container));
+    margin-inline: auto;
+    padding: var(--space-3) 0 var(--space-5);
+  }
   .nav li + li { border-top: 1px solid var(--color-border); }
-  .header-inner { flex-wrap: wrap; }
-  .header-tel { display: none; }
-}
-@media (max-width: 760px) {
-  .header-inner { gap: var(--space-3); }
-  .brand-text strong { font-size: 0.9375rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .brand-text small { display: none; }
-  .header-call { padding: 0.5rem 0.875rem; min-height: 46px; }
+  .nav a {
+    min-height: 54px; padding: 0 var(--space-2);
+    font-size: var(--text-lg); border-radius: 0;
+  }
+  /* Le devis rejoint le panneau, puisqu'il quitte la barre d'actions. */
+  .nav ul::after {
+    content: ""; display: block;
+  }
 }
 
-/* Sous 400 px, marque + bouton + menu totalisaient 342 px pour 328 disponibles :
-   l'en-tête passait sur deux lignes. Ce bloc vient APRÈS celui de 760 px, qui
-   s'applique aussi à cette largeur : sans cet ordre, il serait neutralisé. */
+@media (max-width: 560px) {
+  .header-inner { padding-block: var(--space-3); gap: var(--space-3); }
+  .brand-text strong { font-size: 1.0625rem; }
+  .brand-text small { display: none; }
+  .header-call { padding: 0 var(--space-4); }
+}
 @media (max-width: 400px) {
-  .header-inner { gap: var(--space-2); }
-  .brand { gap: var(--space-2); }
-  .brand-text strong { font-size: 0.8125rem; }
-  .header-call { padding: 0.5rem 0.6875rem; }
-  .header-call-libelle { font-size: var(--text-xs); }
+  .header-call { flex-direction: row; gap: var(--space-2); padding: 0 var(--space-3); }
+  .header-call-numero { display: none; }
+  .header-call-libelle { font-size: var(--text-sm); opacity: 1; }
+  .brand-text strong { font-size: 1rem; }
   .nav-toggle { min-width: 42px; min-height: 42px; }
 }
-/* À 320 px il ne reste que 288 px utiles. Plutôt que de tronquer le nom en
-   « Serrurier Ric… », la marque se réduit à son seul pictogramme : le nom
-   reste lu par les lecteurs d'écran via l'aria-label du lien. */
 @media (max-width: 340px) {
-  .brand-text { display: none; }
+  .brand-text strong { font-size: 0.9375rem; }
 }
 
 /* --- 7. Héros ------------------------------------------------------------- */
@@ -514,17 +592,25 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 .hero a:not(.btn) { color: var(--color-primary-deep); }
 
 .hero-grid {
-  display: grid; grid-template-columns: 1.02fr 0.98fr;
-  gap: var(--space-8); align-items: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  gap: var(--space-8);
+  /* « stretch » et non « center » : la photo occupe toute la hauteur de la
+     colonne de texte. Centrée, elle laissait en dessous d'elle un vide plus
+     haut qu'elle-même — le défaut le plus visible d'un héros à deux colonnes. */
+  align-items: stretch;
 }
+.hero-grid > div:first-child { display: flex; flex-direction: column; justify-content: center; }
 .hero-actions {
   display: flex; gap: var(--space-3); flex-wrap: wrap;
   margin-top: var(--space-6); margin-bottom: 0;
 }
 
-/* Réassurance du héros : liste à coches, pas des chiffres inventés */
+/* Réassurance du héros : liste à coches, pas des chiffres inventés.
+   Elle occupe toute la largeur, sous les deux colonnes. */
 .hero-preuves {
-  display: grid; grid-template-columns: repeat(2, minmax(0,1fr));
+  grid-column: 1 / -1;
+  display: grid; grid-template-columns: repeat(4, minmax(0,1fr));
   gap: var(--space-3) var(--space-5);
   margin: var(--space-7) 0 0; padding: var(--space-6) 0 0;
   border-top: 1px solid var(--color-border);
@@ -545,34 +631,58 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 .preuve strong { display: block; font-family: var(--font-title); font-size: var(--text-base); }
 .preuve span { font-size: var(--text-sm); color: var(--color-muted); }
 
-.hero-media { position: relative; }
+/* Le visuel d'ouverture est traité comme une image de première page : le
+   rapport est imposé par le conteneur, jamais laissé au fichier. Le fichier
+   maître est en 16/9. Affiché sur toute la largeur, il est rendu tel quel,
+   sans le moindre recadrage ; en deux colonnes il passe en 3/2, ce qui retire
+   environ 16 % de largeur sur les bords — le technicien reste entier, la
+   serrure reste au centre. Aucun recadrage plus agressif n'est appliqué : la
+   colonne de texte, plus haute que l'image, ne l'étire plus pour la rejoindre,
+   c'est la vignette placée dessous qui occupe le reste de la hauteur. */
+.hero-media {
+  display: flex; flex-direction: column; justify-content: center;
+  gap: var(--space-4);
+}
 .hero-media img, .hero-media picture {
+  display: block; width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover; object-position: 42% center;
   border-radius: var(--radius-lg);
-  box-shadow: 0 28px 56px rgba(20,35,31,.18);
+  box-shadow: 0 28px 56px rgba(15, 23, 42, .18);
   border: 1px solid var(--color-border);
 }
-/* Pastille flottante posée sur la photo */
+
+/* Vignette téléphone : un bloc posé sous la photo, jamais par-dessus. Rien
+   n'est masqué du visuel, et le rapport de l'image reste intact. */
 .hero-vignette {
-  position: absolute; left: -14px; bottom: 26px;
-  background: #fff; color: var(--color-dark);
+  background: var(--color-white); color: var(--color-dark);
   border-radius: var(--radius); padding: var(--space-4) var(--space-5);
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
   border-left: 4px solid var(--color-secondary);
-  max-width: 280px;
 }
 .hero-vignette strong { display: block; font-family: var(--font-title); font-size: var(--text-xl); line-height: 1.2; letter-spacing: -0.02em; }
 .hero-vignette span { font-size: var(--text-xs); color: var(--color-muted); }
 
-@media (max-width: 960px) {
+/* À partir de 1151 px la photo partage la ligne avec le texte : le 3/2 la
+   rend plus haute sans la déformer et remplit la colonne. En dessous, elle
+   occupe toute la largeur et garde le 16/9 du fichier. */
+@media (min-width: 1151px) {
+  .hero-media img, .hero-media picture { aspect-ratio: 3 / 2; }
+}
+
+@media (max-width: 1080px) {
+  .hero-preuves { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1150px) {
   .hero { padding: var(--space-7) 0 var(--space-8); }
   .hero-grid { grid-template-columns: 1fr; gap: var(--space-7); }
   .hero .chapeau { max-width: none; }
-  .hero-vignette { left: 12px; bottom: 12px; }
 }
 @media (max-width: 560px) {
   .hero-preuves { grid-template-columns: 1fr; }
   .hero-actions .btn { width: 100%; }
-  .hero-vignette { position: static; margin-top: var(--space-4); max-width: none; }
 }
 
 /* Héros compact des pages intérieures */
@@ -619,7 +729,9 @@ section.sombre {
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 .carte h3 { margin-bottom: var(--space-2); }
-.carte p { color: var(--color-muted); }
+/* Idem : une pastille posée dans une carte doit garder sa couleur, sinon elle
+   passe sous le seuil de contraste AA sur son fond bleu clair. */
+.carte p:not(.badge) { color: var(--color-muted); }
 .carte > :last-child { margin-bottom: 0; }
 
 .carte-icone {
@@ -654,12 +766,16 @@ section.sombre {
   box-shadow: var(--shadow-lg);
   border-color: var(--color-primary-lighter);
 }
+/* Cartes : 3/2, exactement le format des fichiers maîtres. Aucun recadrage,
+   donc aucun risque de couper une main ou une tête, et toutes les cartes
+   d'une grille ont la même hauteur d'image quelle que soit la photo. */
 .carte-media {
-  position: relative; aspect-ratio: 16 / 10;
+  position: relative; aspect-ratio: 3 / 2;
   background: var(--color-background-2); overflow: hidden;
 }
 .carte-media img {
-  width: 100%; height: 100%; object-fit: cover;
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
   transition: transform 420ms cubic-bezier(.4,0,.2,1);
 }
 .carte-service:hover .carte-media img { transform: scale(1.045); }
@@ -685,9 +801,10 @@ section.sombre {
 
 /* --- 10. Réassurance, chiffres, étapes ------------------------------------ */
 
-/* Réassurance — les pictogrammes ont laissé la place à de vraies
-   photographies d'intervention. Une image de ce que nous faisons vaut mieux
-   qu'un dessin de bouclier ou d'horloge, qui ne prouve rien. */
+/* Réassurance — du texte, pas d'image. Les photos qui s'y trouvaient
+   reprenaient celles des cartes de prestation situées juste en dessous :
+   l'accueil affichait 26 images pour 14 visuels distincts. Un fait chiffré
+   convainc mieux qu'une photo vue trois fois sur la même page. */
 .reassurance {
   display: grid; gap: var(--space-5);
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
@@ -695,28 +812,20 @@ section.sombre {
 }
 .reassurance li {
   margin: 0;
+  padding: var(--space-6);
   background: var(--color-white);
   border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-primary);
   border-radius: var(--radius-lg);
-  overflow: hidden;
   box-shadow: var(--shadow-sm);
-  display: flex; flex-direction: column;
 }
-.reassurance figure { margin: 0; }
-.reassurance figure img {
-  display: block; width: 100%;
-  aspect-ratio: 16 / 10; object-fit: cover;
-}
-.reassurance li > span { padding: var(--space-5); font-size: var(--text-sm); color: var(--color-muted); }
 .reassurance strong {
   display: block; font-family: var(--font-title);
   color: var(--color-dark); font-size: var(--text-lg);
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-3);
 }
+.reassurance li > span { font-size: var(--text-sm); color: var(--color-muted); line-height: 1.65; }
 
-/* Liste d'engagements : du texte, une barre d'accent, rien d'autre. Elle
-   remplace l'ancienne liste à pictogrammes partout où l'image n'apporterait
-   rien — une promesse ne se photographie pas. */
 .engagements { list-style: none; margin: var(--space-5) 0 0; padding: 0; display: grid; gap: var(--space-4); }
 .engagements li {
   margin: 0;
@@ -767,6 +876,22 @@ section.sombre {
 .etapes p { color: var(--color-muted); font-size: var(--text-sm); margin: 0; }
 section.sombre .etapes li::before { background: var(--color-primary-soft); color: var(--color-primary-deep); }
 
+/* Carte de prestation locale : le gabarit d'une carte de service, sans
+   image. Sur une page de zone, les six cartes reprenaient les visuels du
+   héros et des cas d'intervention de la même page. Un titre, un texte de
+   contexte local et un lien suffisent, et la page cesse de tourner en rond. */
+.carte-locale {
+  display: flex; flex-direction: column;
+  padding: var(--space-6);
+}
+.carte-locale .badge { align-self: flex-start; margin-bottom: var(--space-4); }
+.carte-locale h3 { margin-bottom: var(--space-3); }
+/* « :not(.badge) » est indispensable : sans lui ce sélecteur, plus spécifique
+   que .badge, repeignait les pastilles en gris et les faisait tomber sous le
+   seuil AA. */
+.carte-locale p:not(.badge) { color: var(--color-muted); font-size: var(--text-sm); line-height: 1.65; }
+.carte-locale .carte-pied { margin-top: auto; padding-top: var(--space-4); }
+
 /* --- 11. Galerie et médias ------------------------------------------------ */
 
 .galerie {
@@ -782,7 +907,7 @@ section.sombre .etapes li::before { background: var(--color-primary-soft); color
   transition: transform var(--transition), box-shadow var(--transition);
 }
 .galerie figure:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-.galerie img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.galerie img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: center; }
 .galerie figcaption {
   padding: var(--space-3) var(--space-4);
   font-size: var(--text-sm); color: var(--color-muted);
@@ -791,12 +916,19 @@ section.sombre .etapes li::before { background: var(--color-primary-soft); color
 .galerie figcaption strong { display: block; color: var(--color-dark); font-family: var(--font-title); }
 
 /* Grande illustration en pleine largeur de colonne */
+/* Image principale d'une page service. Elle a droit à de l'air : collée au
+   texte qui la précède, elle se lit comme l'illustration d'un paragraphe et
+   non comme le sujet de la page. */
 .media-large {
   border-radius: var(--radius-lg); overflow: hidden;
   box-shadow: var(--shadow-lg); border: 1px solid var(--color-border);
-  margin: var(--space-6) 0;
+  margin: var(--space-7) 0 var(--space-3);
 }
-.media-large img { width: 100%; }
+.media-large img {
+  display: block; width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover; object-position: center;
+}
 .media-legende {
   font-size: var(--text-sm); color: var(--color-muted);
   margin-top: calc(var(--space-6) * -1 + var(--space-3));
@@ -1006,7 +1138,7 @@ td.prix { font-family: var(--font-title); font-weight: 700; color: var(--color-p
    toute la ligne d'intitulé cliquable, ce qui aide autant à la souris qu'au
    doigt — un doigt vise mal une cible de la taille d'une tête d'épingle. */
 input[type="radio"], input[type="checkbox"] {
-  width: 22px; height: 22px; flex: none; margin: 0;
+  width: 24px; height: 24px; flex: none; margin: 0;
   accent-color: var(--color-primary-deep);
   cursor: pointer;
 }
@@ -1033,14 +1165,16 @@ label:has(> input[type="checkbox"]) {
   min-height: 46px; transition: all var(--transition);
 }
 .champ-radio label:hover { border-color: var(--color-primary-lighter); background: var(--color-primary-tint); }
-.champ-radio input { width: auto; min-height: 0; margin: 0; accent-color: var(--color-primary); }
+/* « width: auto » remettait le contrôle natif à 13 px de large et annulait
+   la règle ci-dessus : la case redevenait deux fois trop petite. */
+.champ-radio input { width: 24px; height: 24px; min-height: 0; margin: 0; accent-color: var(--color-primary-deep); }
 .champ-radio label:has(input:checked) {
   border-color: var(--color-primary); background: var(--color-primary-soft);
   color: var(--color-primary-sur-clair); font-weight: 700;
 }
 
 .champ-case { flex-direction: row; align-items: flex-start; gap: var(--space-3); }
-.champ-case input { width: auto; min-height: 0; margin-top: 4px; accent-color: var(--color-primary); flex: none; }
+.champ-case input { width: 24px; height: 24px; min-height: 0; margin-top: 4px; accent-color: var(--color-primary-deep); flex: none; }
 .champ-case label { font-family: var(--font-body); font-weight: 400; font-size: var(--text-sm); color: var(--color-muted); line-height: 1.6; }
 
 /* Piège à robots : hors écran, ni display:none ni hidden, que des automates
@@ -1656,8 +1790,11 @@ section.sombre .etapes.frise li::after {
   line-height: 1.65;
   max-width: 46ch;
 }
+/* Héros des pages locales : 3/2, le format des fichiers maîtres. */
 .hero-local-media img {
-  width: 100%;
+  display: block; width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover; object-position: center;
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
   box-shadow: 0 24px 52px rgba(15, 23, 42, .16);
@@ -1746,9 +1883,13 @@ section.sombre .etapes.frise li::after {
    d'aligner six blocs strictement identiques. */
 .intervention:nth-child(even) .intervention-media { order: 2; }
 .intervention-media { margin: 0; align-self: stretch; }
+/* Bloc d'intervention : 4/3. Le fichier est en 3/2, « cover » retire donc
+   environ 11 % de largeur — à parts égales à droite et à gauche, sur des
+   photos où le sujet est central. */
 .intervention-media img {
-  width: 100%; height: 100%; min-height: 260px;
-  object-fit: cover; display: block;
+  display: block; width: 100%; height: 100%;
+  min-height: 280px;
+  object-fit: cover; object-position: center;
 }
 .intervention-corps { padding: var(--space-6); }
 .intervention-corps h3 { font-size: var(--text-xl); margin-bottom: var(--space-4); }
@@ -1773,7 +1914,7 @@ section.sombre .etapes.frise li::after {
 @media (max-width: 860px) {
   .intervention { grid-template-columns: 1fr; }
   .intervention:nth-child(even) .intervention-media { order: 0; }
-  .intervention-media img { min-height: 0; aspect-ratio: 4 / 3; }
+  .intervention-media img { min-height: 0; height: auto; aspect-ratio: 4 / 3; }
 }
 
 /* --- Avant / après -------------------------------------------------------- */
@@ -1940,6 +2081,34 @@ section.sombre .etapes.frise li::after {
 .services-associes h2 { font-size: var(--text-xl); }
 .services-associes p { color: var(--color-muted); margin-bottom: var(--space-4); }
 .services-associes { padding-block: var(--space-8); }
+
+/* ==========================================================================
+   25 bis. RESPIRATION AUTOUR DES IMAGES
+   --------------------------------------------------------------------------
+   Une hiérarchie constante, quel que soit le composant :
+
+       titre  →  24 px  →  description  →  32 px  →  image
+                        →  12 px  →  légende  →  24 px  →  action
+
+   C'est la régularité d'un bloc à l'autre, plus que les valeurs elles-mêmes,
+   qui donne l'impression d'une page composée.
+   ========================================================================== */
+
+.section-titre + .media-large,
+.section-titre + .galerie,
+.section-titre + .galerie-filtres,
+.section-titre + .interventions,
+.section-titre + .grille { margin-top: var(--space-7); }
+
+.media-legende,
+.galerie figcaption { margin-top: var(--space-3); }
+
+.media-large + p,
+.media-large + .btn,
+.galerie + p { margin-top: var(--space-5); }
+
+/* Une image ne touche jamais le texte qui la suit. */
+figure + p, figure + h2, figure + h3 { margin-top: var(--space-5); }
 
 /* ==========================================================================
    26. SCHÉMAS EXPLICATIFS
