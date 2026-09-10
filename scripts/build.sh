@@ -126,7 +126,10 @@ resoudre_image() {
 # c'est-à-dire moins bien qu'avant l'ajout des variantes.
 construire_srcset() {
   local base="$1" ext="$2" largeur_reelle="$3" srcset="" largeur
-  for largeur in 800 1200 1600; do
+  # Ces paliers doivent rester alignés sur VARIANTES dans
+  # scripts/preparer-photos.py : une variante produite mais absente d'ici est
+  # un fichier écrit sur le disque que le site ne sert jamais.
+  for largeur in 600 800 1000 1200 1600; do
     if [ "$largeur" -lt "$largeur_reelle" ] \
        && [ -f "static/assets/images/${base}-${largeur}.${ext}" ]; then
       [ -n "$srcset" ] && srcset="${srcset}, "
@@ -366,6 +369,56 @@ if [ -n "${IMG_HERO:-}" ]; then
   export IMG_HERO="${IMG_HERO/ loading=\"lazy\" decoding=\"async\"/ fetchpriority=\"high\" decoding=\"async\"}"
 fi
 
+# --- Dimensionnement réel des images ---------------------------------------
+# Un même identifiant d'image sert dans plusieurs emplacements : le héros, une
+# carte de service, une vignette de galerie. Or l'attribut « sizes » ne décrit
+# pas le fichier, il décrit la LARGEUR À LAQUELLE LA PAGE VA L'AFFICHER — c'est
+# elle qui détermine le fichier choisi dans le srcset. Une valeur unique était
+# donc forcément fausse quelque part : elle annonçait 600 px partout, et le
+# navigateur téléchargeait le fichier de 600 px pour l'afficher sur 1 198 px.
+# Résultat : une image visiblement floue sur ordinateur.
+#
+# Les valeurs ci-dessous ont été relevées au navigateur sur les onze largeurs
+# testées, conteneur par conteneur. Elles sont volontairement légèrement
+# supérieures au maximum mesuré : mieux vaut quelques kilo-octets de trop
+# qu'une image floue.
+#
+# La même passe désigne l'image principale de la page — la première d'un
+# grand conteneur — et lui retire le chargement différé : c'est elle que le
+# navigateur doit demander en premier, pas en dernier.
+ajuster_visuels() {
+  printf '%s' "$1" | perl -0777 -pe '
+    my %profil = (
+      "hero-media"        => "(max-width: 1150px) 96vw, 600px",
+      "media-large"       => "(max-width: 1240px) 96vw, 1200px",
+      "hero-local-media"  => "(max-width: 560px) 92vw, (max-width: 900px) 96vw, 560px",
+      "intervention-media"=> "(max-width: 560px) 92vw, (max-width: 900px) 96vw, 680px",
+      "carte-media"       => "(max-width: 560px) 92vw, 400px",
+      "apparait"          => "(max-width: 560px) 92vw, 360px",
+      "avant-apres"       => "(max-width: 700px) 92vw, 560px",
+    );
+    my %grand = map { $_ => 1 } qw(hero-media media-large hero-local-media);
+    my $principale = 0;
+
+    s{(.*?)(<img\b[^>]*>)}{
+      my ($avant, $img) = ($1, $2);
+      my $classe = "";
+      $classe = $1 while $avant =~ /class="([^"]*)"/g;
+      my ($premiere) = split / /, $classe;
+      $premiere = "" unless defined $premiere;
+
+      if (my $s = $profil{$premiere}) {
+        $img =~ s/\ssizes="[^"]*"/ sizes="$s"/;
+      }
+      if (!$principale && $grand{$premiere}) {
+        $principale = 1;
+        $img =~ s/\sloading="lazy"/ fetchpriority="high"/;
+      }
+      $avant . $img;
+    }gse;
+  '
+}
+
 # Le navigateur ne découvre l'image d'ouverture qu'après avoir analysé le corps
 # de la page. Le préchargement la lui annonce dès l'en-tête : elle part en même
 # temps que la feuille de style au lieu d'attendre son tour.
@@ -498,6 +551,7 @@ while IFS= read -r src_file; do
   # Le corps est substitué d'abord : le balisage FAQPage doit contenir les
   # valeurs finales (tarifs, téléphone), pas les tokens.
   CORPS="$(sed '/^<!--meta$/,/^-->$/d' "$src_file" | substituer)"
+  CORPS="$(ajuster_visuels "$CORPS")"
 
   export PRECHARGEMENT_HERO="$(precharger_visuel_principal "$CORPS")"
 

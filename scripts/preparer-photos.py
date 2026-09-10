@@ -2,7 +2,7 @@
 """
 Prépare une photographie d'intervention pour le site.
 
-    python3 scripts/preparer-photos.py <source> <identifiant du catalogue>
+    python3 scripts/preparer-photos.py <source> <identifiant> [cadrage]
 
 Exemple :
 
@@ -13,9 +13,15 @@ pour cet identifiant, puis écrit le fichier au bon endroit, au bon nom, au bon
 format et aux bonnes proportions. Il produit aussi les variantes -800 et -1200
 qui alimentent l'attribut srcset.
 
-RECADRAGE — la photo est recadrée « au centre » pour atteindre les proportions
-demandées, jamais déformée. Si un cadrage particulier est nécessaire, recadrez
-la source à la main avant de lancer le script.
+RECADRAGE — la photo est recadrée pour atteindre les proportions demandées,
+jamais déformée. Le troisième argument, facultatif, dit où prendre la matière :
+
+    0.5   au centre (défaut)
+    0.4   plus haut — garde les têtes quand on retire de la hauteur
+    0.6   plus bas — garde le sol et l'outillage
+
+C'est le seul réglage qui évite de couper une tête ou des mains sur une photo
+d'intervention, où le sujet n'est presque jamais au centre géométrique.
 
 DONNÉES PERSONNELLES — les métadonnées EXIF (dont la position GPS) ne sont pas
 recopiées : Pillow ne les transporte pas d'un format à l'autre.
@@ -33,7 +39,7 @@ RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 IMAGES = os.path.join(RACINE, "static", "assets", "images")
 
 QUALITE = 82          # WebP : au-delà, le gain visuel ne se voit plus
-VARIANTES = (800, 1200)
+VARIANTES = (600, 1000, 1200)
 
 
 def entree_catalogue(identifiant):
@@ -47,28 +53,34 @@ def entree_catalogue(identifiant):
     return None
 
 
-def recadrer(image, largeur, hauteur):
-    """Recadre au centre pour atteindre exactement les proportions voulues."""
+def recadrer(image, largeur, hauteur, cadrage=0.5):
+    """Recadre aux proportions voulues sans jamais déformer.
+
+    « cadrage » place la fenêtre dans la dimension rognée : 0 en haut ou à
+    gauche, 1 en bas ou à droite, 0.5 au centre.
+    """
     vise = largeur / hauteur
     actuel = image.width / image.height
+    cadrage = min(1.0, max(0.0, cadrage))
 
     if actuel > vise:                      # source trop large : on rogne les côtés
         neuve = int(image.height * vise)
-        marge = (image.width - neuve) // 2
+        marge = int((image.width - neuve) * cadrage)
         image = image.crop((marge, 0, marge + neuve, image.height))
     elif actuel < vise:                    # source trop haute : on rogne haut et bas
         neuve = int(image.width / vise)
-        marge = (image.height - neuve) // 2
+        marge = int((image.height - neuve) * cadrage)
         image = image.crop((0, marge, image.width, marge + neuve))
 
     return image
 
 
 def main():
-    if len(sys.argv) != 3:
+    if len(sys.argv) not in (3, 4):
         sys.exit(__doc__)
 
     source, identifiant = sys.argv[1], sys.argv[2]
+    cadrage = float(sys.argv[3]) if len(sys.argv) == 4 else 0.5
 
     if not os.path.isfile(source):
         sys.exit(f"Fichier introuvable : {source}")
@@ -92,7 +104,7 @@ def main():
     if image.mode not in ("RGB", "L"):
         image = image.convert("RGB")
 
-    image = recadrer(image, largeur, hauteur)
+    image = recadrer(image, largeur, hauteur, cadrage)
 
     destination = os.path.join(IMAGES, f"{chemin}.webp")
     os.makedirs(os.path.dirname(destination), exist_ok=True)

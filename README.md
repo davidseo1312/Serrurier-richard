@@ -472,8 +472,31 @@ python3 scripts/audit-images.py
 
 Détecte : image référencée mais absente, texte alternatif manquant ou trop
 court, `width`/`height` absents, fichier trop lourd, nom de fichier sans
-signification, image livrée mais utilisée nulle part, et vignette de partage
-au format SVG — que les réseaux sociaux ignorent.
+signification, image livrée mais utilisée nulle part, vignette de partage
+au format SVG — que les réseaux sociaux ignorent — et **le même visuel affiché
+deux fois sur une même page**, qui est une erreur bloquante.
+
+### Une photo, un emplacement principal
+
+Avec huit photographies pour une quarantaine de pages, la tentation est de
+mettre la même partout. Trois règles l'évitent :
+
+- aucune page n'affiche deux fois le même fichier (vérifié par l'audit) ;
+- chaque page a sa photo dominante, et les six landing pages de zones ont six
+  photos d'ouverture différentes ;
+- quand il n'y a pas de photo pertinente, on écrit du texte — les cartes de
+  prestations des pages locales sont volontairement sans image.
+
+Pour voir la répartition réelle après un build :
+
+```bash
+grep -ro 'src="/assets/images/[^"]*"' public --include='*.html' \
+  | cut -d/ -f5- | sort | uniq -c | sort -rn | head
+```
+
+Aucun fichier ne doit dominer la liste. `docs/photos.md` détaille les rapports
+d'affichage imposés par chaque conteneur et la façon dont le build calcule
+`sizes` et `fetchpriority`.
 
 ### Régénérer les visuels
 
@@ -535,6 +558,27 @@ python3 scripts/generer-illustrations.py   # les 16 illustrations de repli
 node scripts/generer-og.mjs                # les vignettes de partage social
 bash scripts/build.sh
 ```
+
+### L'en-tête
+
+`src/partials/header.html` en décrit les deux étages :
+
+- **la barre supérieure** (`.barre-haute`, fond `--color-dark`) : à gauche les
+  quatre métiers, à droite le téléphone et le devis. Elle disparaît dès que la
+  page défile ;
+- **l'en-tête principal** (`.site-header`) : une grille à trois colonnes —
+  nom, navigation, actions — qui reste collée en haut et se resserre au
+  défilement.
+
+Toute l'animation est en CSS. Le JavaScript ne fait qu'une chose : poser la
+classe `defile` sur `<body>` au-delà de 60 px de défilement, dans un
+`requestAnimationFrame`. Sans JavaScript, l'en-tête reste simplement à sa
+taille pleine — rien n'est cassé.
+
+Sur mobile (≤ 760 px) l'en-tête se réduit à **nom · appeler · menu** : le
+bouton d'appel reste visible en permanence, ce qui est le geste attendu sur un
+site de dépannage. Les séparateurs de la barre supérieure sont en `#94A3B8` :
+sur fond sombre, `--color-dark-3` tombait à 1,7:1, c'est-à-dire invisible.
 
 ### Clés de métadonnées disponibles
 

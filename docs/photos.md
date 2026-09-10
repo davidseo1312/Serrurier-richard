@@ -77,14 +77,15 @@ Exemple :
   aussi ; le build prend le meilleur disponible dans l'ordre
   `avif > webp > jpg > jpeg > png > svg`).
 - **Définition** : au moins celle indiquée dans `src/images.conf`
-  (1100 × 850 pour le héros, 1200 × 750 pour les autres). Le **rapport**
-  doit être respecté, sinon la photo sera recadrée par le navigateur.
+  (1600 × 900 en 16/9 pour le héros, 1500 × 1000 en 3/2 pour les autres). Le
+  **rapport** doit être respecté : le conteneur impose le sien, une photo au
+  mauvais rapport sera recadrée (jamais déformée, mais recadrée).
 - **Poids** : sous les 250 Ko. Qualité 80 en WebP suffit largement.
 
 Avec `cwebp` :
 
 ```bash
-cwebp -q 80 -resize 1200 0 photo-originale.jpg \
+cwebp -q 80 -resize 1500 0 photo-originale.jpg \
   -o static/assets/images/interventions/serrurier-richard-ouverture-non-destructive-porte.webp
 ```
 
@@ -118,16 +119,41 @@ python3 scripts/audit-images.py
 
 ## 5. Variantes responsives (facultatif)
 
-Déposez en plus des fichiers suffixés `-800`, `-1200` ou `-1600` :
+`scripts/preparer-photos.py` produit trois réductions : `-600`, `-1000` et
+`-1200`. Le fichier maître reste à sa taille d'origine (1500 px de large pour
+les photos, 1600 pour le héros).
 
 ```
-serrurier-richard-ouverture-non-destructive-porte.webp
-serrurier-richard-ouverture-non-destructive-porte-800.webp
+serrurier-richard-ouverture-non-destructive-porte.webp        (maître, 1500 px)
+serrurier-richard-ouverture-non-destructive-porte-600.webp
+serrurier-richard-ouverture-non-destructive-porte-1000.webp
 serrurier-richard-ouverture-non-destructive-porte-1200.webp
 ```
 
-Le build construit tout seul l'attribut `srcset` correspondant. Aucun code à
-modifier.
+Le build construit tout seul l'attribut `srcset` correspondant, en y ajoutant
+le fichier maître avec sa vraie largeur. Aucun code à modifier.
+
+**L'attribut `sizes` n'est pas écrit à la main.** Il ne décrit pas le fichier,
+il décrit la largeur à laquelle la page va l'afficher — c'est elle qui décide
+quel fichier du `srcset` sera téléchargé. Comme un même identifiant d'image
+sert dans plusieurs emplacements (héros, carte, vignette), une valeur unique
+serait forcément fausse quelque part. La fonction `ajuster_visuels()` de
+`scripts/build.sh` la réécrit page par page, d'après la classe du conteneur :
+
+| Conteneur | Largeur affichée mesurée | `sizes` posé |
+|---|---|---|
+| `.hero-media` | 358 → 1118 px puis 598 px | `(max-width: 1150px) 96vw, 600px` |
+| `.media-large` | 356 → 1198 px | `(max-width: 1240px) 96vw, 1200px` |
+| `.hero-local-media` | 358 → 736 px | `… 96vw, 560px` |
+| `.intervention-media` | 356 → 734 px | `… 96vw, 680px` |
+| `.carte-media` | 313 → 400 px | `(max-width: 560px) 92vw, 400px` |
+| `.apparait` (galerie) | 286 → 358 px | `(max-width: 560px) 92vw, 360px` |
+
+La même passe retire le chargement différé de la première image d'un grand
+conteneur et lui pose `fetchpriority="high"` : c'est presque toujours l'image
+la plus grande au premier écran, donc celle que le navigateur doit demander en
+premier. Elle est aussi préchargée depuis l'en-tête, avec exactement les mêmes
+`srcset` et `sizes` — sinon le navigateur téléchargerait deux fichiers.
 
 ---
 
@@ -248,11 +274,73 @@ quelque chose de vrai.
 
 ---
 
+## 11 bis. Une photo, un emplacement principal
+
+Le défaut le plus visible d'un site de dépannage est la même photographie
+répétée de page en page. Trois règles l'évitent, et deux d'entre elles sont
+vérifiées automatiquement.
+
+1. **Aucune page n'affiche deux fois le même fichier.**
+   `scripts/audit-images.py` échoue si elle le fait — c'est une erreur
+   bloquante, pas un avertissement. L'audit compte les `src` réellement
+   présents dans le HTML produit, pas les intentions du code source.
+
+2. **Chaque photo a un emplacement principal.** Une page de service montre la
+   photo de son service ; une landing page de zone reçoit une photo qui lui est
+   propre, jamais les trois mêmes que l'accueil. Les six pages de zone ont donc
+   six photos d'ouverture différentes, et les pages de ville n'ont pas la même
+   que la page de département correspondante.
+
+3. **Quand il n'y a pas assez de photos, on écrit du texte.** Les cartes de
+   prestations des landing pages locales sont volontairement sans image
+   (`.carte-locale`) : mieux vaut un bloc de texte utile que la quatrième
+   apparition de la même serrure. Ajouter une photo vraiment nouvelle est
+   toujours préférable à en recycler une.
+
+Pour voir la répartition réelle :
+
+```bash
+bash scripts/build.sh
+grep -ro 'src="/assets/images/[^"]*"' public --include='*.html' \
+  | cut -d/ -f5- | sort | uniq -c | sort -rn | head -20
+```
+
+Aucun fichier ne devrait dominer la liste. Si l'un d'eux apparaît deux fois
+plus que les suivants, c'est qu'il a été utilisé par défaut faute de mieux :
+c'est le signal qu'il faut une photo de plus, pas une répétition de plus.
+
+---
+
+## 11 ter. Formats d'affichage
+
+Les rapports d'image sont imposés par le conteneur, jamais laissés au fichier :
+un remplacement au mauvais format ne peut donc pas déformer la mise en page.
+Aucune image n'est étirée — `object-fit: cover` recadre, il ne déforme pas.
+
+| Emplacement | Rapport affiché | Remarque |
+|---|---|---|
+| Héros, une colonne (≤ 1150 px) | 16/9 | le fichier maître est déjà en 16/9 : aucun recadrage |
+| Héros, deux colonnes (≥ 1151 px) | 3/2 | environ 16 % de largeur retirés sur les bords |
+| `.media-large` | 3/2 | pleine largeur du conteneur de texte |
+| Cartes de service | 3/2 | hauteur identique sur toute une grille |
+| Vignettes de galerie | 3/2 | |
+| Interventions locales | 4/3 | |
+| Planches explicatives (`.schema`) | rapport natif | jamais recadrées : les annotations doivent rester lisibles |
+
+Le cadrage horizontal (`object-position`) est réglé à 42 % sur le héros : le
+technicien est à gauche du cadre et la serrure au centre, ce réglage garde les
+deux. Une nouvelle photo dont le sujet est ailleurs demande un réglage
+différent — `scripts/preparer-photos.py` accepte un troisième argument de
+cadrage vertical (0 = haut, 0.5 = centre, 1 = bas).
+
+---
+
 ## 12. Les visuels actuels
 
-Neuf emplacements affichent aujourd'hui de **vraies photographies
-d'intervention**, et deux pages portent un schéma explicatif. Les autres
-emplacements sont encore illustrés.
+Huit emplacements affichent aujourd'hui de **vraies photographies
+d'intervention** (`bash scripts/verifier-photos.sh` en donne la liste à jour),
+et trois planches explicatives sont déclarées dans `src/schemas.conf`. Les
+autres emplacements sont encore illustrés.
 
 Les illustrations sont produites par `scripts/generer-illustrations.py` : ce
 sont des dessins vectoriels créés pour ce projet, sans photographie source. Elles expliquent un geste technique ;

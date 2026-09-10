@@ -52,4 +52,9 @@ done
 BASE_URL="http://localhost:${PORT}" node tests/navigateur.mjs
 CODE=$?
 
+# Contrôle visuel : mise en page sur onze largeurs, cibles tactiles, formats
+# d'image et contraste. Séparé de navigateur.mjs parce qu'il balaie TOUTES les
+# pages du sitemap, et non un échantillon de parcours.
+BASE_URL="http://localhost:${PORT}" node tests/visuels.mjs || CODE=1
+
 exit "$CODE"

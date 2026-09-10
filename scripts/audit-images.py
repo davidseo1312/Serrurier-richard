@@ -14,6 +14,7 @@
 # ---------------------------------------------------------------------------
 
 import re
+import collections
 import sys
 from pathlib import Path
 
@@ -90,6 +91,23 @@ def main() -> int:
     pages = sorted(PUBLIC.rglob("*.html"))
     utilisees = set()
     total_balises = 0
+
+    # --- 0. Répétition d'un même visuel sur une même page ------------------
+    # C'est le défaut qui donne au visiteur l'impression de revoir sans cesse
+    # les mêmes photos. Il ne se voit pas dans un inventaire global — chaque
+    # fichier peut être « utilisé une fois » par section — mais saute aux yeux
+    # sur la page. Il est donc traité comme une erreur, pas un avertissement.
+    for page in pages:
+        rel = page.relative_to(PUBLIC)
+        html = page.read_text(encoding="utf-8")
+        vus = collections.Counter(
+            attr.get("src", "") for _, attr in analyser_balises(html) if attr.get("src")
+        )
+        for src, n in vus.items():
+            if n > 1:
+                a.erreur(
+                    f"{rel} : le même visuel est affiché {n} fois sur la page — {src}"
+                )
 
     # --- 1. Les images posées dans les pages -------------------------------
     for page in pages:
