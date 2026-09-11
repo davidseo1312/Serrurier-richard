@@ -19,9 +19,9 @@
 # français : cela divise le poids par trois environ.
 #
 # Dépendance : fonttools[woff]  (pip install "fonttools[woff]" brotli)
-# Licences : Outfit et Work Sans sont sous SIL Open Font License 1.1, qui
-# autorise l'usage commercial et l'auto-hébergement. Les fichiers de licence
-# sont conservés à côté des polices, comme l'exige la OFL.
+# Licence : Inter est sous SIL Open Font License 1.1, qui autorise l'usage
+# commercial et l'auto-hébergement. Le fichier de licence est conservé à côté
+# de la police, comme l'exige la OFL.
 # ---------------------------------------------------------------------------
 
 import sys
@@ -36,14 +36,27 @@ except ImportError:
 RACINE = Path(__file__).resolve().parent.parent
 SOURCE = Path("/mnt/skills/examples/canvas-design/canvas-fonts")
 SORTIE = RACINE / "static" / "assets" / "fonts"
+# Les fichiers d'origine sont versionnés dans le dépôt : ce script tourne donc
+# sans réseau, et sur n'importe quelle machine.
+AMONT = RACINE / "src" / "polices"
 
-# Outfit pour les titres — géométrique, contemporaine, très lisible en gros.
-# Work Sans pour le texte courant — dessinée pour les longues lectures.
+# INTER, pour tout le site — titres comme texte courant.
+#
+# Une seule famille, et c'est un choix, pas une économie. Inter est dessinée
+# pour les écrans : hauteur d'x généreuse, formes ouvertes, et surtout des
+# lettres qu'on ne confond pas — le I majuscule, le l minuscule et le chiffre 1
+# sont trois dessins distincts, ce qui n'est pas le cas de toutes les
+# grotesques. Sur un site où l'on lit un numéro de téléphone et des prix,
+# cela compte plus que le caractère.
+#
+# Le fichier est VARIABLE : un seul téléchargement couvre les graisses 100 à
+# 900. Les quatre fichiers d'avant (Outfit 400/700, Work Sans 400/700) sont
+# remplacés par un seul, plus léger que les quatre réunis.
+#
+# Le fichier « latin » de Fontsource couvre déjà tout le français, œ et Œ
+# compris : le « latin-ext » est inutile ici, et n'est donc pas embarqué.
 POLICES = [
-    ("Outfit-Regular", "outfit-400"),
-    ("Outfit-Bold", "outfit-700"),
-    ("WorkSans-Regular", "worksans-400"),
-    ("WorkSans-Bold", "worksans-700"),
+    ("inter-latin-wght-normal", "inter-variable"),
 ]
 
 # Latin de base, supplément latin-1 (accents français), guillemets typographiques,
@@ -56,7 +69,7 @@ PLAGES = (
 
 
 def preparer(nom_source: str, nom_sortie: str) -> Path | None:
-    chemin = SOURCE / f"{nom_source}.ttf"
+    chemin = AMONT / f"{nom_source}.woff2"
     if not chemin.exists():
         print(f"  police introuvable : {chemin}")
         return None
@@ -84,15 +97,25 @@ if __name__ == "__main__":
     for source, sortie in POLICES:
         fichier = preparer(source, sortie)
         if fichier:
-            avant = (SOURCE / f"{source}.ttf").stat().st_size
+            avant = (AMONT / f"{source}.woff2").stat().st_size
             apres = fichier.stat().st_size
-            print(f"  {fichier.name:<20} {apres // 1024:>3} Ko   (source {avant // 1024} Ko)")
+            print(f"  {fichier.name:<22} {apres // 1024:>3} Ko   (source {avant // 1024} Ko)")
 
     # La OFL impose de distribuer la licence avec les fichiers de police.
-    for licence in ("Outfit-OFL.txt", "WorkSans-OFL.txt"):
-        source = SOURCE / licence
-        if source.exists():
-            (SORTIE / licence).write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
-            print(f"  {licence:<20}     licence conservée")
+    licence = AMONT / "Inter-OFL.txt"
+    if licence.exists():
+        (SORTIE / "Inter-OFL.txt").write_text(
+            licence.read_text(encoding="utf-8"), encoding="utf-8"
+        )
+
+    # Les anciennes polices ne servent plus à rien : les laisser dans
+    # static/ les ferait publier à chaque déploiement.
+    for perime in ("outfit-400.woff2", "outfit-700.woff2",
+                   "worksans-400.woff2", "worksans-700.woff2",
+                   "Outfit-OFL.txt", "WorkSans-OFL.txt"):
+        chemin = SORTIE / perime
+        if chemin.exists():
+            chemin.unlink()
+            print(f"  {perime:<22} retiré")
 
     print(f"\nPolices prêtes dans {SORTIE.relative_to(RACINE)}/")

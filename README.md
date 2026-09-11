@@ -534,7 +534,7 @@ valeur y repeint le site entier.
 | `--color-text` | texte courant (10,41:1) | `#334155` |
 | `--color-background` / `-2` | blanc cassé, surfaces alternées | `#FAFAF9` / `#F4F4F2` |
 | `--color-muted` | texte discret — **valable sur blanc pur seulement** (4,76:1) | `#64748B` |
-| `--font-title` / `--font-body` | Outfit / Work Sans | — |
+| `--font-title` / `--font-body` | Inter, pour tout le site | — |
 | `--radius-*` | **tous à zéro** : le site n'a aucun coin arrondi | `0` |
 
 **Le site est ardoise sur blanc cassé.** Pas de bleu, pas de dégradé coloré :
@@ -562,6 +562,39 @@ se lisent plus comme un signal mais comme un motif.
 > - Le texte du bouton d'appel est **brun très sombre**, pas blanc : blanc sur
 >   `#F97316` ne donne que 2,80:1. Même raison pour l'astérisque de champ
 >   obligatoire, qui utilise `--color-secondary-dark`.
+
+### La police
+
+**Inter, et elle seule.** Un seul fichier variable de 34 Ko couvre les
+graisses 100 à 900 — les quatre fichiers précédents (Outfit 400/700, Work
+Sans 400/700) en pesaient 55 à eux quatre, pour deux graisses chacun.
+
+Inter est dessinée pour les écrans, et c'est ce qui la rend lisible ici :
+hauteur d'x généreuse, formes ouvertes, et des lettres qu'on ne confond pas —
+le `I` majuscule, le `l` minuscule et le chiffre `1` sont trois dessins
+distincts, ce qui n'est pas le cas de toutes les grotesques. Sur un site où
+l'on lit un numéro de téléphone et des prix, cela compte davantage que le
+caractère.
+
+La distinction titre/texte se fait par la **graisse et l'interlettrage**, pas
+par un changement de dessin : 700 et `-0.03em` pour un H1, 400 pour le texte.
+Deux polices mal accordées se remarquent ; une seule bien réglée ne se
+remarque pas. Les deux jetons `--font-title` et `--font-body` sont conservés —
+une centaine de règles s'y réfèrent — mais pointent vers la même famille.
+
+Deux réglages qui se voient à l'usage :
+
+- **`strong` en 600, pas 700.** Dans une phrase, le 700 d'Inter fait une tache
+  noire qui attire l'œil hors de la ligne. Les titres, eux, restent en 700.
+- **Chiffres tabulaires** sur les prix, le numéro de téléphone et la barre
+  d'appel. Toutes les figures ont alors la même largeur : les prix s'alignent
+  verticalement dans la colonne, et un « 1 » étroit ne décale plus la ligne.
+
+La police est auto-hébergée (aucune requête vers un domaine tiers, CSP stricte
+conservée), préchargée depuis l'en-tête, et sous licence OFL — le fichier de
+licence est publié à côté, comme l'exige cette licence. Les sources sont
+versionnées dans `src/polices/`, hors production : `scripts/generer-polices.py`
+tourne donc sans réseau, sur n'importe quelle machine.
 
 **Angles vifs, partout.** Les cinq jetons `--radius-*` valent zéro : boutons,
 cartes, champs, pastilles, images, panneau de menu. Les jetons gardent leur
