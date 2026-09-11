@@ -62,11 +62,11 @@ fi
 
 # Mentions d'assurance : la phrase entière disparaît si l'assureur est
 # inconnu. Mieux vaut une information absente qu'une information fausse.
+# Elles ne figurent plus qu'en page mentions légales — le pied de page n'y
+# renvoie que par un lien.
 if [ -n "${ASSUREUR_RCPRO:-}" ]; then
-  export MENTION_ASSURANCE=" — Assurance responsabilité civile professionnelle ${ASSUREUR_RCPRO}"
   export LIGNE_RCPRO="<li><strong>Responsabilité civile professionnelle :</strong> ${ASSUREUR_RCPRO}${POLICE_RCPRO:+, police n° ${POLICE_RCPRO}}</li>"
 else
-  export MENTION_ASSURANCE=""
   export LIGNE_RCPRO="<li><strong>Responsabilité civile professionnelle :</strong> attestation remise sur demande, et jointe au devis avant tout démarrage de travaux.</li>"
 fi
 
