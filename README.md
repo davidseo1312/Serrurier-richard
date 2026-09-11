@@ -1048,6 +1048,61 @@ Le HSTS est présent mais **commenté** dans le `.htaccess` : ne l'activez
 qu'une fois le certificat confirmé et stable, car la directive est mémorisée
 par les navigateurs pendant deux ans.
 
+## Indexation
+
+`ROBOTS_POLICY` dans `src/config.sh` commande **tout** :
+
+| Valeur | `robots.txt` | Chaque page |
+|---|---|---|
+| `index` | `Allow: /` + `Sitemap:` déclaré | `<meta name="robots" content="index, follow, max-image-preview:large">` |
+| `noindex` | `Disallow: /` | `noindex, follow` |
+
+Deux pages restent en `noindex` quoi qu'il arrive, par leurs propres
+métadonnées : `/merci` (page de confirmation — sans intérêt pour un moteur, et
+source de doublons) et la 404. Elles sont d'ailleurs absentes du sitemap :
+une page en `noindex` listée au sitemap est un signal contradictoire que
+Google signale.
+
+```bash
+python3 scripts/audit-indexation.py
+```
+
+Ce contrôle, intégré à `scripts/audit.sh`, vérifie la mécanique qu'un moteur
+regarde — celle qui, mal réglée, fait qu'une page n'apparaît jamais quelle que
+soit sa qualité :
+
+- `robots.txt` cohérent avec `ROBOTS_POLICY`, et déclarant le sitemap ;
+- une balise `meta robots` sur chaque page, et un `lang` sur chaque `<html>` ;
+- une **canonique absolue, en https, sans www, qui pointe sur la page
+  elle-même** — une canonique qui pointe ailleurs efface la page du résultat ;
+- sitemap et pages indexables qui se correspondent **dans les deux sens** :
+  aucune page oubliée, aucune URL fantôme ;
+- titres et descriptions présents et **uniques** ;
+- aucune valeur d'attente entre crochets publiée.
+
+### Aucune valeur d'attente n'est publiée
+
+`src/config.sh` contient des champs encore vides, écrits entre crochets :
+`[ASSUREUR RC PRO]`, `[NOM DU MÉDIATEUR]`… Tant que le site n'était pas
+indexé, les publier n'avait guère de conséquence. Ce n'est plus vrai : un
+crochet dans une page, c'est un crochet dans le résultat Google — et dans les
+données structurées que Google lit.
+
+Le build les traite donc comme **vides** et compose les phrases en
+conséquence. Une information absente est passée sous silence, jamais remplacée
+par un texte d'attente, et jamais inventée :
+
+| Champ vide | Ce que le site affiche |
+|---|---|
+| `ADRESSE_RUE` | le JSON-LD omet `streetAddress` — une entreprise qui se déplace chez le client n'a pas à en publier une, mais surtout pas une fausse |
+| `ASSUREUR_RCPRO` | « attestation remise sur demande, et jointe au devis avant tout démarrage de travaux » |
+| `ASSUREUR_DECENNALE` | la ligne disparaît |
+| `MEDIATEUR_NOM` | le droit de recourir à un médiateur est rappelé, et ses coordonnées annoncées sur demande |
+
+Le build liste à chaque construction les champs encore vides. **Remplissez-les
+dès que vous les avez** : ce sont des mentions légalement obligatoires, et
+leur absence finira par se voir.
+
 ## Cohérence géographique — à trancher avant publication
 
 Le site est actuellement en `noindex` : il ne sera pas référencé tant que ce

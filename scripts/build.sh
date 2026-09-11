@@ -32,6 +32,69 @@ mkdir -p "$OUT"
 cp -r static/. "$OUT"/
 find "$OUT" -name '*.md' -delete
 
+# --- Valeurs non renseignées -----------------------------------------------
+# src/config.sh contient des valeurs d'attente, écrites entre crochets :
+# [ASSUREUR RC PRO], [NOM DU MÉDIATEUR]… Tant que le site n'était pas indexé,
+# les publier n'avait pas grand conséquence. Ce n'est plus vrai : un crochet
+# dans une page, c'est un crochet dans le résultat Google, et dans les données
+# structurées que Google lit.
+#
+# Le build les traite donc comme VIDES, et compose les phrases en
+# conséquence — une information absente est passée sous silence, jamais
+# remplacée par un texte d'attente, et jamais inventée.
+manquantes=""
+for cle in ADRESSE_RUE ASSUREUR_RCPRO POLICE_RCPRO ASSUREUR_DECENNALE \
+           MEDIATEUR_NOM MEDIATEUR_URL; do
+  valeur="$(eval "printf '%s' \"\${$cle:-}\"")"
+  case "$valeur" in
+    \[*\]) export "$cle="; manquantes="${manquantes}${manquantes:+, }$cle" ;;
+  esac
+done
+
+# Adresse postale des données structurées : sans rue connue, on n'écrit pas de
+# rue. Une entreprise qui se déplace chez le client n'a pas à en publier une —
+# mais elle ne doit surtout pas en publier une fausse ou vide.
+if [ -n "${ADRESSE_RUE:-}" ]; then
+  export ADRESSE_JSONLD="\"streetAddress\": \"${ADRESSE_RUE}\","
+else
+  export ADRESSE_JSONLD=""
+fi
+
+# Mentions d'assurance : la phrase entière disparaît si l'assureur est
+# inconnu. Mieux vaut une information absente qu'une information fausse.
+if [ -n "${ASSUREUR_RCPRO:-}" ]; then
+  export MENTION_ASSURANCE=" — Assurance responsabilité civile professionnelle ${ASSUREUR_RCPRO}"
+  export LIGNE_RCPRO="<li><strong>Responsabilité civile professionnelle :</strong> ${ASSUREUR_RCPRO}${POLICE_RCPRO:+, police n° ${POLICE_RCPRO}}</li>"
+else
+  export MENTION_ASSURANCE=""
+  export LIGNE_RCPRO="<li><strong>Responsabilité civile professionnelle :</strong> attestation remise sur demande, et jointe au devis avant tout démarrage de travaux.</li>"
+fi
+
+if [ -n "${ASSUREUR_DECENNALE:-}" ]; then
+  export LIGNE_DECENNALE="<li><strong>Garantie décennale :</strong> ${ASSUREUR_DECENNALE}</li>"
+else
+  export LIGNE_DECENNALE=""
+fi
+
+if [ -n "${MEDIATEUR_NOM:-}" ]; then
+  export BLOC_MEDIATEUR="<p>Nous adhérons au service de médiation suivant :</p>
+    <ul>
+      <li><strong>Médiateur :</strong> ${MEDIATEUR_NOM}</li>${MEDIATEUR_URL:+
+      <li><strong>Site :</strong> ${MEDIATEUR_URL}</li>}
+    </ul>"
+else
+  export BLOC_MEDIATEUR="<p>
+      Les coordonnées du médiateur de la consommation dont nous relevons vous
+      sont communiquées sur simple demande, et figurent sur le devis remis
+      avant intervention.
+    </p>"
+fi
+
+if [ -n "$manquantes" ]; then
+  echo "  ! informations non renseignées dans src/config.sh : $manquantes"
+  echo "    Le site les passe sous silence plutôt que d'afficher un texte d'attente."
+fi
+
 # --- Empreinte des ressources ----------------------------------------------
 # Le .htaccess sert la CSS et le JS avec « max-age=31536000, immutable » : un
 # an, et sans revalidation. C'est le bon réglage — à une condition, qui n'était

@@ -78,8 +78,24 @@ FORFAIT_EXTRACTION_CLE="99"
 GA4_ID=""
 
 # --- Indexation -------------------------------------------------------------
-# "noindex" tant que le site n'est pas prêt à être référencé, "index" ensuite.
-ROBOTS_POLICY="noindex"
+# "index"  : robots.txt autorise l'exploration et déclare le sitemap, et
+#            chaque page porte <meta name="robots" content="index, follow">.
+# "noindex": robots.txt bloque tout, et chaque page porte "noindex".
+#
+# Deux pages gardent "noindex" quoi qu'il arrive, par leurs propres
+# métadonnées : /merci (page de confirmation, sans intérêt pour un moteur et
+# source de doublons) et la 404.
+#
+# ⚠ RESTE À RÉGLER AVANT QUE LE RÉFÉRENCEMENT SOIT SAIN — ces points ne
+#   bloquent pas l'indexation techniquement, mais ils l'affaibliront :
+#   · l'établissement déclaré au registre (SIREN 901133041) est domicilié à
+#     Courbevoie avec le code APE 81.29A, qui ne correspond pas à la
+#     serrurerie, alors que le site annonce une base dans le Grand Ouest ;
+#   · l'assureur RC Pro et le médiateur de la consommation sont encore vides
+#     dans les mentions légales, alors qu'ils sont obligatoires ;
+#   · aucune fiche Google Business Profile n'est rattachée : sans elle, un
+#     serrurier local ne remonte pas sur les requêtes géolocalisées.
+ROBOTS_POLICY="index"
 
 # ---------------------------------------------------------------------------
 # --- Disponibilité et horaires ---------------------------------------------
