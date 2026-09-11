@@ -717,7 +717,7 @@ for requis in \
   "$OUT/manifest.webmanifest" \
   "$OUT${CSS_URL}" \
   "$OUT${JS_URL}" \
-  "$OUT/assets/img/favicon.svg" \
+  "$OUT/assets/img/favicon.ico" \
   "$OUT/assets/img/og-default.jpg"; do
   [ -f "$requis" ] || manque "fichier requis absent : ${requis#$OUT/}"
 done

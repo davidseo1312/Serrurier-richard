@@ -110,6 +110,13 @@ def dessiner_marque(pinceau, cx: int, cy: int, hauteur: int, couleur, texte: str
     )
 
 
+# La marque du logo, préparée par scripts/preparer-logo.py. Quand elle existe,
+# elle sert PARTOUT : onglet, icône d'application, vignette de partage. Les
+# initiales dessinées ne sont qu'un repli, pour un dépôt qui n'aurait pas
+# encore de logo.
+MARQUE = SORTIE / "logo-marque@3x.webp"
+
+
 # --- 1. Vignette de partage social (Open Graph, 1200 x 630) ----------------
 
 def vignette_sociale():
@@ -123,10 +130,28 @@ def vignette_sociale():
     # Filet orange à gauche : rappelle la charte sans surcharger.
     pinceau.rectangle([0, 0, 14, H], fill=ORANGE)
 
-    dessiner_marque(
-        pinceau, 128, 170, 92, ORANGE,
-        initiales(lire_config("NOM_COMMERCIAL", "Serrurier Richard")),
-    )
+    # La vignette de partage montre la MARQUE du logo, comme l'onglet et
+    # l'en-tête : ce que l'on voit sur Facebook ou WhatsApp doit être ce que
+    # l'on retrouve en arrivant sur le site.
+    if MARQUE.exists():
+        marque = Image.open(MARQUE).convert("RGBA")
+        hauteur = 124
+        largeur = round(marque.width * hauteur / marque.height)
+        marque = marque.resize((largeur, hauteur), Image.LANCZOS)
+        # Sur le fond sombre de la vignette, le cadenas et le bouclier — qui
+        # sont dans la même encre — disparaîtraient. La marque est posée sur
+        # une plaque blanche, exactement comme dans l'onglet.
+        marge = 18
+        pinceau.rectangle(
+            [92, 92, 92 + largeur + 2 * marge, 92 + hauteur + 2 * marge],
+            fill=BLANC,
+        )
+        image.paste(marque, (92 + marge, 92 + marge), marque)
+    else:
+        dessiner_marque(
+            pinceau, 128, 170, 92, ORANGE,
+            initiales(lire_config("NOM_COMMERCIAL", "Serrurier Richard")),
+        )
 
     nom = lire_config("NOM_COMMERCIAL", "Serrurier")
     baseline = lire_config("BASELINE", "Dépannage serrurerie")
@@ -149,17 +174,45 @@ def vignette_sociale():
 # --- 2. Icônes d'application et favicon ------------------------------------
 
 def icone(taille: int, marge_ratio: float = 0.0) -> Image.Image:
-    """Icône carrée, à angles vifs — comme tout le reste du site. La marge
-    sert aux icônes « maskable » d'Android, dont le système rogne les bords :
-    le symbole doit tenir dans le cercle central."""
-    image = Image.new("RGB", (taille, taille), ENCRE_900)
-    pinceau = ImageDraw.Draw(image)
+    """Icône carrée, à angles vifs — comme tout le reste du site.
 
+    Elle reprend LA MARQUE DU LOGO dès que le fichier existe : c'est ce que
+    le visiteur voit dans son onglet, et il doit y reconnaître ce qu'il voit
+    en haut de la page. Les initiales ne servent que de repli, si la marque
+    n'a pas encore été préparée (scripts/preparer-logo.py).
+
+    Le fond est blanc : la marque est dessinée pour du blanc, et un carré
+    blanc se détache aussi bien d'une barre d'onglets claire que sombre.
+
+    La marge sert aux icônes « maskable » d'Android, dont le système rogne
+    les bords : le symbole doit tenir dans le cercle central.
+    """
+    image = Image.new("RGB", (taille, taille), BLANC)
+
+    if MARQUE.exists():
+        marque = Image.open(MARQUE).convert("RGBA")
+        # 6 % de respiration seulement : une icône d'onglet doit remplir son
+        # carré, sinon elle paraît deux fois plus petite qu'elle ne l'est.
+        disponible = taille * (1 - 2 * (marge_ratio + 0.06))
+        facteur = min(disponible / marque.width, disponible / marque.height)
+        marque = marque.resize(
+            (max(1, round(marque.width * facteur)),
+             max(1, round(marque.height * facteur))),
+            Image.LANCZOS,
+        )
+        image.paste(
+            marque,
+            ((taille - marque.width) // 2, (taille - marque.height) // 2),
+            marque,
+        )
+        return image
+
+    pinceau = ImageDraw.Draw(image)
     utile = taille * (1 - 2 * marge_ratio)
     dessiner_marque(
         pinceau,
         taille // 2, int(taille * 0.47),
-        int(utile * 0.52), ORANGE,
+        int(utile * 0.52), ENCRE_900,
         initiales(lire_config("NOM_COMMERCIAL", "Serrurier Richard")),
     )
     return image
@@ -168,20 +221,27 @@ def icone(taille: int, marge_ratio: float = 0.0) -> Image.Image:
 def icones():
     produits = []
 
+    def ecrire_png(image, chemin):
+        """Le logo ne compte qu'une poignée de teintes : une palette de 128
+        couleurs le rend à l'identique et divise le poids par cinq."""
+        image.convert("P", palette=Image.ADAPTIVE, colors=128).save(
+            chemin, "PNG", optimize=True
+        )
+
     for taille, nom in ((192, "icone-192.png"), (512, "icone-512.png")):
         chemin = SORTIE / nom
-        icone(taille).save(chemin, "PNG", optimize=True)
+        ecrire_png(icone(taille), chemin)
         produits.append(chemin)
 
     # Maskable : 20 % de marge de sécurité, comme le recommande la spécification.
     chemin = SORTIE / "icone-512-maskable.png"
-    icone(512, marge_ratio=0.20).save(chemin, "PNG", optimize=True)
+    ecrire_png(icone(512, marge_ratio=0.20), chemin)
     produits.append(chemin)
 
     # iOS n'applique pas de coins arrondis lui-même sur toutes les versions,
     # mais l'image doit rester opaque : pas de transparence ici.
     chemin = SORTIE / "apple-touch-icon.png"
-    icone(180).save(chemin, "PNG", optimize=True)
+    ecrire_png(icone(180), chemin)
     produits.append(chemin)
 
     # favicon.ico : repli pour les navigateurs et outils qui ignorent le SVG.

@@ -154,7 +154,7 @@ function page_erreur(array $messages, int $code = 400): void
 <title>Votre demande n'a pas pu être envoyée — {$site}</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0b2a4a">
-<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>

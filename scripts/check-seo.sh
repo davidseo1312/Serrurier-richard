@@ -171,7 +171,7 @@ done
 
 for f in public/robots.txt public/sitemap.xml public/.htaccess public/404.html \
          public/manifest.webmanifest public/envoi-devis.php \
-         public/assets/img/favicon.svg public/assets/img/favicon.ico \
+         public/assets/img/favicon.ico \
          public/assets/img/apple-touch-icon.png public/assets/img/og-default.jpg \
          public/assets/img/icone-192.png public/assets/img/icone-512.png \
          public/assets/img/icone-512-maskable.png; do

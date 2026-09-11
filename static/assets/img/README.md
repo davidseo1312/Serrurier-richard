@@ -13,12 +13,19 @@ Ce fichier n'est pas publié : `scripts/build.sh` retire les `.md` de `public/`.
 | `apres-effraction.svg` | Illustration de la page après effraction | vectoriel |
 | `rideau-metallique.svg` | Illustration de la page rideau métallique | vectoriel |
 | `coffre-fort.svg` | Illustration disponible, non encore posée dans une page | vectoriel |
-| `favicon.svg` | Icône d'onglet | vectoriel |
-| `favicon.ico` | Repli pour les navigateurs qui ignorent le SVG | 16/32/48 px |
+| `favicon.ico` | Icône d'onglet — la marque du logo sur plaque blanche | 16/32/48 px |
+| `logo-serrurier-richard.webp` (+ `@2x`, `@3x`) | Le logo de l'en-tête, au-dessus de 560 px | 220 → 660 px |
+| `logo-marque.webp` (+ `@2x`, `@3x`) | La marque seule : en-tête sous 560 px, et source des icônes | 64 → 192 px |
 | `apple-touch-icon.png` | Icône d'écran d'accueil iOS | 180 × 180 |
 | `icone-192.png`, `icone-512.png` | Icônes du manifeste | PNG |
 | `icone-512-maskable.png` | Icône Android « maskable », 20 % de marge | PNG |
 | `og-default.jpg` | Vignette de partage sur les réseaux sociaux | 1200 × 630 |
+
+Les six fichiers de logo sont produits par `scripts/preparer-logo.py` à partir
+de `src/marque/logo-fourni.webp`. Les icônes et la vignette sociale sont
+produites par `scripts/generer-images.py`, qui **reprend la marque du logo**
+dès qu'elle existe : l'onglet, l'icône d'application et l'aperçu partagé
+montrent donc la même chose que l'en-tête du site.
 
 Les illustrations sont **vectorielles** : elles pèsent 2 à 3 Ko chacune,
 s'affichent parfaitement sur tous les écrans, ne demandent aucune version
