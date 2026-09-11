@@ -92,8 +92,35 @@ for (const w of LARGEURS) {
   await page.close();
 }
 
+/* --- 3 bis : angles vifs ------------------------------------------------- */
+console.log(`\n${G}2. Angles vifs${R}`);
+{
+  const page = await nav.newPage({ viewport: { width: 1440, height: 900 } });
+  const arrondis = new Map();
+  for (const chemin of chemins) {
+    await page.goto(BASE + chemin, { waitUntil: 'load' });
+    const r = await page.evaluate(() => {
+      const out = [];
+      for (const el of document.querySelectorAll('body *')) {
+        const st = getComputedStyle(el);
+        for (const k of ['borderTopLeftRadius', 'borderBottomRightRadius']) {
+          if (parseFloat(st[k]) > 0.5) {
+            out.push(`${el.tagName}.${(el.className || '').toString().split(' ')[0]} ${st[k]}`);
+            break;
+          }
+        }
+      }
+      return [...new Set(out)];
+    });
+    for (const x of r) if (!arrondis.has(x)) arrondis.set(x, chemin);
+  }
+  await page.close();
+  verifier(arrondis.size === 0, `${chemins.length} pages sans un seul coin arrondi`,
+           [...arrondis].slice(0, 3).map(([k, v]) => `${v} ${k}`).join(' | '));
+}
+
 /* --- 4 : contraste ------------------------------------------------------- */
-console.log(`\n${G}2. Contraste (WCAG AA)${R}`);
+console.log(`\n${G}3. Contraste (WCAG AA)${R}`);
 const page = await nav.newPage({ viewport: { width: 1440, height: 900 } });
 const mauvais = new Map();
 for (const chemin of chemins) {

@@ -31,12 +31,19 @@ RACINE = Path(__file__).resolve().parent.parent
 SORTIE = RACINE / "static" / "assets" / "img"
 
 # --- Charte ----------------------------------------------------------------
-BLEU_900 = (7, 29, 51)
-BLEU_800 = (11, 42, 74)
-BLEU_700 = (18, 60, 104)
-AMBRE = (245, 165, 36)
+# Les mêmes valeurs que les jetons CSS : ardoise et orange, jamais de bleu.
+ENCRE_900 = (15, 23, 42)      # --color-dark
+ENCRE_800 = (30, 41, 59)      # --color-primary-deep
+ENCRE_700 = (51, 65, 85)      # --color-dark-3
+ORANGE = (249, 115, 22)       # --color-secondary
 BLANC = (255, 255, 255)
-BLEU_CLAIR = (185, 210, 232)
+ARDOISE_CLAIRE = (203, 213, 225)
+
+# Compatibilité : les anciens noms pointent vers les nouvelles valeurs, pour
+# qu'aucune partie du script ne se retrouve à peindre en bleu par oubli.
+BLEU_900, BLEU_800, BLEU_700 = ENCRE_900, ENCRE_800, ENCRE_700
+AMBRE = ORANGE
+BLEU_CLAIR = ARDOISE_CLAIRE
 
 POLICES = [
     "/mnt/skills/examples/canvas-design/canvas-fonts/WorkSans-{poids}.ttf",
@@ -80,25 +87,26 @@ def degrade(largeur: int, hauteur: int, haut, bas) -> Image.Image:
     return image
 
 
-def dessiner_marque(pinceau, cx: int, cy: int, rayon: int, epaisseur: int, couleur):
-    """Le symbole de la marque : anse de cadenas surmontant une tige et son
-    ergot — la même forme que le favicon et le logo de l'en-tête."""
-    pinceau.ellipse(
-        [cx - rayon, cy - rayon, cx + rayon, cy + rayon],
-        outline=couleur,
-        width=epaisseur,
-    )
-    tige_haut = cy + rayon
-    tige_bas = cy + rayon + int(rayon * 1.75)
-    demi = epaisseur // 2
-    pinceau.rounded_rectangle(
-        [cx - demi, tige_haut, cx + demi, tige_bas], radius=demi, fill=couleur
-    )
-    ergot_y = tige_bas - int(rayon * 0.55)
-    pinceau.rounded_rectangle(
-        [cx, ergot_y - demi, cx + int(rayon * 0.85), ergot_y + demi],
-        radius=demi,
-        fill=couleur,
+def initiales(nom: str) -> str:
+    """« Serrurier Richard » donne « SR ». Deux lettres, prises sur les deux
+    premiers mots."""
+    mots = [m for m in re.split(r"[^A-Za-zÀ-ÿ]+", nom) if m]
+    return "".join(m[0].upper() for m in mots[:2]) or "SR"
+
+
+def dessiner_marque(pinceau, cx: int, cy: int, hauteur: int, couleur, texte: str):
+    """La marque, ce sont les INITIALES — pas un cadenas dessiné.
+
+    Le site n'embarque aucun pictogramme inventé : un cadenas stylisé ne
+    représente rien de vérifiable, il décore. Les initiales, elles, disent le
+    nom de l'entreprise. Les icônes livrées dans static/assets/img/ suivent
+    déjà cette règle ; ce script la suit désormais aussi, sans quoi le
+    relancer aurait ramené le dessin qu'on avait retiré du site."""
+    fonte = police(hauteur, gras=True)
+    g, h, d, b = pinceau.textbbox((0, 0), texte, font=fonte)
+    pinceau.text(
+        (cx - (d - g) / 2 - g, cy - (b - h) / 2 - h),
+        texte, font=fonte, fill=couleur,
     )
 
 
@@ -110,12 +118,15 @@ def vignette_sociale():
     pinceau = ImageDraw.Draw(image, "RGBA")
 
     # Halo diffus, pour éviter un aplat de couleur trop plat.
-    pinceau.ellipse([-160, 120, 620, 900], fill=(42, 107, 168, 40))
+    pinceau.ellipse([-160, 120, 620, 900], fill=(51, 65, 85, 70))
 
-    # Filet ambre à gauche : rappelle la charte sans surcharger.
-    pinceau.rectangle([0, 0, 14, H], fill=AMBRE)
+    # Filet orange à gauche : rappelle la charte sans surcharger.
+    pinceau.rectangle([0, 0, 14, H], fill=ORANGE)
 
-    dessiner_marque(pinceau, 132, 168, 46, 20, AMBRE)
+    dessiner_marque(
+        pinceau, 128, 170, 92, ORANGE,
+        initiales(lire_config("NOM_COMMERCIAL", "Serrurier Richard")),
+    )
 
     nom = lire_config("NOM_COMMERCIAL", "Serrurier")
     baseline = lire_config("BASELINE", "Dépannage serrurerie")
@@ -125,7 +136,7 @@ def vignette_sociale():
     pinceau.text((92, 400), baseline, font=police(38), fill=BLEU_CLAIR)
 
     prestations = "Ouverture de porte · Changement de serrure · Blindage · Après effraction"
-    pinceau.text((92, 486), prestations, font=police(25), fill=(150, 180, 210))
+    pinceau.text((92, 486), prestations, font=police(25), fill=(148, 163, 184))
 
     if zone:
         pinceau.text((92, 528), zone, font=police(25, gras=True), fill=AMBRE)
@@ -138,18 +149,19 @@ def vignette_sociale():
 # --- 2. Icônes d'application et favicon ------------------------------------
 
 def icone(taille: int, marge_ratio: float = 0.0) -> Image.Image:
-    """Icône carrée. La marge sert aux icônes « maskable » d'Android, dont le
-    système rogne les bords : le symbole doit tenir dans le cercle central."""
-    image = Image.new("RGB", (taille, taille), BLEU_800)
+    """Icône carrée, à angles vifs — comme tout le reste du site. La marge
+    sert aux icônes « maskable » d'Android, dont le système rogne les bords :
+    le symbole doit tenir dans le cercle central."""
+    image = Image.new("RGB", (taille, taille), ENCRE_900)
     pinceau = ImageDraw.Draw(image)
 
     utile = taille * (1 - 2 * marge_ratio)
-    rayon = int(utile * 0.20)
-    epaisseur = max(2, int(utile * 0.095))
-    cx = taille // 2
-    cy = int(taille * 0.40)
-
-    dessiner_marque(pinceau, cx, cy, rayon, epaisseur, AMBRE)
+    dessiner_marque(
+        pinceau,
+        taille // 2, int(taille * 0.47),
+        int(utile * 0.52), ORANGE,
+        initiales(lire_config("NOM_COMMERCIAL", "Serrurier Richard")),
+    )
     return image
 
 

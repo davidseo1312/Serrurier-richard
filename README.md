@@ -535,6 +535,7 @@ valeur y repeint le site entier.
 | `--color-background` / `-2` | blanc cassé, surfaces alternées | `#FAFAF9` / `#F4F4F2` |
 | `--color-muted` | texte discret — **valable sur blanc pur seulement** (4,76:1) | `#64748B` |
 | `--font-title` / `--font-body` | Outfit / Work Sans | — |
+| `--radius-*` | **tous à zéro** : le site n'a aucun coin arrondi | `0` |
 
 **Le site est ardoise sur blanc cassé.** Pas de bleu, pas de dégradé coloré :
 la couleur ne sert plus à décorer, seulement à hiérarchiser. La seule surface
@@ -561,6 +562,20 @@ se lisent plus comme un signal mais comme un motif.
 > - Le texte du bouton d'appel est **brun très sombre**, pas blanc : blanc sur
 >   `#F97316` ne donne que 2,80:1. Même raison pour l'astérisque de champ
 >   obligatoire, qui utilise `--color-secondary-dark`.
+
+**Angles vifs, partout.** Les cinq jetons `--radius-*` valent zéro : boutons,
+cartes, champs, pastilles, images, panneau de menu. Les jetons gardent leur
+nom parce qu'une centaine de règles s'y réfèrent — pour revenir à des angles
+adoucis, il suffit de leur redonner une valeur. Les ombres portées des boutons
+sont franches et neutres (`0 3px 0`) : un halo de couleur flou ramollirait
+l'arête qu'on vient de créer. `tests/visuels.mjs` refuse qu'un seul élément
+des 41 pages retrouve un rayon supérieur à 0,5 px.
+
+Deux exceptions qui n'en sont pas : les **boutons radio** sont dessinés ronds
+par le système, et un radio qui ne ressemble pas à un radio cesse d'être
+compris ; et les **illustrations vectorielles** contiennent des formes
+arrondies parce qu'elles dessinent des objets — une porte, un coffre, une clé.
+Leur cadre, lui, est carré.
 
 > **Une accolade orpheline dans la CSS n'est pas une erreur bruyante.** Le
 > navigateur abandonne silencieusement toutes les règles qui suivent : la
