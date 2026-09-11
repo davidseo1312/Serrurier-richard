@@ -1103,6 +1103,82 @@ Le build liste à chaque construction les champs encore vides. **Remplissez-les
 dès que vous les avez** : ce sont des mentions légalement obligatoires, et
 leur absence finira par se voir.
 
+### « J'ai publié, mais le site en ligne n'a pas changé »
+
+C'est la question qui bloque tout, et tant qu'elle n'est pas tranchée on
+corrige à l'aveugle des fichiers que personne ne lit. **Une commande y
+répond :**
+
+```bash
+bash scripts/verifier-en-ligne.sh
+```
+
+Aucun identifiant, aucune dépendance — curl suffit. À lancer depuis votre
+poste. Elle interroge le site en ligne et compare la version servie à celle
+du dépôt :
+
+```
+2. Version servie
+  en ligne : 2026-09-11 06:31:32 UTC
+  commit   : c3e8c4792529
+  local    : c3e8c4792529
+  v le serveur sert exactement la version de ce dépôt.
+```
+
+Le fichier `version.txt`, publié à la racine du site et servi **sans cache**,
+porte le commit, la date de construction, le nombre de pages et la politique
+d'indexation. Vous pouvez aussi l'ouvrir simplement dans un navigateur :
+`https://serrurier-richard.fr/version.txt`.
+
+**Si le commit en ligne diffère de celui du dépôt, tout le reste en découle :**
+le serveur n'a pas récupéré la nouvelle version. Corriger `robots.txt` dans le
+dépôt n'y changera rien tant que ce point n'est pas réglé.
+
+### Deux chaînes de publication, et pourquoi la seconde existe
+
+```
+   push sur main
+        │
+        ├─► GitHub Actions : build, contrôles, puis branche « deploy »   (automatique)
+        │
+        ├─► l'hébergeur récupère la branche « deploy »        (PAS automatique par défaut)
+        │
+        └─► publication FTP directe depuis GitHub Actions     (automatique, si activée)
+```
+
+Publier sur la branche `deploy` **ne met rien en ligne**. Il faut encore que
+l'hébergement récupère cette branche. Sur une offre mutualisée, ce `git pull`
+n'est pas automatique : tant que personne ne clique dans le panneau de
+l'hébergeur, le site en ligne reste celui du dernier clic.
+
+Deux façons de supprimer cet intermédiaire — **l'une ou l'autre suffit** :
+
+**A. Le webhook de l'hébergeur, sans aucun identifiant.** Dans hPanel >
+Avancé > Git, copiez l'URL de déploiement automatique, puis dans GitHub :
+Settings > Webhooks > Add webhook, collez-la, content type
+`application/json`, événement « Just the push event ». L'hébergeur récupère
+alors la branche à chaque publication.
+
+**B. La publication FTP directe depuis GitHub Actions.** Dans GitHub :
+Settings > Secrets and variables > Actions > New repository secret, trois
+secrets à créer :
+
+| Secret | Valeur |
+|---|---|
+| `FTP_HOST` | l'hôte FTP donné par l'hébergeur |
+| `FTP_USER` | l'identifiant FTP |
+| `FTP_PASSWORD` | le mot de passe FTP |
+| `FTP_DIR` | facultatif — le dossier servi, `public_html` par défaut |
+
+Tant que ces secrets n'existent pas, l'étape est **sautée** et le workflow se
+comporte exactement comme avant ; il écrit seulement un rappel dans son
+journal. Dès qu'ils existent, chaque poussée écrit le site directement dans le
+dossier servi par Apache, puis relit `version.txt` en ligne pour confirmer.
+
+Le mot de passe reste dans les secrets GitHub : il n'apparaît ni dans le
+dépôt, ni dans les journaux. TLS est exigé — sans lui, un mot de passe FTP
+circule en clair.
+
 ### Search Console : la marche à suivre
 
 **Le sitemap se soumet à son adresse, pas à celle d'une page.**

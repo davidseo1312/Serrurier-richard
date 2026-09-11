@@ -42,6 +42,14 @@ concurrency:
 jobs:
   construire-et-publier:
     runs-on: ubuntu-latest
+    # Les identifiants FTP sont facultatifs. Tant qu'ils ne sont pas
+    # renseignés dans les secrets du dépôt, l'étape de publication directe est
+    # simplement sautée : le workflow se comporte exactement comme avant.
+    env:
+      FTP_HOST: ${{ secrets.FTP_HOST }}
+      FTP_USER: ${{ secrets.FTP_USER }}
+      FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+      FTP_DIR: ${{ secrets.FTP_DIR }}
     steps:
       - name: Récupérer les sources
         uses: actions/checkout@v4
@@ -118,6 +126,63 @@ jobs:
 
           git commit -q -m "Publication du site — ${GITHUB_SHA::7}"
           git push -q origin deploy
+
+      # -------------------------------------------------------------------
+      # Publication directe par FTP — facultative, et sautée sans identifiants
+      #
+      # Pourquoi elle existe : publier sur la branche « deploy » ne met rien
+      # en ligne. Il faut encore que l'hébergeur récupère cette branche. Sur
+      # une offre mutualisée, ce « git pull » n'est PAS automatique par
+      # défaut : tant que personne ne clique, le site en ligne reste celui du
+      # jour où on a cliqué la dernière fois — et l'on corrige des fichiers
+      # que personne ne lit.
+      #
+      # Cette étape supprime cet intermédiaire : le contenu de public/ est
+      # écrit directement dans le dossier servi par Apache.
+      #
+      # Pour l'activer, dans Settings > Secrets and variables > Actions :
+      #   FTP_HOST      hôte FTP donné par l'hébergeur (ex. ftp.exemple.fr)
+      #   FTP_USER      identifiant FTP
+      #   FTP_PASSWORD  mot de passe FTP
+      #   FTP_DIR       dossier servi — facultatif, « public_html » par défaut
+      #
+      # Le mot de passe reste dans les secrets GitHub : il n'apparaît ni dans
+      # le dépôt, ni dans les journaux (lftp lit l'environnement, la commande
+      # ne contient aucun identifiant en clair).
+      #
+      # TLS est EXIGÉ : sans lui, un mot de passe FTP circule en clair.
+      # -------------------------------------------------------------------
+      - name: Publier directement sur l'hébergement (FTP)
+        if: env.FTP_HOST != ''
+        run: |
+          set -e
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq lftp
+
+          lftp -c "
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ssl:verify-certificate ${FTP_TLS_VERIFY:-true};
+            set net:max-retries 3;
+            set net:timeout 20;
+            open -u \"\$FTP_USER\",\"\$FTP_PASS\" \"\$FTP_HOST\";
+            mirror --reverse --parallel=4 --verbose=1 \
+                   --exclude-glob .git/ \
+                   public/ \"\${FTP_DIR:-public_html}\"/;
+          "
+
+          echo "Publié. Vérification de ce que le serveur renvoie :"
+          BASE="$(grep -m1 '^BASE_URL=' src/config.sh | cut -d'\"' -f2)"
+          curl -sL --max-time 25 "${BASE%/}/version.txt" || true
+
+      - name: Rappel si la publication directe n'est pas configurée
+        if: env.FTP_HOST == ''
+        run: |
+          echo "::notice::La branche deploy est à jour, mais rien n'a été"
+          echo "::notice::envoyé à l'hébergement : aucun identifiant FTP n'est"
+          echo "::notice::configuré. L'hébergeur doit donc récupérer la branche"
+          echo "::notice::lui-même. Pour publier automatiquement, ajoutez les"
+          echo "::notice::secrets FTP_HOST, FTP_USER et FTP_PASSWORD."
           echo "Branche deploy mise à jour. Hostinger peut la récupérer."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

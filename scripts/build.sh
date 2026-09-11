@@ -817,6 +817,26 @@ if [ "$MANQUES" -gt 0 ]; then
   exit 1
 fi
 
+# --- Empreinte de la publication -------------------------------------------
+# Un fichier d'une ligne, à la racine du site, qui dit QUELLE VERSION le
+# serveur sert réellement.
+#
+# Sans lui, impossible de trancher la question qui bloque tout : « le site en
+# ligne est-il à jour ? ». On tourne alors en rond entre le cache du
+# navigateur, celui de l'hébergeur, et un déploiement qui n'a peut-être jamais
+# eu lieu. Il suffit désormais d'ouvrir https://<domaine>/version.txt : si le
+# commit affiché n'est pas le dernier, le serveur n'a pas récupéré la nouvelle
+# version, et c'est là qu'il faut chercher.
+#
+# Servi sans cache : c'est tout l'intérêt.
+COMMIT="${GITHUB_SHA:-$(git rev-parse HEAD 2>/dev/null || echo inconnu)}"
+{
+  printf 'commit    %s\n' "${COMMIT:0:40}"
+  printf 'construit %s\n' "$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+  printf 'pages     %s\n' "$(find "$OUT" -name '*.html' | wc -l | tr -d ' ')"
+  printf 'robots    %s\n' "${ROBOTS_POLICY_GLOBAL}"
+} > "$OUT/version.txt"
+
 if ! verifier_css static/assets/css/style.css; then
   echo
   echo "BUILD ÉCHEC : feuille de style invalide."
