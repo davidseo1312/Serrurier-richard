@@ -107,6 +107,13 @@ fi
 # Une erreur 403 sur un mutualisé a presque toujours la même origine : le
 # dossier servi par Apache ne contient pas de page d'accueil. Cette étape
 # reconstitue ce qu'Apache verra et le vérifie, sans avoir besoin d'Apache.
+# --- 5 ter. Workflow de publication ----------------------------------------
+# Un workflow ne se teste qu'en le poussant : l'erreur ne se voit qu'après
+# coup, et pendant ce temps la branche deploy reste figée.
+if command -v python3 > /dev/null && python3 -c "import yaml" 2>/dev/null; then
+  python3 scripts/check-workflow.py || ECHEC=1
+fi
+
 # --- 5 bis. Indexation -----------------------------------------------------
 titre "6/8  Indexation"
 if command -v python3 > /dev/null; then

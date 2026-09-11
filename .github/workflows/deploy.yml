@@ -126,6 +126,9 @@ jobs:
 
           git commit -q -m "Publication du site — ${GITHUB_SHA::7}"
           git push -q origin deploy
+          echo "Branche deploy mise à jour."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # -------------------------------------------------------------------
       # Publication directe par FTP — facultative, et sautée sans identifiants
@@ -183,6 +186,3 @@ jobs:
           echo "::notice::configuré. L'hébergeur doit donc récupérer la branche"
           echo "::notice::lui-même. Pour publier automatiquement, ajoutez les"
           echo "::notice::secrets FTP_HOST, FTP_USER et FTP_PASSWORD."
-          echo "Branche deploy mise à jour. Hostinger peut la récupérer."
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
