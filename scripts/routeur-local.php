@@ -17,6 +17,20 @@ $racine = __DIR__ . '/../public';
 $chemin = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '/';
 $chemin = rawurldecode($chemin);
 
+/* La Content-Security-Policy de production, relue directement dans le
+   .htaccess pour que les deux ne puissent pas diverger.
+
+   Sans elle, l'aperçu local et les tests tournent sans filet : une CSP trop
+   étroite ne produit aucun message côté serveur, elle fait juste taire le
+   script bloqué. C'est exactement ainsi qu'une mesure d'audience peut
+   sembler installée et ne rien remonter. */
+$htaccess = $racine . '/.htaccess';
+if (is_file($htaccess) && preg_match(
+        '/^\s*Header always set Content-Security-Policy "(.+)"\s*$/m',
+        file_get_contents($htaccess), $m)) {
+    header('Content-Security-Policy: ' . $m[1]);
+}
+
 // Les mêmes redirections 301 que le .htaccess.
 $redirections = [
     '/services/ouverture-de-porte'    => '/ouverture-porte',

@@ -74,8 +74,15 @@ FORFAIT_OUVERTURE_VERROUILLEE="179"
 FORFAIT_EXTRACTION_CLE="99"
 
 # --- Analytics --------------------------------------------------------------
-# Laisser vide tant que la propriété GA4 n'est pas créée.
-GA4_ID=""
+# Identifiant de mesure GA4 (« G-XXXXXXXXXX »). Laisser vide désactive
+# proprement la mesure : aucun script tiers n'est chargé, aucun bandeau de
+# consentement n'est affiché, aucune balise vide n'est écrite dans le HTML.
+#
+# Le tag n'est PAS posé en dur dans les pages, contrairement au bloc que
+# fournit Google. Il est chargé par assets/js/site.js, et seulement après un
+# clic sur « Accepter » : la CNIL impose un consentement préalable pour les
+# cookies de mesure d'audience, et un tag posé en dur dépose avant le choix.
+GA4_ID="G-4MD9C1NX66"
 
 # --- Indexation -------------------------------------------------------------
 # "index"  : robots.txt autorise l'exploration et déclare le sitemap, et

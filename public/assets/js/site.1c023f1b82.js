@@ -120,10 +120,30 @@
     }
 
     if (GA_ID) {
-      injecter('https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_ID));
+      // L'ordre compte : gtag.js rejoue dataLayer au chargement, donc les
+      // commandes doivent y être AVANT que le script arrive. On les empile
+      // d'abord, on injecte ensuite.
       window.gtag = function () { window.dataLayer.push(arguments); };
+
+      // Mode consentement Google. Le tag n'est chargé qu'après acceptation,
+      // ces signaux sont donc redondants pour la mesure — mais ils ferment
+      // explicitement la porte à la publicité, y compris si la propriété
+      // GA4 active un jour les signaux Google côté Google.
+      window.gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied'
+      });
+      window.gtag('consent', 'update', { analytics_storage: 'granted' });
+
       window.gtag('js', new Date());
-      window.gtag('config', GA_ID, { anonymize_ip: true });
+      // anonymize_ip n'existe plus sous GA4 : la propriété ne journalise pas
+      // l'adresse IP, elle l'utilise pour la géolocalisation approximative
+      // puis la jette. Rien à activer, donc rien à passer ici.
+      window.gtag('config', GA_ID);
+
+      injecter('https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_ID));
     }
   }
 

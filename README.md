@@ -794,9 +794,37 @@ aucune balise vide n'est écrite, aucun bandeau de consentement n'apparaît.
 
 Puis `bash scripts/build.sh`.
 
+**Mesure active : `G-4MD9C1NX66`.**
+
+**Le tag n'est pas collé en dur dans les pages, et c'est volontaire.** Le bloc
+fourni par Google (`<script async src="…/gtag/js?id=…">`) dépose ses cookies
+dès l'ouverture de la page, donc avant tout consentement — ce que la CNIL
+interdit. Ici l'identifiant est posé sur la balise `<html>`
+(`data-ga="G-…"`), et `assets/js/site.js` charge le tag uniquement après un
+clic sur « Accepter ». Le résultat mesuré est identique ; le risque juridique,
+non. Pour changer d'identifiant, modifiez `GA4_ID` et reconstruisez : il n'y a
+rien à toucher dans les pages.
+
+**Vérifier que ça remonte vraiment.** Les tests prouvent le comportement du
+site, pas la réception chez Google, qui ne se voit que depuis GA4 :
+
+1. ouvrez le site, **acceptez** le bandeau ;
+2. dans Google Analytics : *Rapports → Temps réel* ;
+3. vous devez apparaître en utilisateur actif dans la minute ;
+4. cliquez sur le numéro de téléphone : l'événement `appel` apparaît dans la
+   liste des événements, avec son paramètre `zone`.
+
+Rien ne remonte ? Dans l'ordre : le bandeau a-t-il été accepté (le refus est
+mémorisé — videz les données du site pour le revoir) ; un bloqueur de
+publicité est-il actif ; la console du navigateur signale-t-elle un blocage
+`Content-Security-Policy` (voir la section CSP du `.htaccess`).
+
 **Search Console.** La vérification par fichier HTML ou par enregistrement DNS
 est préférable : elle ne pèse rien sur les pages. Si vous choisissez la méthode
 « balise HTML », copiez uniquement la valeur de `content=` dans `GSC_CODE`.
+Depuis que GA4 est en place, une troisième méthode est disponible et ne coûte
+rien non plus : *Google Analytics*, qui s'appuie sur le tag déjà présent —
+à condition d'utiliser le même compte Google que la propriété GA4.
 
 **Consentement.** Aucun script de mesure n'est chargé avant acceptation
 explicite du bandeau, conformément aux exigences de la CNIL. Un refus est

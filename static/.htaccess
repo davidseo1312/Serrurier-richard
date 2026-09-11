@@ -179,16 +179,23 @@ RewriteRule ^(.+?)/?$ /$1.html [L]
   # Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
 
   # Content-Security-Policy
-  # 'unsafe-inline' sur script-src reste nécessaire pour les blocs JSON-LD et
-  # le snippet Google Analytics. Retirez googletagmanager.com si vous
-  # n'utilisez pas de mesure d'audience.
+  # 'unsafe-inline' sur script-src reste nécessaire pour les blocs JSON-LD.
+  #
+  # googletagmanager.com sert le tag Google Analytics 4, et les domaines
+  # *.google-analytics.com / *.analytics.google.com reçoivent les mesures.
+  # Les jokers sont volontaires : GA4 répartit la collecte européenne sur
+  # des sous-domaines régionaux (region1, region2…) qui changent selon le
+  # visiteur. Les énumérer un par un ferait tomber la mesure au silence,
+  # sans le moindre message d'erreur visible.
+  # Si vous coupez la mesure d'audience (GA4_ID vide dans src/config.sh),
+  # ces trois domaines peuvent être retirés.
   #
   # tile.openstreetmap.org sert UNIQUEMENT les tuiles de la carte détaillée,
   # qui n'est chargée qu'après un clic explicite du visiteur. La carte
   # affichée par défaut est un SVG servi par ce site : elle ne dépend
   # d'aucun domaine extérieur. Si vous retirez la carte détaillée,
   # retirez aussi ce domaine.
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://tile.openstreetmap.org https://www.google-analytics.com https://www.googletagmanager.com; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com; form-action 'self'; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://tile.openstreetmap.org https://*.google-analytics.com https://www.googletagmanager.com; font-src 'self' data:; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; form-action 'self'; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
 
   # Le nom du serveur applicatif n'a pas à être publié.
   Header unset X-Powered-By

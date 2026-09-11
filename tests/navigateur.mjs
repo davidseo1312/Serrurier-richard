@@ -285,20 +285,134 @@ verifier(
   'le piège à robots est hors de l’écran'
 );
 
-titre('7. Vie privée');
+titre('7. Vie privée et mesure d’audience');
 
 verifier((await ctxMobile.cookies()).length === 0, 'aucun cookie déposé sans consentement');
+const GA_ID = await mobile.evaluate(() => document.documentElement.dataset.ga || '');
 const mesureActive = await mobile.evaluate(
   () => Boolean(document.documentElement.dataset.ga || document.documentElement.dataset.gtm)
 );
-verifier(
-  mesureActive || (await mobile.locator('.cookie-bandeau').count()) === 0,
-  mesureActive
-    ? 'mesure d’audience configurée : le bandeau de consentement doit s’afficher'
-    : 'aucune mesure d’audience configurée : aucun bandeau, aucun script tiers'
-);
-
 await ctxMobile.close();
+
+/* Google est injoignable depuis l'environnement de test, et c'est tant mieux :
+   on intercepte les appels vers ses domaines pour observer ce que le site
+   DEMANDE, sans rien transmettre à personne. Ce que ces tests prouvent, c'est
+   le comportement du site — pas la réception côté Google, qui se vérifie dans
+   le rapport « Temps réel » de GA4. */
+const DOMAINES_GOOGLE = /googletagmanager\.com|google-analytics\.com/;
+
+async function contexteMesure() {
+  const ctx = await navigateur.newContext(devices['iPhone 13']);
+  const appels = [];
+  // Une CSP trop étroite ne produit aucune erreur serveur : elle fait taire
+  // le script bloqué, en silence. On écoute donc les violations.
+  await ctx.addInitScript(() => {
+    window.__cspViolations = [];
+    document.addEventListener('securitypolicyviolation', (e) => {
+      window.__cspViolations.push(`${e.blockedURI} (${e.violatedDirective})`);
+    });
+  });
+  await ctx.route(DOMAINES_GOOGLE, async (route) => {
+    appels.push(route.request().url());
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/javascript',
+      body: '/* gtag.js simulé : le vrai script n’est jamais téléchargé ici */'
+    });
+  });
+  return { ctx, page: await ctx.newPage(), appels };
+}
+
+if (!mesureActive) {
+  verifier(true, 'aucune mesure d’audience configurée : aucun bandeau, aucun script tiers');
+} else {
+  verifier(/^G-[A-Z0-9]+$/.test(GA_ID), `identifiant GA4 présent sur la page : ${GA_ID}`);
+
+  // --- a) Avant tout choix : rien ne part, et le bandeau se présente. ---
+  const avant = await contexteMesure();
+  const enTetes = (await avant.page.goto(BASE + '/')).headers();
+  const csp = enTetes['content-security-policy'] || '';
+  const scriptSrc = (csp.match(/script-src[^;]*/) || [''])[0];
+  verifier(
+    scriptSrc.includes('googletagmanager.com'),
+    'la CSP de production est servie et autorise le tag dans script-src'
+  );
+  await avant.page.waitForTimeout(500);
+  verifier(avant.appels.length === 0, 'avant consentement : aucun appel vers Google');
+  verifier(await avant.page.locator('.cookie-bandeau').isVisible(), 'le bandeau de consentement s’affiche');
+
+  // Une conversion survenue avant le choix doit être mise en file, pas perdue.
+  await avant.page.evaluate(() => {
+    const sonde = document.createElement('button');
+    sonde.setAttribute('data-track', 'appel');
+    sonde.setAttribute('data-track-zone', 'sonde-test');
+    document.body.appendChild(sonde);
+    sonde.click();
+  });
+  verifier(
+    (await avant.page.evaluate(() => (window.dataLayer || []).length)) === 0,
+    'une conversion survenue avant le choix n’est pas transmise'
+  );
+
+  // --- b) Après « Accepter » : le tag est demandé, la file est rejouée. ---
+  await avant.page.locator('.cookie-bandeau [data-action=accepter]').click();
+  await avant.page.waitForTimeout(500);
+
+  verifier(
+    avant.appels.some((u) => u.includes('/gtag/js?id=' + GA_ID)),
+    'après acceptation : le tag GA4 est demandé avec le bon identifiant'
+  );
+  verifier(
+    (await avant.page.locator('.cookie-bandeau').count()) === 0,
+    'le bandeau disparaît une fois le choix fait'
+  );
+
+  const empile = await avant.page.evaluate(() =>
+    (window.dataLayer || [])
+      .map((e) => {
+        try { return JSON.stringify(e.length !== undefined ? Array.prototype.slice.call(e) : e); }
+        catch (x) { return ''; }
+      })
+      .join(' | ')
+  );
+  verifier(empile.includes('"config"') && empile.includes(GA_ID), 'la configuration GA4 est bien empilée');
+  verifier(empile.includes('"analytics_storage":"granted"'), 'le consentement à la mesure est transmis au tag');
+  verifier(empile.includes('"ad_storage":"denied"'), 'le stockage publicitaire reste refusé');
+  verifier(empile.includes('sonde-test'), 'la conversion mise en file est rejouée après acceptation');
+
+  const violations = await avant.page.evaluate(() => window.__cspViolations || []);
+  verifier(violations.length === 0, `aucune ressource bloquée par la CSP${violations.length ? ' — ' + violations.join(', ') : ''}`);
+
+  // Le choix survit au rechargement : pas de bandeau une seconde fois.
+  await avant.page.goto(BASE + '/tarifs');
+  await avant.page.waitForTimeout(400);
+  verifier(
+    (await avant.page.locator('.cookie-bandeau').count()) === 0,
+    'l’acceptation est mémorisée : le bandeau ne revient pas'
+  );
+  await avant.ctx.close();
+
+  // --- c) Après « Refuser » : rien, ni maintenant ni à la visite suivante. ---
+  const refus = await contexteMesure();
+  await refus.page.goto(BASE + '/');
+  await refus.page.locator('.cookie-bandeau [data-action=refuser]').click();
+  await refus.page.waitForTimeout(400);
+  await refus.page.evaluate(() => {
+    const sonde = document.createElement('button');
+    sonde.setAttribute('data-track', 'appel');
+    document.body.appendChild(sonde);
+    sonde.click();
+  });
+  await refus.page.goto(BASE + '/serrurier');
+  await refus.page.waitForTimeout(500);
+  verifier(refus.appels.length === 0, 'après refus : toujours aucun appel vers Google');
+  verifier(
+    (await refus.page.locator('.cookie-bandeau').count()) === 0,
+    'le refus est mémorisé : le bandeau ne revient pas'
+  );
+  verifier((await refus.ctx.cookies()).length === 0, 'après refus : aucun cookie déposé');
+  await refus.ctx.close();
+}
 
 titre('8. Fonctionnement sans JavaScript');
 
