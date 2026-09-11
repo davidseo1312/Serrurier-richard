@@ -96,11 +96,54 @@ URL_CSS=$(grep -o 'href="/assets/css/style[^"]*\.css"' /tmp/reponse-diag.html 2>
 URL_CSS="${URL_CSS:-/assets/css/style.css}"
 CODE_CSS=$(lire_code "${BASE_URL}${URL_CSS}")
 
+# Les deux fichiers que Google lit en premier. Ils ne sont jamais servis par
+# le même chemin qu'une page — pas de réécriture, pas d'extension masquée —
+# et c'est précisément pour cela qu'on les contrôle séparément : un site
+# parfaitement affiché peut très bien renvoyer un sitemap introuvable.
+CODE_ROBOTS=$(lire_code "${BASE_URL}/robots.txt")
+CODE_PLAN=$(curl -s -o /tmp/plan-diag.xml -w '%{http_code}' --max-time 20 "${BASE_URL}/sitemap.xml" 2>/dev/null)
+TYPE_PLAN=$(curl -s -o /dev/null -w '%{content_type}' --max-time 20 "${BASE_URL}/sitemap.xml" 2>/dev/null)
+
 printf '  %-3s  %s\n' "$CODE_RACINE" "${BASE_URL}/"
 printf '  %-3s  %s\n' "$CODE_PAGE"   "${BASE_URL}/tarifs"
 printf '  %-3s  %s\n' "$CODE_CSS"    "${BASE_URL}${URL_CSS}"
+printf '  %-3s  %s\n' "$CODE_ROBOTS" "${BASE_URL}/robots.txt"
+printf '  %-3s  %s   %s\n' "$CODE_PLAN" "${BASE_URL}/sitemap.xml" "${TYPE_PLAN}"
 
-titre "6. Diagnostic"
+titre "6. Ce que Google lit en premier"
+
+if [ "$CODE_ROBOTS" != "200" ]; then
+  echo "  ${ROUGE}x${FIN} robots.txt répond ${CODE_ROBOTS}."
+  echo "      Sans lui, Google explore à l'aveugle et ne trouve pas le sitemap."
+elif grep -qiE '^[[:space:]]*Disallow:[[:space:]]*/[[:space:]]*$' /tmp/reponse-diag.html 2>/dev/null; then
+  echo "  ${ROUGE}x${FIN} robots.txt interdit tout le site."
+else
+  echo "  ${VERT}v${FIN} robots.txt accessible."
+  if curl -s --max-time 20 "${BASE_URL}/robots.txt" | grep -q "Sitemap:"; then
+    echo "  ${VERT}v${FIN} il déclare le sitemap."
+  else
+    echo "  ${ROUGE}x${FIN} il ne déclare PAS le sitemap."
+  fi
+fi
+
+if [ "$CODE_PLAN" != "200" ]; then
+  echo "  ${ROUGE}x${FIN} sitemap.xml répond ${CODE_PLAN}."
+  echo "      Dans la Search Console, le sitemap apparaîtra en"
+  echo "      « Impossible de récupérer le sitemap »."
+elif ! grep -q "<urlset" /tmp/plan-diag.xml 2>/dev/null; then
+  echo "  ${ROUGE}x${FIN} l'adresse répond 200 mais ne renvoie pas un sitemap."
+  echo "      Type reçu : ${TYPE_PLAN}."
+  echo "      C'est ce que voit la Search Console quand on lui soumet"
+  echo "      l'adresse d'une PAGE au lieu de celle du sitemap : elle affiche"
+  echo "      « Type : Inconnu » et « Impossible de récupérer le sitemap »."
+  echo "      L'adresse à soumettre est exactement : ${BASE_URL}/sitemap.xml"
+else
+  NB_PLAN=$(grep -c "<loc>" /tmp/plan-diag.xml 2>/dev/null || echo 0)
+  echo "  ${VERT}v${FIN} sitemap.xml servi en ${TYPE_PLAN}, ${NB_PLAN} URLs."
+  echo "      À soumettre dans la Search Console : ${BASE_URL}/sitemap.xml"
+fi
+
+titre "7. Diagnostic"
 
 if [ "$CODE_RACINE" = "403" ] && grep -qi 'hostinger' /tmp/reponse-diag.html 2>/dev/null; then
   echo "  ${ROUGE}x${FIN} Page 403 de Hostinger, pas d'Apache."

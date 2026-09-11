@@ -1103,6 +1103,39 @@ Le build liste à chaque construction les champs encore vides. **Remplissez-les
 dès que vous les avez** : ce sont des mentions légalement obligatoires, et
 leur absence finira par se voir.
 
+### Search Console : la marche à suivre
+
+**Le sitemap se soumet à son adresse, pas à celle d'une page.**
+
+Dans *Sitemaps*, le champ « Ajouter un sitemap » est déjà préfixé par
+`https://serrurier-richard.fr/`. Il ne reste donc qu'à taper :
+
+```
+sitemap.xml
+```
+
+Soumettre l'adresse d'un article (`blog/securiser-son-logement` par exemple)
+produit `Type : Inconnu` et `Impossible de récupérer le sitemap` : Google
+reçoit bien une réponse 200, mais du HTML là où il attend du XML. Supprimez
+alors l'entrée fautive dans la liste des sitemaps envoyés, et soumettez la
+bonne.
+
+Ensuite, dans *Inspection d'URL* : coller l'adresse d'une page, puis
+**Demander une indexation**. À faire pour l'accueil et les quelques pages qui
+comptent le plus ; le reste suivra par le sitemap.
+
+Pour vérifier depuis votre poste ce que Google va recevoir :
+
+```bash
+bash scripts/diag-hostinger.sh
+```
+
+Sa section « Ce que Google lit en premier » interroge le site EN LIGNE et dit
+si `robots.txt` répond, s'il déclare le sitemap, si `/sitemap.xml` renvoie
+bien du XML, et combien d'URLs il contient. Un site parfaitement affiché peut
+très bien servir un sitemap introuvable : ces deux fichiers ne passent par
+aucune des réécritures d'URL, ils se contrôlent donc à part.
+
 ## Cohérence géographique — à trancher avant publication
 
 Le site est actuellement en `noindex` : il ne sera pas référencé tant que ce
