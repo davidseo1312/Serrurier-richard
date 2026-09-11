@@ -60,6 +60,19 @@ def analyser_balises(html: str):
         yield balise, attributs
 
 
+def analyser_sources(html: str):
+    """Les <source srcset> d'un <picture>.
+
+    Sans cette lecture, un fichier servi uniquement sur mobile — la marque
+    seule du logo, par exemple — serait déclaré « utilisé dans aucune page ».
+    Un audit qui ment dans ce sens est dangereux : il finit par faire
+    supprimer un fichier dont le site a besoin."""
+    for balise in re.findall(r"<source\b[^>]*>", html, re.I):
+        attributs = dict(re.findall(r'([a-zA-Z-]+)="([^"]*)"', balise))
+        if attributs.get("srcset"):
+            yield balise, attributs
+
+
 def replis_du_catalogue() -> set:
     """Chemins web des visuels déclarés dans src/images.conf."""
     chemins = set()
@@ -166,6 +179,17 @@ def main() -> int:
 
             if "loading" not in attr and "fetchpriority" not in attr:
                 a.avertit(f"{rel} : ni loading ni fetchpriority — {src}")
+
+        # Les <source> d'un <picture> désignent des fichiers bien réels : ils
+        # comptent comme utilisés, au même titre qu'un src.
+        for balise, attr in analyser_sources(html):
+            for candidat in attr["srcset"].split(","):
+                url = candidat.strip().split(" ")[0]
+                if not url.startswith("/"):
+                    continue
+                utilisees.add(url)
+                if not (PUBLIC / url.lstrip("/")).is_file():
+                    a.erreur(f"{rel} : source <picture> absente du disque — {url}")
 
     # --- 2. Les fichiers présents sur le disque ----------------------------
     extensions = {".jpg", ".jpeg", ".png", ".webp", ".avif", ".svg", ".gif", ".ico"}

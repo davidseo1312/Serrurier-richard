@@ -606,7 +606,37 @@ hauteur.
 
 Dans la colonne d'actions, **le devis est un lien, pas un bouton** : deux
 boutons côte à côte se concurrencent, et c'est l'appel qui doit gagner. Sous
-1 080 px la ligne se réduit à *nom · appeler · menu*.
+1 080 px la ligne se réduit à *logo · appeler · menu*.
+
+### Le logo
+
+Le fichier livré est un « lockup » complet : la marque (cadenas, bouclier,
+hermines), le mot-symbole sur trois lignes, et une bande de services en bas.
+Tel quel il est inutilisable dans un en-tête — la bande serait illisible, et
+le fond blanc opaque interdirait tout autre fond derrière.
+
+`scripts/preparer-logo.py` en tire deux fichiers, en trois définitions :
+
+| Fichier | Affiché |
+|---|---|
+| `logo-serrurier-richard.webp` | au-dessus de 560 px — 56 px de haut, 44 px une fois la page défilée |
+| `logo-marque.webp` | en dessous de 560 px — le mot-symbole y descendrait sous 9 px de haut |
+
+La bascule est faite par `<picture>` et non par la CSS : **le navigateur ne
+télécharge que le fichier qui correspond**, et il n'y a qu'une balise `<img>`,
+donc un seul texte alternatif, toujours juste. Deux images masquées l'une
+après l'autre auraient fait télécharger les deux partout, et posé la question
+insoluble de savoir laquelle porte l'`alt`.
+
+Le détourage se fait **par propagation depuis les bords** : seuls les pixels
+blancs atteignables depuis l'extérieur deviennent transparents. Un simple
+« tout le blanc devient transparent » aurait percé le trou de serrure au
+centre du bouclier, qui est du blanc enfermé.
+
+Le fichier d'origine est conservé dans `src/marque/`, hors production. Pour
+remplacer le logo : déposez la nouvelle version sous le même nom et relancez
+le script. Un logo **vectoriel** serait préférable — net à toutes les tailles,
+quelques kilo-octets, aucun détourage à deviner.
 
 La **page courante est marquée** : le build pose `aria-current="page"` sur
 l'entrée de menu dont l'adresse correspond à celle de la page, et la CSS la

@@ -333,7 +333,14 @@ verifier(
 const sansTexte = await bureau.evaluate(() => {
   const vides = [];
   for (const a of document.querySelectorAll('a')) {
-    const texte = (a.textContent || '').trim() || a.getAttribute('aria-label') || a.title;
+    /* Un lien dont le contenu est une image tire son intitulé du texte
+       alternatif de cette image : c'est le cas du logo. Ne pas le compter
+       ferait échouer le test sur un balisage pourtant correct — et poser un
+       aria-label par-dessus écraserait l'alt au lieu de s'y ajouter. */
+    const alt = [...a.querySelectorAll('img')]
+      .map(i => (i.getAttribute('alt') || '').trim())
+      .find(Boolean);
+    const texte = (a.textContent || '').trim() || a.getAttribute('aria-label') || alt || a.title;
     if (!texte) vides.push(a.getAttribute('href') || '(sans href)');
   }
   return vides;

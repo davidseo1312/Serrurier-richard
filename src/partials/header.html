@@ -7,20 +7,43 @@
      dernier endroit où se permettre du remplissage.
 
      Ce qu'elle portait d'utile est remonté : le téléphone et le devis sont
-     dans la ligne principale, à droite. Les trois métiers sont devenus la
-     baseline sous le nom, où ils ne coûtent aucune hauteur.
+     dans la ligne principale, à droite.
 
-     Rail à trois colonnes — NOM | NAVIGATION | ACTIONS — dont la colonne
+     Rail à trois colonnes — LOGO | NAVIGATION | ACTIONS — dont la colonne
      centrale est réellement centrée. La page courante est marquée par le
      build (aria-current="page").
+
+     DEUX fichiers de logo, un seul téléchargé. Le lockup complet dès qu'il y
+     a la place, la marque seule sur les petits écrans. C'est « picture » qui
+     arbitre, pas la CSS : deux balises masquées l'une après l'autre auraient
+     fait télécharger les deux fichiers sur tous les appareils, et posé la
+     question insoluble de savoir laquelle porte le texte alternatif.
+
+     Ici il n'y a qu'une balise « img », donc un seul « alt », toujours juste.
      --------------------------------------------------------------------- -->
 <header class="site-header">
   <div class="wrap header-inner">
-    <a class="brand" href="/" aria-label="{{NOM_COMMERCIAL}} — retour à l'accueil">
-      <span class="brand-text">
-        <strong>{{NOM_COMMERCIAL}}</strong>
-        <small>Dépannage · Installation · Sécurisation</small>
-      </span>
+    <a class="brand" href="/">
+      <picture>
+        <!-- En dessous de 560 px, le mot-symbole descendrait sous 9 px de
+             haut : illisible. On sert la marque seule, qui reste
+             identifiable à n'importe quelle taille. « picture » et non deux
+             balises masquées l'une après l'autre : le navigateur ne
+             télécharge alors QUE le fichier qui correspond. -->
+        <source media="(max-width: 560px)"
+                srcset="/assets/img/logo-marque.webp 1x,
+                        /assets/img/logo-marque@2x.webp 2x,
+                        /assets/img/logo-marque@3x.webp 3x"
+                width="64" height="78">
+        <img class="brand-logo"
+             src="/assets/img/logo-serrurier-richard.webp"
+             srcset="/assets/img/logo-serrurier-richard.webp 1x,
+                     /assets/img/logo-serrurier-richard@2x.webp 2x,
+                     /assets/img/logo-serrurier-richard@3x.webp 3x"
+             width="220" height="73"
+             alt="{{NOM_COMMERCIAL}} — retour à l'accueil"
+             loading="eager" decoding="async">
+      </picture>
     </a>
 
     <nav id="nav-principal" class="nav" aria-label="Navigation principale">
