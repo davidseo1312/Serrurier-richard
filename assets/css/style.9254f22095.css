@@ -377,23 +377,26 @@ body.defile .site-header { box-shadow: 0 4px 20px rgba(15, 23, 42, .07); }
 }
 body.defile .header-inner { padding-block: var(--space-3); }
 
+/* --- La marque ------------------------------------------------------------
+   Le logo est une image, pas du texte reconstitué : le mot-symbole a sa
+   typographie propre, et la réécrire en CSS donnerait une imitation, pas la
+   marque. La hauteur est imposée ici, la largeur suit — un logo étiré n'est
+   plus un logo. « width » et « height » sont écrits dans la balise : la place
+   est réservée avant même que le fichier arrive, la page ne saute pas.
+   ------------------------------------------------------------------------ */
 .brand {
   display: flex; align-items: center;
-  color: var(--color-dark); text-decoration: none;
-  min-height: 44px; justify-self: start;
+  text-decoration: none; min-height: 44px; justify-self: start;
 }
-.brand-text { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
-.brand-text strong {
-  font-family: var(--font-title); font-size: 1.25rem; font-weight: 700;
-  color: var(--color-dark); letter-spacing: -0.03em; white-space: nowrap;
+.brand img {
+  display: block; width: auto;
+  height: 56px;
+  transition: height 220ms ease;
 }
-.brand-text small {
-  font-size: 0.75rem; color: var(--color-muted);
-  white-space: nowrap; margin-top: 2px;
-  transition: max-height 200ms ease, opacity 200ms ease;
-  max-height: 1.4em;
-}
-body.defile .brand-text small { max-height: 0; opacity: 0; overflow: hidden; }
+/* Au défilement le rail se resserre : le logo suit, sans jamais disparaître. */
+body.defile .brand img { height: 44px; }
+
+.brand picture { display: block; }
 
 /* --- Navigation, colonne centrale ---------------------------------------
    Le repère de la page courante et celui du survol sont le MÊME trait, sous
@@ -520,21 +523,26 @@ body.defile .brand-text small { max-height: 0; opacity: 0; overflow: hidden; }
   .nav a:hover::after, .nav a[aria-current="page"]::after { transform: scaleY(1); }
 }
 
+@media (max-width: 900px) {
+  /* Le rail se réduit : le logo aussi, plutôt que d'écraser le bouton
+     d'appel, qui est la raison d'être de cette ligne. */
+  .brand img { height: 48px; }
+  body.defile .brand img { height: 40px; }
+}
 @media (max-width: 560px) {
   .header-inner { padding-block: var(--space-3); gap: var(--space-3); }
-  .brand-text strong { font-size: 1.125rem; }
-  .brand-text small { display: none; }
   .header-call { padding: 0 var(--space-4); }
+  /* C'est « picture » qui a déjà changé de fichier : il ne reste qu'à donner
+     à la marque, bien plus haute que large, sa propre hauteur. */
+  .brand img { height: 44px; }
+  body.defile .brand img { height: 38px; }
 }
 @media (max-width: 400px) {
   .header-call { flex-direction: row; gap: var(--space-2); padding: 0 var(--space-3); }
   .header-call-numero { display: none; }
   .header-call-libelle { font-size: var(--text-sm); opacity: 1; }
-  .brand-text strong { font-size: 1.0625rem; }
   .nav-toggle { min-width: 42px; min-height: 42px; }
-}
-@media (max-width: 340px) {
-  .brand-text strong { font-size: 0.9375rem; }
+  .brand img { height: 40px; }
 }
 
 /* --- 7. Héros ------------------------------------------------------------- */
