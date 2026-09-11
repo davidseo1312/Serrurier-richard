@@ -1,2 +1,9 @@
 User-agent: *
-Disallow: /
+Allow: /
+
+# Les images doivent rester explorables : sans cela elles n'apparaissent pas
+# dans Google Images, quelle que soit la qualité du balisage.
+Allow: /assets/images/
+Allow: /assets/img/
+
+Sitemap: https://serrurier-richard.fr/sitemap.xml
