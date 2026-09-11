@@ -88,6 +88,21 @@ else
   etape "JSON-LD" "IGNOREE"
 fi
 
+# --- 4 bis. Présentation des prix -------------------------------------------
+# Un plafond affiché est lu comme un engagement. Le site n'annonce que des
+# prix de départ ; ce contrôle empêche une fourchette de revenir par mégarde.
+titre "4 bis  Présentation des prix"
+if command -v python3 > /dev/null; then
+  if python3 scripts/check-prix.py; then
+    etape "PRIX DE DÉPART" "OK"
+  else
+    etape "PRIX DE DÉPART" "ECHEC"; ECHEC=1
+  fi
+else
+  echo "Python 3 absent : contrôle ignoré."
+  etape "PRIX DE DÉPART" "IGNOREE"
+fi
+
 # --- 5. Parcours navigateur -------------------------------------------------
 titre "5/8  Parcours navigateur (mobile, tablette, ordinateur)"
 if command -v node > /dev/null && command -v php > /dev/null \
