@@ -56,9 +56,9 @@
         "@type": "OfferCatalog",
         "name": "Prestations de serrurerie",
         "itemListElement": [
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ouverture de porte claquée", "url": "{{BASE_URL}}/ouverture-porte" }, "price": "{{FORFAIT_OUVERTURE_SIMPLE}}", "priceCurrency": "EUR" },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Changement de cylindre", "url": "{{BASE_URL}}/changement-serrure" }, "price": "{{FORFAIT_CHANGEMENT_CYLINDRE}}", "priceCurrency": "EUR" },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ouverture de porte blindée", "url": "{{BASE_URL}}/porte-blindee" }, "price": "{{FORFAIT_OUVERTURE_BLINDEE}}", "priceCurrency": "EUR" }
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ouverture de porte claquée", "url": "{{BASE_URL}}/ouverture-porte" }, "priceSpecification": { "@type": "PriceSpecification", "minPrice": "{{FORFAIT_OUVERTURE_SIMPLE}}", "priceCurrency": "EUR", "valueAddedTaxIncluded": true } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Changement de cylindre", "url": "{{BASE_URL}}/changement-serrure" }, "priceSpecification": { "@type": "PriceSpecification", "minPrice": "{{FORFAIT_CHANGEMENT_CYLINDRE}}", "priceCurrency": "EUR", "valueAddedTaxIncluded": true } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ouverture de porte blindée", "url": "{{BASE_URL}}/porte-blindee" }, "priceSpecification": { "@type": "PriceSpecification", "minPrice": "{{FORFAIT_OUVERTURE_BLINDEE}}", "priceCurrency": "EUR", "valueAddedTaxIncluded": true } }
         ]
       }
     }
