@@ -130,11 +130,15 @@
   --container-etroit: 760px;
 
   /* Rayons */
-  --radius-sm: 8px;
-  --radius:    14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-  --radius-full: 999px;
+  /* Angles vifs, partout. Les jetons gardent leur nom — une centaine de
+     règles s'y réfèrent — mais valent tous zéro : le site n'a plus un seul
+     coin arrondi, boutons compris. Pour revenir à des angles adoucis, il
+     suffit de redonner une valeur à ces cinq lignes. */
+  --radius-sm: 0;
+  --radius:    0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-full: 0;
 
   /* Ombres — diffuses et colorées, jamais du gris neutre */
   --shadow-xs: 0 1px 2px rgba(15,23,42,.05);
@@ -142,8 +146,10 @@
   --shadow:    0 4px 16px rgba(15,23,42,.07), 0 1px 3px rgba(15,23,42,.05);
   --shadow-lg: 0 12px 32px rgba(15,23,42,.10), 0 4px 8px rgba(15,23,42,.04);
   --shadow-xl: 0 24px 56px rgba(15,23,42,.14), 0 8px 16px rgba(15,23,42,.05);
-  --shadow-primary: 0 8px 24px rgba(30,41,59,.22);
-  --shadow-secondary: 0 8px 24px rgba(249,115,22,.30);
+  /* Ombres portées nettes et neutres : un halo de couleur ramollirait
+     l'arête vive des boutons. Décalage franc, très peu de flou. */
+  --shadow-primary: 0 3px 0 rgba(15,23,42,.20);
+  --shadow-secondary: 0 3px 0 rgba(120,53,15,.35);
 
   --transition: 180ms cubic-bezier(.4,0,.2,1);
 
@@ -233,7 +239,7 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
 :focus-visible {
   outline: 3px solid var(--color-primary-light);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 0;
 }
 
 /* --- 5. Boutons et badges ------------------------------------------------- */
@@ -274,9 +280,9 @@ hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-7
   background: var(--color-secondary); color: #1A1200;
   box-shadow: var(--shadow-secondary);
 }
-.btn-call:hover { background: #FB923C; color: #1A1200; box-shadow: 0 12px 28px rgba(249,115,22,.40); }
+.btn-call:hover { background: #FB923C; color: #1A1200; box-shadow: 0 3px 0 rgba(120,53,15,.45); }
 
-/* Devis — action secondaire, en bleu de marque */
+/* Devis — action secondaire, dans l'encre du site */
 .btn-devis {
   background: var(--color-primary-deep); color: #fff;
   box-shadow: var(--shadow-primary);
@@ -412,7 +418,7 @@ body.defile .brand-text small { max-height: 0; opacity: 0; overflow: hidden; }
 .nav a::after {
   content: ""; position: absolute;
   left: var(--space-3); right: var(--space-3); bottom: 4px;
-  height: 2px; border-radius: 2px;
+  height: 2px;
   background: var(--color-dark);
   transform: scaleX(0); transform-origin: center;
   transition: transform var(--transition);
@@ -463,7 +469,7 @@ body.defile .brand-text small { max-height: 0; opacity: 0; overflow: hidden; }
 }
 .nav-toggle-bars, .nav-toggle-bars::before, .nav-toggle-bars::after {
   display: block; width: 20px; height: 2px; background: var(--color-dark);
-  border-radius: 2px; content: ""; transition: transform var(--transition), opacity var(--transition);
+  content: ""; transition: transform var(--transition), opacity var(--transition);
 }
 .nav-toggle-bars::before { transform: translateY(-6px); }
 .nav-toggle-bars::after  { transform: translateY(4px); }
@@ -614,7 +620,6 @@ body.defile .brand-text small { max-height: 0; opacity: 0; overflow: hidden; }
   grid-column: 1; grid-row: 1;
   width: 22px; height: 22px; margin-top: 3px;
   display: grid; place-items: center;
-  border-radius: 50%;
   background: var(--color-primary-soft);
   color: var(--color-primary-deep);
   font-size: 13px; font-weight: 700; line-height: 1;
@@ -1010,7 +1015,7 @@ section.sombre .etapes li::before { background: var(--color-primary-soft); color
 }
 .liste-situations li::before {
   content: ""; position: absolute; left: 0; top: .5em;
-  width: 7px; height: 7px; border-radius: 50%;
+  width: 6px; height: 6px;
   background: currentColor; opacity: .6;
 }
 
@@ -1106,7 +1111,6 @@ td.prix { font-family: var(--font-title); font-weight: 700; color: var(--color-p
 .faq summary::after {
   content: "+"; flex: none; width: 26px; height: 26px;
   display: grid; place-items: center;
-  border-radius: 50%;
   background: var(--color-primary-soft);
   color: var(--color-primary-deep);
   font-family: var(--font-title); font-size: 1.125rem; font-weight: 700; line-height: 1;
@@ -1423,7 +1427,7 @@ label:has(> input[type="checkbox"]) {
 }
 .visionneuse-fermer {
   position: absolute; top: var(--space-5); right: var(--space-5);
-  width: 48px; height: 48px; border-radius: 50%;
+  width: 48px; height: 48px;
   background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
   color: #fff; font-size: 1.75rem; line-height: 1; cursor: pointer;
 }
@@ -1605,7 +1609,6 @@ label:has(> input[type="checkbox"]) {
   /* 44 px de haut : la cible reste confortable au doigt (WCAG 2.5.8). */
   min-height: 44px;
   padding: var(--space-3) var(--space-4);
-  border-radius: 999px;
   border: 1px solid var(--color-border-strong);
   background: var(--color-white);
   color: var(--color-dark-3);
@@ -1681,7 +1684,6 @@ label:has(> input[type="checkbox"]) {
   width: 44px;
   height: 44px;
   padding: 0;
-  border-radius: 50%;
   font-size: var(--text-lg);
 }
 section.sombre .etapes.frise li::after {
