@@ -162,6 +162,12 @@ RewriteRule ^(.+?)/?$ /$1.html [L]
     Header set Cache-Control "public, max-age=0, must-revalidate"
   </FilesMatch>
 
+  # version.txt dit quelle version le serveur sert. Le mettre en cache, ne
+  # serait-ce qu'une seconde, lui retirerait toute utilité.
+  <Files "version.txt">
+    Header set Cache-Control "no-store, no-cache, must-revalidate"
+  </Files>
+
   # --- En-têtes de sécurité ------------------------------------------------
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
