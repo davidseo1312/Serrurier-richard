@@ -626,6 +626,11 @@ while IFS= read -r src_file; do
   export PAGE_DESC="$(meta_get "$src_file" description)"
   export PAGE_IMAGE="$(meta_get "$src_file" image)"
   export PAGE_DATE="$(meta_get "$src_file" date)"
+  # Deux dates distinctes, et ce n'est pas un détail : « datePublished » dit
+  # quand l'article est paru, « dateModified » quand il a été revu. Écrire la
+  # date du jour dans les deux ferait passer un article ancien pour un article
+  # neuf — Google recoupe, et le lecteur aussi.
+  export PAGE_DATE_MAJ="$(meta_get "$src_file" date_maj)"
   export PAGE_BREADCRUMB="$(meta_get "$src_file" breadcrumb)"
   PAGE_SCHEMA="$(meta_get "$src_file" schema)"
   PAGE_PRIORITY="$(meta_get "$src_file" priority)"
@@ -653,6 +658,7 @@ while IFS= read -r src_file; do
   esac
   [ -n "$PAGE_IMAGE" ] || PAGE_IMAGE="/assets/img/og-default.jpg"
   [ -n "$PAGE_DATE" ] || PAGE_DATE="$(date +%Y-%m-%d)"
+  [ -n "$PAGE_DATE_MAJ" ] || PAGE_DATE_MAJ="$PAGE_DATE"
 
   # Une page peut déclarer une conversion mesurée à son affichage (page de
   # remerciement). L'attribut n'est écrit que si la clé est renseignée.
@@ -719,7 +725,7 @@ while IFS= read -r src_file; do
 
   # Les pages marquées "sitemap: non" restent hors du sitemap.
   if [ "$PAGE_SITEMAP" != "non" ]; then
-  SITEMAP_ENTRIES="${SITEMAP_ENTRIES}${PAGE_URL}|${PAGE_PRIORITY}|${PAGE_DATE}"$'\n'
+  SITEMAP_ENTRIES="${SITEMAP_ENTRIES}${PAGE_URL}|${PAGE_PRIORITY}|${PAGE_DATE_MAJ}"$'\n'
   fi
   PAGE_COUNT=$((PAGE_COUNT + 1))
 done < <(find src/pages -name '*.html' | sort)

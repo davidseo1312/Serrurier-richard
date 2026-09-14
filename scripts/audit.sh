@@ -103,6 +103,22 @@ else
   etape "PRIX DE DÉPART" "IGNOREE"
 fi
 
+# --- 4 ter. Contenu des articles --------------------------------------------
+# Un article qui ne couvre pas le champ lexical de sa requête ne se classe pas,
+# et un article qui ne nomme pas les départements desservis ne remonte pas en
+# local. Ce contrôle mesure les deux, plus l'appel à l'action final.
+titre "4 ter  Contenu des articles"
+if command -v python3 > /dev/null; then
+  if python3 scripts/check-blog-seo.py; then
+    etape "ARTICLES" "OK"
+  else
+    etape "ARTICLES" "ECHEC"; ECHEC=1
+  fi
+else
+  echo "Python 3 absent : contrôle ignoré."
+  etape "ARTICLES" "IGNOREE"
+fi
+
 # --- 5. Parcours navigateur -------------------------------------------------
 titre "5/8  Parcours navigateur (mobile, tablette, ordinateur)"
 if command -v node > /dev/null && command -v php > /dev/null \
