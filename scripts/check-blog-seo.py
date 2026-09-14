@@ -46,6 +46,13 @@ RENFORT_MIN = 3
 LONGUEUR_MIN = 1200
 MAILLAGE_MIN = 4
 DENSITE_MAX = 0.03
+# Redondance entre articles. Deux guides qui redisent la même chose se
+# cannibalisent : Google en choisit un, l'autre disparaît des résultats.
+# Mesurée en passages de cinq mots partagés (indice de Jaccard) : le fond
+# commun normal d'un même métier tourne autour de 2 %. Au-delà de 6 %, deux
+# articles racontent la même histoire et l'un des deux est de trop.
+SEUIL_REDONDANCE = 0.06
+
 
 # --- Ancrage géographique ---------------------------------------------------
 # Les zones réellement couvertes par le site, et elles seules. En inventer une
@@ -187,6 +194,33 @@ CHAMPS = {
             ["entretien", "lubrifi"], ["graphite", "PTFE"],
             ["humidité"], ["corrosion", "grippe"], ["embruns", "air marin"],
             ["devis"], ["prix"], ["pose"], ["remplacement"],
+        ],
+    },
+    "securiser-un-commerce.html": {
+        "requete": "sécuriser un commerce local professionnel",
+        "termes": [
+            ["commerce"], ["local professionnel", "locaux professionnels"],
+            ["boutique"], ["atelier"], ["entrepôt"], ["bureau"],
+            ["vitrine"], ["devanture"], ["rideau métallique"],
+            ["grille"], ["vitrage feuilleté", "feuilleté"],
+            ["serrure de sol", "serrures de sol"], ["coulisse"],
+            ["tablier"], ["organigramme"], ["passe général"],
+            ["plan de fermeture"], ["carte de propriété"],
+            ["contrôle d'accès"], ["badge"], ["cylindre"],
+            ["clés"], ["trousseau"], ["salarié"], ["personnel"],
+            ["saisonnier"], ["prestataire"], ["coffre-fort"],
+            ["scellement", "scellé"], ["espèces"], ["caisse"], ["stock"],
+            ["issue de secours", "issues de secours"],
+            ["barre anti-panique"], ["public", "recevant du public"],
+            ["alarme"], ["vidéoprotection"],
+            ["assurance", "assureur"],
+            ["multirisque professionnelle", "multirisque"],
+            ["clause de protection", "moyens de protection"],
+            ["indemnisation"], ["perte d'exploitation"],
+            ["effraction"], ["intrusion"], ["vol"],
+            ["fermeture prolongée", "période de fermeture"],
+            ["maintenance", "entretien"], ["dégrippage", "lubrifi"],
+            ["embruns", "sel"], ["devis"], ["diagnostic"],
         ],
     },
     "serrure-locataire-proprietaire.html": {
@@ -350,6 +384,43 @@ def analyser(fichier: Path, regle: dict) -> list:
     return defauts, notes
 
 
+def empreintes(corps_texte: str, n: int = 5) -> set:
+    """Les suites de n mots du texte, pour comparer deux articles."""
+    mots = re.findall(r"[a-z0-9\']+", sans_accents(corps_texte).lower())
+    return {" ".join(mots[i:i + n]) for i in range(len(mots) - n + 1)}
+
+
+def controler_redondance(pages: dict) -> int:
+    """Compare les articles deux à deux et refuse les doublons de fond."""
+    from itertools import combinations
+
+    print(f"\n{G}Redondance entre articles{R}")
+    if len(pages) < 2:
+        print("  un seul article : rien à comparer")
+        return 0
+
+    paires = []
+    for a, b in combinations(sorted(pages), 2):
+        commun = len(pages[a] & pages[b])
+        total = len(pages[a] | pages[b])
+        paires.append(((commun / total) if total else 0.0, commun, a, b))
+    paires.sort(reverse=True)
+
+    pire, commun, a, b = paires[0]
+    print(f"  {len(paires)} paires comparées · maximum {pire:.2%}"
+          f" ({commun} passages communs entre {a} et {b})")
+
+    fautives = [p for p in paires if p[0] > SEUIL_REDONDANCE]
+    for taux, commun, a, b in fautives:
+        print(f"  {X} {a} et {b} partagent {taux:.2%} de leur texte")
+    if fautives:
+        print(f"\n  Deux articles qui se recouvrent à plus de {SEUIL_REDONDANCE:.0%}")
+        print("  se cannibalisent : Google en retient un et ignore l'autre.")
+        return 1
+    print(f"  {V} Chaque article traite un sujet distinct.")
+    return 0
+
+
 def main() -> int:
     if not PUBLIC.is_dir():
         print("public/blog est absent : lancez d'abord bash scripts/build.sh")
@@ -357,12 +428,16 @@ def main() -> int:
 
     print(f"\n{G}Articles : couverture sémantique, ancrage breton, appel à l'action{R}")
     code = 0
+    empreintes_par_article = {}
     for nom, regle in CHAMPS.items():
         fichier = PUBLIC / nom
         if not fichier.is_file():
             print(f"  {X} {nom} : article introuvable")
             code = 1
             continue
+        empreintes_par_article[nom] = empreintes(
+            texte_visible(corps_article(fichier.read_text(encoding="utf-8")))
+        )
         defauts, notes = analyser(fichier, regle)
         marque = X if defauts else V
         print(f"\n  {marque} {nom}  — requête : « {regle['requete']} »")
@@ -379,6 +454,8 @@ def main() -> int:
         print(f"\n  {A} article(s) sans champ lexical déclaré : {', '.join(manquants)}")
         print("      Ajoutez-les dans CHAMPS, sinon ils ne sont pas contrôlés.")
         code = 1
+
+    code = controler_redondance(empreintes_par_article) or code
 
     print()
     if code == 0:
