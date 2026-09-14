@@ -216,6 +216,22 @@ CHAMPS = {
             ["sans casse", "sans dégât"], ["dépannage"], ["diagnostic"],
             ["tarif", "prix"], ["téléphone"],
         ],
+        # Les 36 mots-clés demandés : présence ET emploi répété.
+        "renforces": [
+            ["A2P"], ["porte d'entrée"], ["barillet"], ["serruriers"],
+            ["haute sécurité"], ["verrouillage"], ["ouvrir la porte"],
+            ["cambriolage"], ["cambriolages"], ["cambrioleurs"],
+            ["blindées"], ["portes blindées"], ["Vachette"], ["Fichet"],
+            ["crochetage"], ["clefs"], ["changer la serrure"],
+            ["nouvelle serrure"], ["pose de serrure"], ["dépanner"],
+            ["dépannage serrurier"], ["faire appel à un serrurier"],
+            ["faites appel"], ["artisan serrurier"],
+            ["serrurier professionnel"], ["entreprise de serrurerie"],
+            ["porte de garage"], ["tentative d'effraction"],
+            ["demi-tour"], ["pêne demi-tour"], ["verrous"],
+            ["serrure de porte"], ["type de serrure"],
+            ["types de serrures"], ["métalliques"], ["lock"],
+        ],
     },
     "securiser-un-commerce.html": {
         "requete": "sécuriser un commerce local professionnel",
