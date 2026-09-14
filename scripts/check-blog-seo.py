@@ -84,6 +84,23 @@ CHAMPS = {
             ["maison"], ["courant d'air", "coup de vent", "le vent"],
             ["multipoints", "trois points"], ["facture"],
             ["arrêté du 24 janvier 2017"], ["nuit"], ["week-end", "dimanche"],
+            # Mots-clés demandés en complément : ils décrivent le vocabulaire
+            # que les visiteurs emploient réellement dans leurs recherches.
+            ["porte d'entrée"], ["haute sécurité"], ["Vachette"], ["Fichet"],
+            ["verrou"], ["verrous"], ["verrouillage"], ["clefs"],
+            ["cambriolage"], ["cambrioleurs"], ["serruriers"],
+            ["blindée", "blindées"], ["portes blindées"], ["cylindres"],
+            ["entreprise de serrurerie", "entreprise serrurerie"],
+            ["ouvrir la porte"], ["dépanner"], ["dépannages"],
+            ["dépannage serrurerie", "dépannage serrurier"],
+            ["dépannage de serrure", "dépannage serrure"],
+            ["porte de garage"], ["serrurier professionnel"],
+            ["changer la serrure", "changer de serrure", "changer serrure"],
+            ["serrure multipoints"], ["artisan serrurier"],
+            ["pose de serrure"], ["métalliques"], ["type de serrure"],
+            ["installateur"], ["faire appel à un serrurier"],
+            ["serrure de porte", "serrure porte"], ["niveau de sécurité"],
+            ["pêne"],
         ],
     },
     "prix-ouverture-de-porte.html": {
