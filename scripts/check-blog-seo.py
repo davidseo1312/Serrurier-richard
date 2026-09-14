@@ -196,6 +196,27 @@ CHAMPS = {
             ["devis"], ["prix"], ["pose"], ["remplacement"],
         ],
     },
+    "enferme-chez-soi-que-faire.html": {
+        "requete": "bloqué chez soi porte ne s'ouvre plus de l'intérieur",
+        "termes": [
+            ["enfermé", "enferme"], ["bloqué", "bloquée"], ["sortir"],
+            ["de l'intérieur", "intérieur"], ["porte"], ["serrure"],
+            ["serrurier"], ["cylindre"], ["canon"], ["clé"], ["poignée"],
+            ["carré"], ["bouton moleté", "bouton"], ["pêne"], ["gâche"],
+            ["dormant"], ["paumelle"], ["multipoints"], ["tringlerie"],
+            ["verrou"], ["condamnation"], ["déverrouillage d'urgence"],
+            ["salle de bain"], ["WC", "toilettes"], ["enfant"],
+            ["personne âgée", "vivant seul", "vit seul"],
+            ["pompiers"], ["112", "le 18"], ["secours"], ["danger"],
+            ["fumée"], ["gaz"], ["malaise"], ["urgence"],
+            ["assurance habitation"], ["assistance"], ["multirisque"],
+            ["voisin"], ["gardien"], ["syndic"], ["bailleur"],
+            ["double"], ["grippé", "grippe"], ["lubrifi"],
+            ["graphite", "PTFE"], ["forcer"], ["perçage", "percer"],
+            ["sans casse", "sans dégât"], ["dépannage"], ["diagnostic"],
+            ["tarif", "prix"], ["téléphone"],
+        ],
+    },
     "securiser-un-commerce.html": {
         "requete": "sécuriser un commerce local professionnel",
         "termes": [
