@@ -222,6 +222,20 @@ CHAMPS = {
             ["maintenance", "entretien"], ["dégrippage", "lubrifi"],
             ["embruns", "sel"], ["devis"], ["diagnostic"],
         ],
+        # Les 36 mots-clés demandés : présence ET emploi répété.
+        "renforces": [
+            ["porte de garage"], ["portes de garage"], ["haute sécurité"],
+            ["cambriolage"], ["cambriolages"], ["cambrioleurs"],
+            ["A2P"], ["verrou"], ["blindées"], ["portes blindées"],
+            ["Vachette"], ["Fichet"], ["Point Fort Fichet"],
+            ["multipoints"], ["serrure multipoints"], ["fermetures"],
+            ["stores"], ["roulants"], ["volets roulants"],
+            ["barillet"], ["serruriers"], ["menuiserie"], ["menuiseries"],
+            ["alu"], ["clefs"], ["portails"], ["ouvertures"],
+            ["crochetage"], ["lock"], ["niveau de sécurité"],
+            ["dépanner"], ["dépannages"], ["coffres-forts"],
+            ["pêne"], ["tentative d'effraction"], ["gâche"],
+        ],
     },
     "serrure-locataire-proprietaire.html": {
         "requete": "serrure qui paie locataire ou propriétaire",
