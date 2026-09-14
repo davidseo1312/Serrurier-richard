@@ -37,6 +37,12 @@ PUBLIC = RACINE / "public" / "blog"
 V, X, A, G, R = "\033[32mv\033[0m", "\033[31mx\033[0m", "\033[33m!\033[0m", "\033[1m", "\033[0m"
 
 SEUIL = 0.90
+# Un mot-clé présent une seule fois dans 4 000 mots ne pèse rien. Les outils
+# d'optimisation sémantique notent la richesse d'emploi, pas la présence : un
+# terme employé trois fois dans des contextes différents compte, une mention
+# unique passe pour une coïncidence. D'où ce plancher sur les mots-clés dont
+# l'article doit vraiment traiter.
+RENFORT_MIN = 3
 LONGUEUR_MIN = 1200
 MAILLAGE_MIN = 4
 DENSITE_MAX = 0.03
@@ -101,6 +107,22 @@ CHAMPS = {
             ["installateur"], ["faire appel à un serrurier"],
             ["serrure de porte", "serrure porte"], ["niveau de sécurité"],
             ["pêne"],
+        ],
+        # Les 36 mots-clés demandés : présence ET emploi répété.
+        "renforces": [
+            ["porte d'entrée"], ["haute sécurité"], ["Vachette"], ["Fichet"],
+            ["verrou"], ["verrous"], ["verrouillage"], ["clefs"],
+            ["barillet"], ["cambriolage"], ["cambrioleurs"], ["serruriers"],
+            ["blindée", "blindées"], ["portes blindées"], ["cylindres"],
+            ["entreprise de serrurerie"], ["ouvrir la porte"],
+            ["dépanner"], ["dépannages"], ["dépannage serrurerie"],
+            ["dépannage de serrure"], ["porte de garage"],
+            ["serrurier professionnel"], ["crochetage"],
+            ["changer la serrure", "changer le cylindre"],
+            ["serrure multipoints"], ["gâche"], ["artisan serrurier"],
+            ["pose de serrure"], ["métalliques"], ["type de serrure"],
+            ["pêne"], ["installateur"], ["faire appel à un serrurier"],
+            ["serrure de porte"], ["niveau de sécurité"],
         ],
     },
     "prix-ouverture-de-porte.html": {
@@ -234,6 +256,20 @@ def analyser(fichier: Path, regle: dict) -> list:
     if couverture < SEUIL:
         defauts.append(
             f"couverture {couverture:.1%} < {SEUIL:.0%} — manque : {', '.join(manquants[:10])}"
+        )
+
+    # 1 bis. Occurrences minimales sur les mots-clés renforcés.
+    faibles = []
+    for variantes in regle.get("renforces", []):
+        n = sum(plat.count(sans_accents(v).lower()) for v in variantes)
+        if n < RENFORT_MIN:
+            faibles.append(f"{variantes[0]} ({n}×)")
+    if regle.get("renforces"):
+        renforces = len(regle["renforces"])
+        notes.append(f"{renforces - len(faibles)}/{renforces} mots-clés à {RENFORT_MIN}× ou plus")
+    if faibles:
+        defauts.append(
+            f"mots-clés trop peu employés (< {RENFORT_MIN}×) : {', '.join(faibles[:10])}"
         )
 
     # 2. Ancrage géographique réel.
