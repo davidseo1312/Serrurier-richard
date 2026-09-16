@@ -327,6 +327,21 @@ CHAMPS = {
             ["effraction"], ["cambriolage"], ["pompiers"], ["112", "le 18"],
             ["saison", "saisonnier"], ["circulation"], ["intervention"],
         ],
+        # Les 36 mots-clés demandés : présence ET emploi répété.
+        "renforces": [
+            ["porte d'entrée"], ["porte claquée"], ["serruriers"],
+            ["artisan serrurier"], ["entreprise de serrurerie"],
+            ["installateur"], ["multipoints"], ["serrure multipoints"],
+            ["blindées"], ["portes blindées"], ["haute sécurité"],
+            ["certifiée"], ["anti-effraction"], ["clefs"],
+            ["toutes les marques"], ["cylindres"], ["barillet"],
+            ["pêne"], ["verrou"], ["verrous"], ["verrouillage"],
+            ["métalliques"], ["rideaux"], ["fermetures"],
+            ["menuiserie"], ["porte de garage"], ["coffres"],
+            ["coffres-forts"], ["ouvrir la porte"], ["dépanner"],
+            ["dépannages"], ["cambriolages"], ["cambrioleurs"],
+            ["panique"], ["Vachette"], ["Fichet"],
+        ],
     },
     "changer-serrure-rennes-autorisations.html": {
         "requete": "changer serrure porte Rennes autorisation",
