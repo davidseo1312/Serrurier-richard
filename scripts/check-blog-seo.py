@@ -216,6 +216,21 @@ CHAMPS = {
             ["porte claquée"], ["sans casse"], ["huisserie"],
             ["humidité"], ["maison", "maisons"], ["garage"],
         ],
+        # Les 36 mots-clés demandés : présence ET emploi répété.
+        "renforces": [
+            ["A2P"], ["porte d'entrée"], ["haute sécurité"],
+            ["multipoints"], ["serrure multipoints"], ["serruriers"],
+            ["cylindres"], ["blindées"], ["portes blindées"], ["clefs"],
+            ["porte de garage"], ["Vachette"], ["Fichet"], ["verrou"],
+            ["verrous"], ["verrouillage"], ["cambriolage"],
+            ["cambriolages"], ["cambrioleurs"], ["métalliques"],
+            ["barillet"], ["pêne"], ["dormant"], ["crochetage"],
+            ["lock"], ["fermetures"], ["dépanner"], ["dépannages"],
+            ["ouvrir la porte"], ["niveau de sécurité"],
+            ["anti-panique"], ["panique"], ["menuiserie"],
+            ["entreprise de serrurerie"], ["certifiée"],
+            ["tentative d'effraction"],
+        ],
     },
     "trouver-serrurier-quimper.html": {
         "requete": "serrurier Quimper vérifier entreprise",
