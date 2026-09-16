@@ -290,6 +290,21 @@ CHAMPS = {
             ["dépannage"], ["intervention"], ["pompiers"], ["112", "le 18"],
             ["air marin", "sel"],
         ],
+        # Les 36 mots-clés demandés : présence ET emploi répété.
+        "renforces": [
+            ["A2P"], ["certifiée"], ["porte d'entrée"], ["porte claquée"],
+            ["haute sécurité"], ["niveau de sécurité"], ["serruriers"],
+            ["artisan serrurier"], ["entreprise de serrurerie"],
+            ["blindées"], ["portes blindées"], ["serrure multipoints"],
+            ["porte de garage"], ["fermetures"], ["stores"],
+            ["menuiserie"], ["anti-panique"], ["panique"],
+            ["Vachette"], ["Fichet"], ["barillet"], ["dormant"],
+            ["verrou"], ["verrous"], ["verrouillage"], ["clefs"],
+            ["crochetage"], ["ouvrir la porte"], ["pose de serrure"],
+            ["dépanner"], ["dépannages"], ["cambriolage"],
+            ["cambriolages"], ["cambrioleurs"], ["intrusion"],
+            ["tentative d'effraction"],
+        ],
     },
     "trouver-serrurier-vannes.html": {
         "requete": "serrurier Vannes urgence rendez-vous",
