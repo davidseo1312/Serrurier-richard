@@ -280,6 +280,23 @@ CHAMPS = {
             ["réglage"], ["remplacement"], ["clé cassée"],
             ["extraction"], ["forcer"], ["urgence"], ["dépannage"],
             ["rendez-vous"], ["volets"], ["garage"],
+            ["blindée", "blindées"], ["coupe-feu"], ["anti-panique"],
+            ["crochetage"], ["cambriolage"], ["installateur"],
+        ],
+        # Les 36 mots-clés demandés : présence ET emploi répété.
+        "renforces": [
+            ["porte d'entrée"], ["Vachette"], ["verrou"],
+            ["porte de garage"], ["cambriolage"], ["verrouillage"],
+            ["serruriers"], ["blindées"], ["portes blindées"],
+            ["clefs"], ["cambrioleurs"], ["métalliques"],
+            ["fermetures"], ["Fichet"], ["lock"],
+            ["niveau de sécurité"], ["panique"], ["anti-panique"],
+            ["dormant"], ["pose de serrure"], ["menuiserie"],
+            ["intrusion"], ["stores"], ["crochetage"],
+            ["porte claquée"], ["cambriolages"], ["coffres"],
+            ["ouvrir la porte"], ["rideaux"], ["contrôle d'accès"],
+            ["portes de garage"], ["dépanner"], ["installateur"],
+            ["certifiées"], ["serrure de sécurité"], ["coupe-feu"],
         ],
     },
     "trouver-serrurier-brest.html": {
