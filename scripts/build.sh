@@ -618,6 +618,8 @@ LD
 
 PAGE_COUNT=0
 SITEMAP_ENTRIES=""
+# Inventaire pour llms.txt : section|titre|url|description
+LLMS_ENTRIES=""
 
 while IFS= read -r src_file; do
   rel="${src_file#src/pages/}"
@@ -640,6 +642,26 @@ while IFS= read -r src_file; do
   PAGE_FAQ="$(meta_get "$src_file" faq)"
   PAGE_PARENT_NOM="$(meta_get "$src_file" parent_nom)"
   PAGE_PARENT_URL="$(meta_get "$src_file" parent_url)"
+  # Réponse directe : le paragraphe autosuffisant que les moteurs de réponse
+  # génératifs peuvent citer tel quel. Facultatif ; sans lui, aucun bloc.
+  PAGE_REPONSE="$(meta_get "$src_file" reponse)"
+  # Territoire décrit par une page de zone. Par défaut on déduit du fil
+  # d'Ariane : « Serrurier à Rennes » est une commune, « Finistère » un
+  # département.
+  export GEO_NOM="$(meta_get "$src_file" geo_nom)"
+  export GEO_TYPE="$(meta_get "$src_file" geo_type)"
+  if [ -z "$GEO_NOM" ]; then
+    case "$PAGE_BREADCRUMB" in
+      "Serrurier à "*) export GEO_NOM="${PAGE_BREADCRUMB#Serrurier à }" ;;
+      *)               export GEO_NOM="$PAGE_BREADCRUMB" ;;
+    esac
+  fi
+  if [ -z "$GEO_TYPE" ]; then
+    case "$PAGE_BREADCRUMB" in
+      "Serrurier à "*) export GEO_TYPE="City" ;;
+      *)               export GEO_TYPE="AdministrativeArea" ;;
+    esac
+  fi
 
   [ -n "$PAGE_PRIORITY" ] || PAGE_PRIORITY="0.6"
   # « image: og:HERO » désigne la vignette sociale de l'entrée HERO du
@@ -693,6 +715,24 @@ while IFS= read -r src_file; do
   CORPS="$(sed '/^<!--meta$/,/^-->$/d' "$src_file" | substituer)"
   CORPS="$(ajuster_visuels "$CORPS")"
 
+  # Réponse directe, insérée juste après le titre principal.
+  #
+  # Un moteur de réponse génératif ne lit pas une page en entier : il en
+  # extrait un passage court, autosuffisant, et le cite. Un passage ne vaut
+  # que s'il reste vrai une fois sorti de son contexte — il doit donc nommer
+  # l'entreprise, la prestation, le territoire et le moyen de contact dans
+  # les mêmes phrases. C'est le seul endroit du site où cette redondance est
+  # voulue.
+  #
+  # Le bloc est aussi la cible de « speakable » dans schema-entite.html.
+  if [ -n "$PAGE_REPONSE" ]; then
+    export BLOC_REPONSE="$(printf '%s' "$PAGE_REPONSE" | substituer)"
+    CORPS="$(printf '%s' "$CORPS" | perl -0777 -pe '
+      my $bloc = $ENV{BLOC_REPONSE};
+      s{(</h1>)}{$1\n<div class="reponse-ia"><p>$bloc</p></div>}s;
+    ')"
+  fi
+
   export PRECHARGEMENT_HERO="$(precharger_visuel_principal "$CORPS")"
 
   # FAQPage dérivé des blocs <details> réellement affichés. « faq: non » dans
@@ -707,6 +747,10 @@ while IFS= read -r src_file; do
 
   {
     cat src/partials/head.html
+    # Identité complète sur chaque page : un moteur de réponse ne récupère
+    # qu'une URL et doit pouvoir répondre « qui, quoi, où » sans en visiter
+    # d'autre.
+    cat src/partials/schema-entite.html
     if [ -n "$PAGE_SCHEMA" ] && [ -f "src/partials/schema-${PAGE_SCHEMA}.html" ]; then
       cat "src/partials/schema-${PAGE_SCHEMA}.html"
     fi
@@ -726,6 +770,20 @@ while IFS= read -r src_file; do
   # Les pages marquées "sitemap: non" restent hors du sitemap.
   if [ "$PAGE_SITEMAP" != "non" ]; then
   SITEMAP_ENTRIES="${SITEMAP_ENTRIES}${PAGE_URL}|${PAGE_PRIORITY}|${PAGE_DATE_MAJ}"$'\n'
+  # Même page, même inventaire : llms.txt ne peut pas diverger du sitemap.
+  case "$rel" in
+    blog/*)  section="Guides" ;;
+    zones/*) section="Zones" ;;
+    *)       section="Site"  ;;
+  esac
+  # La description brute contient encore ses tokens : llms.txt est écrit
+  # après la boucle, hors du pipeline de substitution des pages.
+  desc_llms="$(printf '%s' "$PAGE_DESC" | substituer)"
+  # Le séparateur est la barre verticale : un titre qui en contient une
+  # (« CGV | Serrurier Richard ») décalerait toutes les colonnes. On prend
+  # donc ce qui précède, et on substitue avant de découper.
+  titre_llms="$(printf '%s' "${PAGE_BREADCRUMB:-$PAGE_TITLE}" | substituer | cut -d'|' -f1 | sed 's/[[:space:]]*$//')"
+  LLMS_ENTRIES="${LLMS_ENTRIES}${section}|${titre_llms}|${PAGE_URL}|${desc_llms}"$'\n'
   fi
   PAGE_COUNT=$((PAGE_COUNT + 1))
 done < <(find src/pages -name '*.html' | sort)
@@ -746,6 +804,7 @@ done < <(find static -name '*.php' 2>/dev/null | sort)
 [ -f static/manifest.webmanifest ] && substituer < static/manifest.webmanifest > "$OUT/manifest.webmanifest"
 
 bash scripts/gen-sitemap.sh "$SITEMAP_ENTRIES"
+bash scripts/gen-llms.sh "$LLMS_ENTRIES"
 
 echo "✓ $PAGE_COUNT pages générées dans public/"
 [ "$PHP_COUNT" -gt 0 ] && echo "✓ $PHP_COUNT script(s) PHP traité(s)"
@@ -783,6 +842,7 @@ for requis in \
   "$OUT/404.html" \
   "$OUT/robots.txt" \
   "$OUT/sitemap.xml" \
+  "$OUT/llms.txt" \
   "$OUT/manifest.webmanifest" \
   "$OUT${CSS_URL}" \
   "$OUT${JS_URL}" \

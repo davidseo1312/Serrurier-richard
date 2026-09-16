@@ -119,6 +119,24 @@ else
   etape "ARTICLES" "IGNOREE"
 fi
 
+# --- 4 quater. Lisibilité par les moteurs de réponse -------------------------
+# Un moteur de réponse génératif ne parcourt pas le site : il récupère une URL
+# et cite un passage. Ce contrôle vérifie les conditions matérielles de cette
+# citation — identité complète sur chaque page, passage autosuffisant,
+# robots.txt qui n'interdit rien, llms.txt à jour. Il ne prétend pas mesurer
+# si une IA cite effectivement le site : personne ne peut le faire d'ici.
+titre "4 quater  Lisibilité par les moteurs de réponse"
+if command -v python3 > /dev/null; then
+  if python3 scripts/check-ia.py; then
+    etape "MOTEURS DE RÉPONSE" "OK"
+  else
+    etape "MOTEURS DE RÉPONSE" "ECHEC"; ECHEC=1
+  fi
+else
+  echo "Python 3 absent : contrôle ignoré."
+  etape "MOTEURS DE RÉPONSE" "IGNOREE"
+fi
+
 # --- 5. Parcours navigateur -------------------------------------------------
 titre "5/8  Parcours navigateur (mobile, tablette, ordinateur)"
 if command -v node > /dev/null && command -v php > /dev/null \

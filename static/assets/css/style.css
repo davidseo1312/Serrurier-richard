@@ -1104,6 +1104,36 @@ td.prix {
 .encadre.alerte { border-left-color: var(--color-danger); background: var(--color-danger-soft); }
 .encadre.ok { border-left-color: var(--color-success); background: var(--color-success-soft); }
 
+/* ---------------------------------------------------------------------------
+   Réponse directe, sous le titre de chaque page.
+
+   Ce bloc existe pour être cité hors de son contexte : par un moteur de
+   réponse génératif, par un extrait Google, par un assistant vocal (il est
+   désigné par « speakable » dans le balisage). Il est donc placé juste après
+   le <h1>, avant tout le reste, et reste aligné à gauche même dans un
+   en-tête centré — un paragraphe de fait se lit en drapeau, pas en centré.
+   --------------------------------------------------------------------------- */
+.reponse-ia {
+  border-left: 4px solid var(--color-primary);
+  background: var(--color-primary-tint);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: var(--space-5) var(--space-6);
+  margin: var(--space-5) 0 var(--space-6);
+  text-align: left;
+  max-width: 68ch;
+}
+.section-titre .reponse-ia { margin-inline: auto; }
+/* La règle « .section-titre p:not(.badge) » est plus spécifique et repeignait
+   ce paragraphe en --color-muted : 4,43:1 sur le voile, sous le seuil AA de
+   4,5:1. Le sélecteur ci-dessous reprend la main sur la couleur ET sur la
+   taille. Un passage destiné à être cité doit d'abord être lisible. */
+.reponse-ia p,
+.section-titre .reponse-ia p:not(.badge) {
+  margin: 0;
+  font-size: var(--text-base);
+  color: var(--color-text);
+}
+
 /* Emplacement d'avis, tant qu'aucun avis réel n'est publié */
 .avis-vide {
   border: 2px dashed var(--color-border-strong);

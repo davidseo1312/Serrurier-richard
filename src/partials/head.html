@@ -6,7 +6,11 @@
 <title>{{PAGE_TITLE}}</title>
 <meta name="description" content="{{PAGE_DESC}}">
 <link rel="canonical" href="{{PAGE_URL}}">
-<meta name="robots" content="{{ROBOTS_POLICY}}, follow, max-image-preview:large">
+<!-- max-snippet:-1 autorise un extrait de longueur libre. Sans cette
+     directive, Google limite l'extrait qu'il peut citer — et les réponses
+     générées (AI Overviews, ChatGPT Search) s'appuient sur ces extraits.
+     C'est la seule consigne d'en-tête qui pèse réellement sur la citation. -->
+<meta name="robots" content="{{ROBOTS_POLICY}}, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="theme-color" content="#0F172A">
 <meta name="format-detection" content="telephone=yes">
 {{BLOC_VERIFICATION}}

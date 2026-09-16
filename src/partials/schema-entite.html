@@ -1,0 +1,111 @@
+<!-- ===========================================================================
+     Graphe d'entité, présent sur TOUTES les pages.
+
+     Pourquoi sur toutes et pas seulement sur l'accueil : un moteur de réponse
+     génératif ne parcourt pas le site, il récupère UNE page et répond avec ce
+     qu'elle contient. Une page qui se contente de renvoyer à « #entreprise »
+     défini ailleurs ne décrit donc rien d'exploitable. Chaque page porte ici
+     l'identité complète — qui, quoi, où, comment joindre — pour être
+     autosuffisante.
+
+     « speakable » désigne le passage à citer en priorité : le bloc de réponse
+     directe placé sous le titre.
+
+     Volontairement absent : « sameAs ». Il doit pointer vers des profils
+     réels (fiche Google, annuaires, réseaux). L'entreprise n'en a aucun à ce
+     jour ; en inventer un serait un lien mort qui décrédibiliserait tout le
+     balisage. À renseigner dans src/config.sh dès qu'un profil existe.
+     ======================================================================= -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "{{BASE_URL}}/#site",
+      "url": "{{BASE_URL}}/",
+      "name": "{{NOM_COMMERCIAL}}",
+      "description": "{{BASELINE}}",
+      "inLanguage": "fr-FR",
+      "publisher": { "@id": "{{BASE_URL}}/#entreprise" }
+    },
+    {
+      "@type": "Locksmith",
+      "@id": "{{BASE_URL}}/#entreprise",
+      "name": "{{NOM_COMMERCIAL}}",
+      "legalName": "{{RAISON_SOCIALE}}",
+      "description": "{{BASELINE}}",
+      "url": "{{BASE_URL}}/",
+      "telephone": "{{TELEPHONE_E164}}",
+      "email": "{{EMAIL}}",
+      "image": "{{BASE_URL}}/assets/img/og-default.jpg",
+      "address": {
+        "@type": "PostalAddress",
+        {{ADRESSE_JSONLD}}
+        "postalCode": "{{ADRESSE_CP}}",
+        "addressLocality": "{{ADRESSE_VILLE}}",
+        "addressRegion": "Bretagne",
+        "addressCountry": "FR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "{{LATITUDE}}",
+        "longitude": "{{LONGITUDE}}"
+      },
+      "areaServed": [
+        { "@type": "AdministrativeArea", "name": "Ille-et-Vilaine" },
+        { "@type": "AdministrativeArea", "name": "Morbihan" },
+        { "@type": "AdministrativeArea", "name": "Finistère" },
+        { "@type": "AdministrativeArea", "name": "Côtes-d'Armor" },
+        { "@type": "AdministrativeArea", "name": "Loire-Atlantique" },
+        { "@type": "AdministrativeArea", "name": "Maine-et-Loire" }
+      ],
+      "knowsAbout": [
+        "Ouverture de porte claquée",
+        "Ouverture de porte blindée",
+        "Changement de cylindre",
+        "Remplacement de serrure",
+        "Serrure multipoints",
+        "Certification A2P",
+        "Blindage de porte",
+        "Clé cassée dans la serrure",
+        "Réparation après effraction",
+        "Rideau métallique",
+        "Coffre-fort"
+      ],
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "00:00",
+        "closes": "23:59"
+      },
+      "priceRange": "€€",
+      "currenciesAccepted": "EUR",
+      "paymentAccepted": "Carte bancaire, espèces, virement",
+      "knowsLanguage": "fr-FR"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "{{PAGE_URL}}#page",
+      "url": "{{PAGE_URL}}",
+      "name": "{{PAGE_TITLE}}",
+      "description": "{{PAGE_DESC}}",
+      "inLanguage": "fr-FR",
+      "isPartOf": { "@id": "{{BASE_URL}}/#site" },
+      "about": { "@id": "{{BASE_URL}}/#entreprise" },
+      "provider": { "@id": "{{BASE_URL}}/#entreprise" },
+      "dateModified": "{{PAGE_DATE_MAJ}}",
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "{{BASE_URL}}{{PAGE_IMAGE}}",
+        "width": 1200,
+        "height": 630
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": ["h1", ".reponse-ia"]
+      }
+    }
+  ]
+}
+</script>

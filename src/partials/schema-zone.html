@@ -1,11 +1,22 @@
+<!-- ===========================================================================
+     Page de zone : un SERVICE rendu sur un territoire, pas un établissement.
+
+     Le balisage précédent déclarait ici un « Locksmith » par zone, avec
+     l'adresse de la base. Répété sur neuf pages, cela revient à annoncer neuf
+     agences qui n'existent pas — exactement ce qu'un moteur de réponse
+     recoupe avant de citer une entreprise, et ce qu'un annuaire officiel
+     contredit. Une seule entreprise est donc déclarée (schema-entite.html), et
+     chaque page de zone décrit le service qu'elle y rend.
+     ======================================================================= -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Locksmith",
-  "name": "{{NOM_COMMERCIAL}} — {{PAGE_BREADCRUMB}}",
+  "@type": "Service",
+  "@id": "{{PAGE_URL}}#service",
+  "name": "{{PAGE_BREADCRUMB}}",
   "description": "{{PAGE_DESC}}",
+  "serviceType": "Dépannage et installation en serrurerie",
   "url": "{{PAGE_URL}}",
-  "telephone": "{{TELEPHONE_E164}}",
   "image": {
     "@type": "ImageObject",
     "url": "{{BASE_URL}}{{PAGE_IMAGE}}",
@@ -13,21 +24,30 @@
     "height": 630,
     "caption": "{{PAGE_TITLE}}"
   },
-  "parentOrganization": { "@id": "{{BASE_URL}}/#entreprise" },
-  "address": {
-    "@type": "PostalAddress",
-    {{ADRESSE_JSONLD}}
-    "postalCode": "{{ADRESSE_CP}}",
-    "addressLocality": "{{ADRESSE_VILLE}}",
-    "addressCountry": "FR"
+  "provider": {
+    "@id": "{{BASE_URL}}/#entreprise"
   },
-  "areaServed": { "@type": "AdministrativeArea", "name": "{{PAGE_BREADCRUMB}}" },
-  "openingHoursSpecification": {
+  "areaServed": {
+    "@type": "{{GEO_TYPE}}",
+    "name": "{{GEO_NOM}}",
+    "containedInPlace": { "@type": "Country", "name": "France" }
+  },
+  "availableChannel": {
+    "@type": "ServiceChannel",
+    "servicePhone": {
+      "@type": "ContactPoint",
+      "telephone": "{{TELEPHONE_E164}}",
+      "contactType": "customer service",
+      "areaServed": "FR",
+      "availableLanguage": "French"
+    },
+    "serviceUrl": "{{PAGE_URL}}"
+  },
+  "hoursAvailable": {
     "@type": "OpeningHoursSpecification",
     "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
     "opens": "00:00",
     "closes": "23:59"
-  },
-  "priceRange": "€€"
+  }
 }
 </script>

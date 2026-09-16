@@ -74,7 +74,96 @@ Allow: /
 Allow: /assets/images/
 Allow: /assets/img/
 
+# -------------------------------------------------------------------------
+# Robots des moteurs de réponse génératifs.
+#
+# La règle générale ci-dessus les autorise déjà : ces blocs nommés ne
+# changent donc rien techniquement. Ils existent pour deux raisons.
+# D'abord, plusieurs de ces robots cherchent leur propre nom avant de
+# retomber sur la règle générale. Ensuite, une autorisation écrite noir sur
+# blanc évite qu'un blocage soit ajouté par erreur un jour — ce qui
+# retirerait le site des réponses d'IA sans que personne ne s'en aperçoive.
+#
+# Google-Extended et Applebot-Extended ne sont pas des robots mais des
+# jetons de REFUS : ils ne servent qu'à interdire l'usage du contenu par
+# Gemini ou Apple Intelligence. Les mentionner en Allow est sans effet
+# technique ; leur présence ici documente qu'aucun refus n'est posé.
+# -------------------------------------------------------------------------
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Qwantify
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
 Sitemap: ${BASE_URL}/sitemap.xml
+LLMs: ${BASE_URL}/llms.txt
 ROBOTS
 else
   # Site non prêt : on bloque toute exploration.

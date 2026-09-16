@@ -222,7 +222,15 @@ done
 # Deux pages portant la meme question se concurrencent dans les resultats
 # enrichis de Google : aucune des deux ne ressort.
 titre "12. Donnees structurees FAQ"
-DOUBLES=$(grep -rhoE '"name": "[^"]+\?"' public --include='*.html' | sort | uniq -d || true)
+# Ce qu'on cherche : la MÊME question posée sur PLUSIEURS pages, qui ferait se
+# cannibaliser deux pages sur la même requête. Le relevé retient donc le
+# fichier avec le libellé et déduplique d'abord par fichier : depuis que
+# chaque page porte un nœud WebPage, un titre se terminant par « ? » apparaît
+# légitimement deux fois sur sa propre page, et cela ne dit rien d'un doublon.
+DOUBLES=$(grep -roE '"name": "[^"]+\?"' public --include='*.html' \
+          | sort -u \
+          | sed 's/^[^:]*://' \
+          | sort | uniq -d || true)
 if [ -n "$DOUBLES" ]; then
   while IFS= read -r q; do avert "question FAQ presente sur plusieurs pages : ${q:10:70}"; done <<< "$DOUBLES"
 else
