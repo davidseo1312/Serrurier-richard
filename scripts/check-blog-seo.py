@@ -253,6 +253,21 @@ CHAMPS = {
             ["porte"], ["bois"], ["organigramme"], ["air marin", "sel"],
             ["lubrifiant", "lubrifi"], ["résidence secondaire"],
         ],
+        # Les 36 mots-clés demandés : présence ET emploi répété.
+        "renforces": [
+            ["dépannages"], ["dépanner"], ["dépannage d'urgence"],
+            ["intervention rapide"], ["serruriers"], ["installateur"],
+            ["métalliques"], ["rideaux"], ["rideaux métalliques"],
+            ["fermetures"], ["volets roulants"], ["roulants"],
+            ["stores"], ["portails"], ["porte de garage"],
+            ["portes de garage"], ["menuiserie"], ["menuiseries"],
+            ["clefs"], ["reproduction de clés"], ["toutes les marques"],
+            ["A2P"], ["haute sécurité"], ["Vachette"], ["Fichet"],
+            ["barillet"], ["multipoints"], ["verrou"],
+            ["porte d'entrée"], ["porte claquée"], ["blindées"],
+            ["portes blindées"], ["cambriolage"], ["coffres"],
+            ["coffres-forts"], ["lock"],
+        ],
     },
     "trouver-serrurier-lorient.html": {
         "requete": "serrurier Lorient appeler dépannage",
