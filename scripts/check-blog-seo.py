@@ -259,6 +259,23 @@ CHAMPS = {
             ["litige"], ["DGCCRF", "SignalConso"],
             ["lettre recommandée"], ["majoration"], ["urgence"],
             ["serrurier"], ["intervention"], ["dépannage"],
+            ["TTC"], ["assurance habitation"], ["garantie vol", "garantie"],
+            ["cambriolage"], ["multipoints"], ["barillet"],
+        ],
+        # Les 36 mots-clés demandés : présence ET emploi répété.
+        "renforces": [
+            ["serruriers"], ["multipoints"], ["métalliques"],
+            ["porte d'entrée"], ["porte de garage"], ["niveau de sécurité"],
+            ["cylindres"], ["blindées"], ["barillet"],
+            ["portes blindées"], ["Vachette"], ["installateur"],
+            ["cambriolage"], ["Fichet"], ["verrou"],
+            ["clefs"], ["dépannages"], ["lock"],
+            ["serrure multipoints"], ["porte claquée"], ["verrouillage"],
+            ["menuiserie"], ["dépanner"], ["contrôle d'accès"],
+            ["stores"], ["TTC"], ["verrous"],
+            ["rideaux"], ["cambrioleurs"], ["fermetures"],
+            ["assurance habitation"], ["ouvrir la porte"], ["coffres"],
+            ["coffres-forts"], ["menuiseries"], ["panique"],
         ],
     },
     "serrurier-lannion-entretien-prevention.html": {
