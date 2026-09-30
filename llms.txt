@@ -29,6 +29,7 @@ qu'ils ne sont pas vérifiables à ce jour. Leur absence est volontaire.
 ## Pages du site
 
 - [Qui sommes-nous : serrurier du Grand Ouest](https://serrurier-richard.fr/a-propos) : Entreprise de serrurerie immatriculée, intervenant depuis Rennes. Prix affichés, devis écrit avant travaux, ouverture sans casse.
+- [Avis clients](https://serrurier-richard.fr/avis) : Les témoignages que nos clients nous ont adressés après intervention, département par département, reproduits sans modification.
 - [Blindage de porte](https://serrurier-richard.fr/blindage-porte) : Blindage d'une porte existante ou bloc-porte blindé : ce que chaque solution protège réellement, l'importance de l'huisserie et les certifications A2P BP.
 - [Changement de serrure](https://serrurier-richard.fr/changement-serrure) : Remplacement de serrure ou de cylindre à partir de 159 €. Clé perdue, serrure forcée, emménagement : intervention 24h/24.
 - [Clé cassée](https://serrurier-richard.fr/cle-cassee) : Clé cassée dans le cylindre ou dans la main ? Extraction du fragment à l'outil dédié à partir de 99 €, sans remplacer la serrure quand elle est intacte.
