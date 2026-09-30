@@ -1,0 +1,43 @@
+# ---------------------------------------------------------------------------
+# AVIS CLIENTS — source unique de vérité.
+#
+# Ce fichier est le SEUL endroit où un avis est écrit. Les blocs affichés sur
+# le site (accueil, pages de zones, pages de villes, pages de prestations,
+# page /avis) en sont dérivés à chaque construction par
+# scripts/gen-avis.py. Ajouter un avis ici suffit à le faire apparaître
+# partout où il est pertinent ; le supprimer ici le retire partout.
+#
+# RÈGLE ABSOLUE : n'ajoutez ici que des avis RÉELLEMENT reçus de clients, et
+# reproduisez-les sans les réécrire. Un faux avis constitue une pratique
+# commerciale trompeuse (art. L121-2 du code de la consommation) et se repère.
+#
+# ⚠ DATE : la colonne « date » est obligatoire au regard de l'article
+# L111-7-2 du code de la consommation, qui impose d'afficher la date de
+# publication de chaque avis et celle de l'expérience. Tant qu'elle est vide,
+# la construction affiche un avertissement et la date n'est pas publiée.
+# Format attendu : AAAA-MM-JJ (date de l'intervention).
+#
+# Format : une ligne par avis, colonnes séparées par « | »
+#   id | nom | ville | departement | note | date | sujet | texte
+#
+# sujet sert à placer l'avis sur la bonne page de prestation. Valeurs
+# utilisées : ouverture, cle-cassee, cle-entre-pas, cylindre, mecanisme,
+# reglage, effraction.
+# ---------------------------------------------------------------------------
+
+1|Julien Martin|Saint-Brieuc|22|5||reglage|Ma porte d'entrée ne fermait plus correctement et le problème devenait vraiment gênant. Le serrurier a rapidement trouvé d'où venait le problème et a réglé la serrure sans avoir à remplacer toute la porte. Intervention propre et explications claires.
+2|Sophie Le Goff|Lannion|22|5||cylindre|J'avais la clé qui tournait dans le vide et impossible de verrouiller correctement. Intervention rapide, le problème venait du cylindre. Il a remplacé uniquement ce qui était nécessaire. Très professionnel.
+3|Thomas Le Roux|Lamballe-Armor|22|5||ouverture|Porte claquée avec les clés restées à l'intérieur… forcément au mauvais moment. Le serrurier est arrivé rapidement et a réussi à ouvrir la porte sans l'abîmer. Tarif annoncé avant l'intervention, rien à redire.
+4|Claire Robert|Dinan|22|5||reglage|La serrure de notre porte d'entrée commençait à vraiment fatiguer. Nous avons préféré la faire réparer avant qu'elle ne bloque complètement. Travail sérieux et porte réglée correctement.
+5|Nicolas Bernard|Brest|29|5||reglage|Ma porte d'appartement frottait énormément et devenait difficile à fermer. Le serrurier a fait plusieurs réglages et a également vérifié la serrure. Depuis, la porte ferme normalement. Intervention efficace.
+6|Émilie Thomas|Quimper|29|5||cle-cassee|Clé cassée dans la serrure en rentrant chez moi. Je pensais devoir changer toute la serrure mais le serrurier a réussi à retirer le morceau et à conserver le mécanisme. Très bonne intervention.
+7|Antoine Le Goff|Concarneau|29|5||cylindre|Problème avec la serrure de ma porte d'entrée qui se bloquait régulièrement. Le diagnostic a été rapide et le remplacement du cylindre s'est fait proprement. Bon contact et travail sérieux.
+8|Marie Kerjean|Morlaix|29|5||mecanisme|Porte qui ne se verrouillait plus correctement depuis quelques jours. Le serrurier a trouvé le problème au niveau du mécanisme et a effectué la réparation directement. Merci pour la rapidité.
+9|Thomas Durand|Rennes|35|5||ouverture|Je suis rentré du travail et impossible d'ouvrir ma porte. Intervention assez rapide malgré l'heure. L'ouverture a été faite proprement puis la serrure a été réparée. Très rassurant quand on se retrouve bloqué devant chez soi.
+10|Laura Morel|Saint-Malo|35|5||reglage|La serrure de notre maison était devenue très dure à tourner. Nous avons appelé pour éviter qu'elle finisse complètement bloquée. Le serrurier a réglé le problème et nous a expliqué ce qui n'allait pas.
+11|Alexandre Simon|Fougères|35|5||effraction|Suite à une tentative d'effraction, notre serrure avait été endommagée. Intervention rapide pour sécuriser la porte puis remplacement du mécanisme. Travail propre et sérieux.
+12|Camille Renault|Vitré|35|5||reglage|Très bonne intervention pour une porte d'entrée qui ne fermait plus correctement. Le problème a été identifié rapidement et la réparation a été faite sans changer toute la porte.
+13|Pierre Le Meur|Lorient|56|5||cylindre|Serrure bloquée le matin avant de partir travailler. J'ai appelé et quelqu'un est intervenu rapidement. Le problème venait du cylindre, qui a été remplacé sur place. Tout fonctionne parfaitement depuis.
+14|Julie Le Gall|Vannes|56|5||reglage|Porte d'entrée difficile à fermer depuis plusieurs semaines. Le serrurier a pris le temps de vérifier l'ensemble avant de faire la réparation. Travail soigné et bonnes explications.
+15|Maxime Bernard|Auray|56|5||cle-entre-pas|Clé qui ne rentrait plus correctement dans la serrure. Intervention rapide et surtout pas de remplacement inutile. Le problème a été réparé directement. Très satisfait du résultat.
+16|Nathalie Robin|Ploërmel|56|5||mecanisme|Nous avions un problème de fermeture sur la porte principale de la maison. Le serrurier est intervenu rapidement, a réglé la porte et remplacé la pièce défectueuse. Intervention sérieuse et propre.

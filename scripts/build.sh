@@ -617,6 +617,28 @@ LD
 }
 
 PAGE_COUNT=0
+# --- Avis clients -----------------------------------------------------------
+# Les témoignages ne sont écrits qu'à un seul endroit : src/avis.txt. Le
+# générateur en tire un bloc par département, par ville et par sujet, que la
+# substitution place ensuite sur les pages concernées. Chaque page reçoit les
+# avis qui la concernent, pas les seize.
+if command -v python3 > /dev/null; then
+  python3 scripts/gen-avis.py || { echo "  ! génération des avis en échec"; exit 1; }
+  if [ -d build/avis ]; then
+    for fragment in build/avis/*.html; do
+      [ -f "$fragment" ] || continue
+      cle="AVIS_$(basename "$fragment" .html | tr 'a-z-' 'A-Z_')"
+      export "$cle=$(nettoyer_html < "$fragment" | substituer)"
+    done
+  fi
+fi
+# Tout token AVIS_* non renseigné doit disparaître proprement plutôt que de
+# rester affiché : une page de zone sans avis n'affiche simplement rien.
+for d in 22 29 35 56 44 49; do
+  cle="AVIS_DEP_${d}"
+  eval "[ -n \"\${$cle:-}\" ] || export $cle=''"
+done
+
 # Pages de liste du blog, reconstruites depuis les articles eux-mêmes avant
 # que la boucle ne les rencontre. Écrire ces listes à la main les périmerait
 # au premier article publié.

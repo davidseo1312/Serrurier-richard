@@ -1135,6 +1135,62 @@ td.prix {
 }
 
 /* ---------------------------------------------------------------------------
+   Avis clients.
+
+   Les témoignages sont des <figure> : le texte est la citation, la légende
+   porte l'auteur, la commune et la date. Les étoiles sont purement
+   décoratives et masquées aux lecteurs d'écran, qui reçoivent la note en
+   toutes lettres via aria-label.
+   --------------------------------------------------------------------------- */
+.section-avis { padding: var(--space-9) 0; background: var(--color-surface, var(--color-primary-tint)); }
+.avis-bloc { margin: var(--space-6) 0; }
+.avis-entete { margin-bottom: var(--space-6); }
+.avis-entete h2, .avis-entete h3 { margin-bottom: var(--space-2); }
+/* --color-muted (#64748B) tient sur blanc pur (4,76:1) mais tombe à 4,43:1
+   sur le voile de .section-avis, sous le seuil AA de 4,5. --color-primary
+   (#475569) garde l'effet « texte secondaire » en restant confortable sur
+   les deux fonds. Même raison pour la mention de provenance. */
+.avis-entete p { color: var(--color-primary); margin: 0; }
+
+.avis-carte {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+.avis-note { font-size: var(--text-lg); color: #B45309; letter-spacing: 0.08em; line-height: 1; }
+.avis-carte blockquote { margin: 0; border: 0; padding: 0; background: none; }
+.avis-carte blockquote p {
+  margin: 0;
+  font-style: normal;
+  color: var(--color-text);
+}
+.avis-carte blockquote p::before { content: "\00AB\00A0"; }
+.avis-carte blockquote p::after  { content: "\00A0\00BB"; }
+.avis-carte figcaption {
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+}
+.avis-auteur { font-weight: 700; color: var(--color-text); }
+.avis-lieu, .avis-date { color: var(--color-muted); }
+.avis-provenance {
+  margin-top: var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--color-primary);
+  max-width: 78ch;
+}
+
+/* ---------------------------------------------------------------------------
    Pagination des listes d'articles.
 
    Les numéros sont de vrais liens et la page courante n'en est pas un : un
@@ -1201,14 +1257,17 @@ td.prix {
   text-align: center; color: var(--color-muted);
   background: var(--color-white);
 }
-.avis { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
-.avis blockquote {
-  margin: 0; background: var(--color-white);
-  border: 1px solid var(--color-border); border-radius: var(--radius-lg);
-  padding: var(--space-6); box-shadow: var(--shadow-sm);
+/* Grille des témoignages. Le minimum est fixé à 260 px pour qu'une sélection
+   de quatre avis tienne sur une seule ligne en grand écran : à 300 px elle se
+   cassait en trois plus un, ce qui déséquilibrait visiblement la section.
+   Les anciennes règles « .avis blockquote » ont été retirées : elles dessinaient
+   un cadre autour de la citation ALORS QUE la carte en dessine déjà un, et
+   imposaient un italique peu lisible sur des témoignages de cette longueur. */
+.avis {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
 }
-.avis blockquote p { font-style: italic; }
-.avis figcaption { font-size: var(--text-sm); color: var(--color-muted); }
 
 /* --- 14. FAQ -------------------------------------------------------------- */
 
