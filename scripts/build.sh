@@ -617,6 +617,15 @@ LD
 }
 
 PAGE_COUNT=0
+# Pages de liste du blog, reconstruites depuis les articles eux-mêmes avant
+# que la boucle ne les rencontre. Écrire ces listes à la main les périmerait
+# au premier article publié.
+if command -v python3 > /dev/null; then
+  python3 scripts/gen-blog-pages.py || { echo "  ! génération des pages de blog en échec"; exit 1; }
+else
+  echo "  ! python3 absent : pages de blog non régénérées"
+fi
+
 SITEMAP_ENTRIES=""
 # Inventaire pour llms.txt : section|titre|url|description
 LLMS_ENTRIES=""

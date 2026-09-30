@@ -223,14 +223,25 @@ done
 # enrichis de Google : aucune des deux ne ressort.
 titre "12. Donnees structurees FAQ"
 # Ce qu'on cherche : la MÊME question posée sur PLUSIEURS pages, qui ferait se
-# cannibaliser deux pages sur la même requête. Le relevé retient donc le
-# fichier avec le libellé et déduplique d'abord par fichier : depuis que
-# chaque page porte un nœud WebPage, un titre se terminant par « ? » apparaît
-# légitimement deux fois sur sa propre page, et cela ne dit rien d'un doublon.
-DOUBLES=$(grep -roE '"name": "[^"]+\?"' public --include='*.html' \
-          | sort -u \
-          | sed 's/^[^:]*://' \
-          | sort | uniq -d || true)
+# cannibaliser deux pages sur la même requête.
+#
+# Le relevé doit donc être précis. Un « name » se terminant par « ? » n'est pas
+# forcément une question de FAQ : le nœud WebPage porte le titre de la page, et
+# l'ItemList d'une page de liste porte les titres des articles qu'elle annonce.
+# Compter ces libellés ferait remonter un doublon là où il n'y en a aucun. On
+# n'extrait donc les questions QUE des blocs FAQPage, et on déduplique par
+# fichier avant de comparer les fichiers entre eux.
+# L'espace après « "@type": » dépend du formatage du JSON : un bloc compact
+# n'en a pas. Le filtre de fichiers la rend donc optionnelle, sinon un balisage
+# minifié échapperait entièrement au contrôle.
+DOUBLES=$(for f in $(grep -rlE '"@type":[[:space:]]*"FAQPage"' public --include='*.html'); do
+            perl -0777 -ne '
+              while (m{<script type="application/ld\+json">(.*?)</script>}gs) {
+                my $bloc = $1;
+                next unless $bloc =~ /"\@type":\s*"FAQPage"/;
+                while ($bloc =~ /"name":\s*"([^"]+\?)"/g) { print "$1\n" }
+              }' "$f" | sort -u
+          done | sort | uniq -d || true)
 if [ -n "$DOUBLES" ]; then
   while IFS= read -r q; do avert "question FAQ presente sur plusieurs pages : ${q:10:70}"; done <<< "$DOUBLES"
 else

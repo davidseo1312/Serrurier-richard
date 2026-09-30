@@ -37,3 +37,8 @@ __pycache__/
 # possible le déploiement automatique par Git de Hostinger.
 # Il est intégralement régénéré par « bash scripts/build.sh » : ne le modifiez
 # jamais à la main, vos changements seraient écrasés.
+
+# Pages de liste du blog au-delà de la première : artefacts de build,
+# reconstruits par scripts/gen-blog-pages.py à chaque fois. src/pages/blog/index.html
+# est régénéré lui aussi mais reste suivi, car c'est une URL du site.
+src/pages/blog/page/

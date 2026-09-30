@@ -1134,6 +1134,65 @@ td.prix {
   color: var(--color-text);
 }
 
+/* ---------------------------------------------------------------------------
+   Pagination des listes d'articles.
+
+   Les numéros sont de vrais liens et la page courante n'en est pas un : un
+   lecteur au clavier comme un robot doivent pouvoir parcourir la série. Les
+   zones cliquables font au moins 44 px pour rester utilisables au doigt.
+   --------------------------------------------------------------------------- */
+.pagination {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+}
+.pagination-etat {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+.pagination-liens {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2);
+}
+.pagination-liens a,
+.pagination-liens .page-courante {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  font-weight: 600;
+  text-decoration: none;
+}
+.pagination-liens a { color: var(--color-text); background: var(--color-white); }
+.pagination-liens a:hover,
+.pagination-liens a:focus-visible {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+}
+.pagination-liens .page-courante {
+  color: var(--color-white);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  cursor: default;
+}
+/* Sur mobile, les libellés complets passent à la ligne et prennent toute la
+   largeur : c'est plus lisible que de les tronquer. */
+.pagination-liens .page-prec,
+.pagination-liens .page-suiv { padding: 0 var(--space-4); }
+@media (max-width: 30rem) {
+  .pagination-liens .page-prec,
+  .pagination-liens .page-suiv { flex-basis: 100%; }
+}
+
 /* Emplacement d'avis, tant qu'aucun avis réel n'est publié */
 .avis-vide {
   border: 2px dashed var(--color-border-strong);
