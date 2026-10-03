@@ -3,22 +3,32 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://serrurier-richard.fr/a-propos</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/avis</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/blindage-porte</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/blindage/blindage-porte-corniere-anti-pince.svg</image:loc>
       <image:title>Blindage d'une porte existante avec plaque d'acier et cornière anti-pince</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://serrurier-richard.fr/blog/bloque-devant-mobil-home-camping-morbihan-56</loc>
+    <lastmod>2026-10-03</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://serrurier-richard.fr/blog/boite-a-cles-bloquee-location-morbihan-56</loc>
+    <lastmod>2026-10-03</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/blog/changer-serrure-rennes-autorisations</loc>
@@ -57,22 +67,27 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/blog/</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/blog/page/2/</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/blog/page/3/</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/blog/page/4/</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://serrurier-richard.fr/blog/page/5/</loc>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
@@ -98,6 +113,11 @@
   <url>
     <loc>https://serrurier-richard.fr/blog/porte-qui-ne-ferme-plus-coup-de-vent-cotes-d-armor-22</loc>
     <lastmod>2026-09-30</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://serrurier-richard.fr/blog/presquiles-rhuys-quiberon-une-seule-route-56</loc>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
@@ -186,8 +206,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://serrurier-richard.fr/blog/urgence-serrurier-grands-evenements-lorient-56</loc>
+    <lastmod>2026-10-03</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://serrurier-richard.fr/blog/urgence-serrurier-pontivy-centre-bretagne-56</loc>
+    <lastmod>2026-10-03</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://serrurier-richard.fr/changement-serrure</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.9</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/serrure/serrurier-richard-pose-serrure-multipoints-porte-bois.webp</image:loc>
@@ -196,7 +226,7 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/cle-cassee</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.85</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/cle-cassee/extraction-cle-cassee-cylindre.svg</image:loc>
@@ -205,7 +235,7 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/cle-perdue</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.85</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/cle-perdue/remplacement-cylindre-cles-perdues.svg</image:loc>
@@ -214,7 +244,7 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/coffre-fort</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/coffre-fort/serrurier-richard-ouverture-coffre-fort-bureau.webp</image:loc>
@@ -223,22 +253,22 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/conditions-generales</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/contact</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/devis-serrurerie</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/effraction</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/schemas/securisation-apres-effraction.webp</image:loc>
@@ -247,12 +277,12 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/faq</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/interventions/serrurier-richard-intervention-porte-entree-outillage.webp</image:loc>
@@ -261,7 +291,7 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/installation-serrure</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/installation/installation-serrure-porte.svg</image:loc>
@@ -270,12 +300,12 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/mentions-legales</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/ouverture-porte</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.9</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/ouverture-porte/serrurier-richard-ouverture-porte-blindee-crochetage.webp</image:loc>
@@ -284,12 +314,12 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/politique-confidentialite</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/porte-blindee</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/schemas/porte-blindee-multipoints.webp</image:loc>
@@ -298,7 +328,7 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/porte-bloquee</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.85</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/porte-bloquee/serrurier-richard-diagnostic-cylindre-porte-bloquee.webp</image:loc>
@@ -307,12 +337,12 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/remplacement-serrure</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/rideau-metallique</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.7</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/rideau-metallique/serrurier-richard-deblocage-rideau-metallique-commerce.webp</image:loc>
@@ -321,7 +351,7 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/serrure-3-points</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/serrure-3-points/serrure-trois-points-porte.svg</image:loc>
@@ -330,7 +360,7 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/serrure-5-points</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.75</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/schemas/cinq-points-verrouillage-annotes.webp</image:loc>
@@ -339,17 +369,17 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/serrurier-nantes</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/serrurier-rennes</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/serrurier-urgence</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.95</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/interventions/serrurier-richard-depannage-serrure-lampe-torche.webp</image:loc>
@@ -358,12 +388,12 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/serrurier-vannes</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/serrurier</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.9</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/interventions/serrurier-richard-serrurier-au-travail-couloir.webp</image:loc>
@@ -372,7 +402,7 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/tarifs</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.9</priority>
     <image:image>
       <image:loc>https://serrurier-richard.fr/assets/images/interventions/devis-serrurerie-detaille.svg</image:loc>
@@ -381,37 +411,37 @@
   </url>
   <url>
     <loc>https://serrurier-richard.fr/zones-d-intervention</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/zones/cotes-d-armor-22</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/zones/finistere-29</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/zones/ille-et-vilaine-35</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/zones/loire-atlantique-44</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/zones/maine-et-loire-49</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://serrurier-richard.fr/zones/morbihan-56</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
   </url>
 </urlset>
