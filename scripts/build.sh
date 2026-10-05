@@ -44,7 +44,8 @@ find "$OUT" -name '*.md' -delete
 # remplacée par un texte d'attente, et jamais inventée.
 manquantes=""
 for cle in ADRESSE_RUE ASSUREUR_RCPRO POLICE_RCPRO ASSUREUR_DECENNALE \
-           MEDIATEUR_NOM MEDIATEUR_URL; do
+           MEDIATEUR_NOM MEDIATEUR_URL \
+           SIEGE_RUE SIEGE_CP SIEGE_VILLE; do
   valeur="$(eval "printf '%s' \"\${$cle:-}\"")"
   case "$valeur" in
     \[*\]) export "$cle="; manquantes="${manquantes}${manquantes:+, }$cle" ;;
@@ -58,6 +59,42 @@ if [ -n "${ADRESSE_RUE:-}" ]; then
   export ADRESSE_JSONLD="\"streetAddress\": \"${ADRESSE_RUE}\","
 else
   export ADRESSE_JSONLD=""
+fi
+
+# Adresse du siège : quatre formulations en dépendaient, dans quatre pages.
+# Plutôt que d'imprimer une virgule orpheline ou un crochet, chacune est
+# composée ici, avec adresse ou sans. Sans adresse, la phrase reste correcte
+# et ne prétend pas qu'une adresse a été donnée.
+if [ -n "${SIEGE_RUE:-}" ] && [ -n "${SIEGE_VILLE:-}" ]; then
+  SIEGE_UNE_LIGNE="${SIEGE_RUE}, ${SIEGE_CP} ${SIEGE_VILLE}"
+  export LIGNE_SIEGE="<li><strong>Siège social :</strong> ${SIEGE_UNE_LIGNE}</li>"
+  export ADRESSE_RESPONSABLE="${RAISON_SOCIALE}, ${SIEGE_UNE_LIGNE}, joignable au"
+  export ADRESSE_RETRACTATION="${RAISON_SOCIALE}, ${SIEGE_UNE_LIGNE}, ou par courriel à"
+  export BLOC_ADRESSE_CONTACT="<p>
+        ${RAISON_SOCIALE}<br>
+        ${SIEGE_RUE}<br>
+        ${SIEGE_CP} ${SIEGE_VILLE}
+      </p>
+      <p>
+        Notre activité est le dépannage sur site : nous nous déplaçons chez vous et ne recevons pas
+        de clientèle à cette adresse. Consultez nos
+        <a href=\"/zones-d-intervention\">zones d'intervention</a> pour les délais par secteur.
+      </p>"
+else
+  export LIGNE_SIEGE=""
+  export ADRESSE_RESPONSABLE="${RAISON_SOCIALE}, joignable au"
+  export ADRESSE_RETRACTATION="${RAISON_SOCIALE} par courriel à"
+  export BLOC_ADRESSE_CONTACT="<p>
+        Notre activité est le dépannage sur site : nous nous déplaçons chez vous et ne recevons pas
+        de clientèle dans des locaux ouverts au public. Le plus simple est donc de nous joindre par
+        téléphone au <a href=\"tel:${TELEPHONE_E164}\">${TELEPHONE}</a> ou par courriel à
+        <a href=\"mailto:${EMAIL}\">${EMAIL}</a>. Notre adresse postale vous est communiquée sur
+        simple demande, et figure sur le devis remis avant intervention.
+      </p>
+      <p>
+        Consultez nos <a href=\"/zones-d-intervention\">zones d'intervention</a> pour le détail des
+        communes desservies.
+      </p>"
 fi
 
 # Mentions d'assurance : la phrase entière disparaît si l'assureur est

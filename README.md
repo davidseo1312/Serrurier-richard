@@ -1248,7 +1248,9 @@ point n'est pas résolu.
 Données relevées le 08/09/2026 au registre national des entreprises pour le
 SIREN 901133041 :
 
-- **Siège social : 1 rue Albert Simonin, 92400 Courbevoie** (Hauts-de-Seine)
+- **Siège social : en Île-de-France** (Hauts-de-Seine) — l'adresse exacte
+  figure au registre, consultable par le SIREN ci-dessus ; elle n'est plus
+  recopiée ici ni dans `src/config.sh`, à la demande de l'exploitant
 - **Code APE : 81.29A** — désinfection, désinsectisation, dératisation
 - Aucun numéro de TVA intracommunautaire actif (vérifié auprès de VIES)
 
@@ -1264,16 +1266,26 @@ Deux issues possibles, à choisir avant toute mise en ligne :
    `src/config.sh`. C'est la seule voie qui permet de conserver le contenu tel
    qu'il est écrit.
 
-2. **Recentrer le site sur l'Île-de-France**, autour du siège de Courbevoie.
+2. **Recentrer le site sur l'Île-de-France**, autour du siège déclaré.
    Les six pages départementales, les trois pages de ville, les tableaux de
    délais, le nom de domaine et une partie du contenu éditorial sont alors à
    réécrire.
 
-Publier en l'état — mentions légales à Courbevoie, contenu revendiquant une
-implantation bretonne — cumule trois risques : mentions légales inexactes,
+Publier en l'état — un siège déclaré hors de Bretagne, un contenu revendiquant
+une implantation bretonne — cumule trois risques : mentions légales inexactes,
 information trompeuse du consommateur dans un secteur étroitement surveillé par
 la DGCCRF, et pénalité Google pour fausse implantation locale, le motif de
 sanction le plus fréquent dans le référencement des serruriers.
+
+> **Retrait du nom et de l'adresse (05/10/2026).** À la demande de
+> l'exploitant, `RAISON_SOCIALE` porte désormais le nom commercial et non le
+> nom de la personne physique, `DIRECTEUR_PUBLICATION` une formule générique,
+> et `SIEGE_RUE` / `SIEGE_CP` / `SIEGE_VILLE` sont traitées comme vides par le
+> build. Trois obligations restent de ce fait non satisfaites : l'article 6-III
+> de la LCEN (nom et prénom de l'éditeur personne physique, et son adresse),
+> l'article 13 du RGPD (identité et coordonnées du responsable du traitement),
+> et l'article L221-18 du code de la consommation (adresse où exercer le droit
+> de rétractation). À renseigner avant l'ouverture au public.
 
 Une fois la question tranchée, passez `ROBOTS_POLICY="index"` dans
 `src/config.sh` et relancez le build : `robots.txt` et les balises `robots`

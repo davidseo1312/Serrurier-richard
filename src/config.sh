@@ -17,7 +17,15 @@ EMAIL="contact@serrurier-richard.fr"
 # --- Identité légale --------------------------------------------------------
 # Données vérifiées le 08/09/2026 auprès du registre national des entreprises
 # (recherche-entreprises.api.gouv.fr, SIREN 901133041).
-RAISON_SOCIALE="Bilal Assoul"
+#
+# ⚠ RAISON_SOCIALE et DIRECTEUR_PUBLICATION portent pour l'instant une valeur
+# d'attente volontairement générique, à la demande de l'exploitant. Pour une
+# entreprise individuelle, l'article 6-III de la loi du 21 juin 2004 (LCEN)
+# exige le NOM et le PRÉNOM de la personne physique, pas son nom commercial :
+# les mentions légales sont donc incomplètes tant que ces deux lignes ne sont
+# pas renseignées. À remplir avant toute ouverture au public.
+RAISON_SOCIALE="Serrurier Richard"
+DIRECTEUR_PUBLICATION="Le représentant légal de l'entreprise"
 FORME_JURIDIQUE="Entrepreneur individuel"
 CAPITAL=""                       # Sans objet pour une entreprise individuelle
 SIRET="901 133 041 00011"
@@ -33,13 +41,21 @@ MENTION_TVA="TVA non applicable, article 293 B du code général des impôts"
 UNITE_PRIX="€"                   # Mettre "€ TTC" si assujetti à la TVA
 
 # --- Adresse du siège (mentions légales) ------------------------------------
-# ⚠ ATTENTION : le siège déclaré est à Courbevoie (92), alors que le site
-# revendique une implantation à Rennes et une couverture bretonne. Tant que
-# cet écart n'est pas résolu, le site ne doit pas être publié : voir la
-# section « Cohérence géographique » du README.
-SIEGE_RUE="1 rue Albert Simonin"
-SIEGE_CP="92400"
-SIEGE_VILLE="Courbevoie"
+# ⚠ Retirée à la demande de l'exploitant, en attendant la résolution de
+# l'écart entre le siège déclaré au registre (hors Bretagne) et l'implantation
+# revendiquée par le site. Le build traite ces trois valeurs comme vides :
+# les lignes qui en dépendent disparaissent au lieu d'afficher une adresse
+# d'attente.
+#
+# Conséquences à connaître : l'article 6-III de la LCEN exige l'adresse de
+# l'éditeur dans les mentions légales, l'article 13 du RGPD l'exige pour
+# identifier le responsable du traitement, et l'article L221-18 du code de la
+# consommation suppose une adresse où exercer le droit de rétractation. Ces
+# trois obligations restent donc non satisfaites tant que ces lignes sont
+# vides. À renseigner avant toute ouverture au public.
+SIEGE_RUE="[ADRESSE DU SIÈGE]"
+SIEGE_CP="[CODE POSTAL DU SIÈGE]"
+SIEGE_VILLE="[VILLE DU SIÈGE]"
 
 # --- Base opérationnelle (balisage LocalBusiness, délais annoncés) ----------
 # ⚠ À N'UTILISER que si un établissement réel existe à cette adresse.
@@ -95,8 +111,8 @@ GA4_ID="G-4MD9C1NX66"
 #
 # ⚠ RESTE À RÉGLER AVANT QUE LE RÉFÉRENCEMENT SOIT SAIN — ces points ne
 #   bloquent pas l'indexation techniquement, mais ils l'affaibliront :
-#   · l'établissement déclaré au registre (SIREN 901133041) est domicilié à
-#     Courbevoie avec le code APE 81.29A, qui ne correspond pas à la
+#   · l'établissement déclaré au registre (SIREN 901133041) est domicilié
+#     hors de Bretagne, sous un code APE qui ne correspond pas à la
 #     serrurerie, alors que le site annonce une base dans le Grand Ouest ;
 #   · l'assureur RC Pro et le médiateur de la consommation sont encore vides
 #     dans les mentions légales, alors qu'ils sont obligatoires ;
