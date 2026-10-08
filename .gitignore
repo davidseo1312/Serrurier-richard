@@ -42,3 +42,8 @@ __pycache__/
 # reconstruits par scripts/gen-blog-pages.py à chaque fois. src/pages/blog/index.html
 # est régénéré lui aussi mais reste suivi, car c'est une URL du site.
 src/pages/blog/page/
+
+# Blocs « guides locaux » des pages de zone : artefacts de build, reconstruits
+# par scripts/gen-guides-zone.py à partir des en-têtes des articles. Les
+# versionner ferait un diff à chaque article publié, sans rien apporter.
+src/partials/guides/

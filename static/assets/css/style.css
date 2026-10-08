@@ -1465,6 +1465,33 @@ label:has(> input[type="checkbox"]) {
   color: var(--color-primary-deep);
 }
 
+/* Guides locaux des pages de zone : une liste de titres avec leur résumé, et
+   non des pastilles. Les pastilles conviennent à un mot, pas à une phrase. */
+.liens-guides { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+.liens-guides a {
+  display: block; padding: var(--space-3); border-radius: 0;
+  border: 1px solid var(--color-border); background: var(--color-white);
+  font-weight: 400; font-size: var(--text-base); height: 100%;
+}
+.liens-guides a strong {
+  display: block; color: var(--color-primary-deep);
+  font-size: var(--text-base); font-weight: 700; margin-bottom: 0.35rem;
+}
+.liens-guides a span {
+  display: block; color: var(--color-primary); font-size: var(--text-sm);
+  line-height: 1.55;
+}
+.liens-guides a:hover { border-color: var(--color-primary-dark); background: var(--color-primary-tint); }
+.liens-guides a:hover strong,
+.liens-guides a:hover span { color: var(--color-primary-deep); }
+@media (max-width: 720px) {
+  .liens-guides { grid-template-columns: 1fr; }
+}
+.lien-tous-guides {
+  display: inline-block; min-height: 24px;
+  padding: 0.5rem 0; font-weight: 500;
+}
+
 :target { scroll-margin-top: 6rem; }
 
 /* --- 17. Pied de page ----------------------------------------------------- */

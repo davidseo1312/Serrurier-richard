@@ -685,6 +685,15 @@ else
   echo "  ! python3 absent : pages de blog non régénérées"
 fi
 
+# Blocs « guides locaux » des pages de zone. Les pages départementales sont les
+# plus fortes du site sur les requêtes locales : les laisser sans lien vers les
+# articles du même département prive ceux-ci de tout signal interne.
+if command -v python3 > /dev/null; then
+  python3 scripts/gen-guides-zone.py || { echo "  ! génération des guides de zone en échec"; exit 1; }
+else
+  echo "  ! python3 absent : guides de zone non régénérés"
+fi
+
 SITEMAP_ENTRIES=""
 # Inventaire pour llms.txt : section|titre|url|description
 LLMS_ENTRIES=""
@@ -730,6 +739,20 @@ while IFS= read -r src_file; do
       *)               export GEO_TYPE="AdministrativeArea" ;;
     esac
   fi
+
+  # Guides du département traité par une page de zone. Le fragment est produit
+  # par gen-guides-zone.py ; hors page de zone, le jeton vaut la chaîne vide
+  # plutôt que de laisser « {{GUIDES_LOCAUX}} » s'imprimer dans la page.
+  export GUIDES_LOCAUX=""
+  case "$rel" in
+    zones/*-[0-9][0-9].html)
+      dep_zone="${rel%.html}"; dep_zone="${dep_zone##*-}"
+      if [ -f "src/partials/guides/${dep_zone}.html" ]; then
+        GUIDES_LOCAUX="$(cat "src/partials/guides/${dep_zone}.html")"
+        export GUIDES_LOCAUX
+      fi
+      ;;
+  esac
 
   [ -n "$PAGE_PRIORITY" ] || PAGE_PRIORITY="0.6"
   # « image: og:HERO » désigne la vignette sociale de l'entrée HERO du
